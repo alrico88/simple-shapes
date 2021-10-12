@@ -5,12 +5,15 @@ import shortid from 'shortid';
 import VuexPersistence from 'vuex-persist';
 import area from '@turf/area';
 import {processNumber} from 'number-helper-functions';
+import {Formatter} from 'fracturedjsonjs';
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
 });
 
 Vue.use(Vuex);
+
+const jsonFormatter = new Formatter();
 
 class WktItem {
 
@@ -43,10 +46,22 @@ export default new Vuex.Store({
           ? `GEOMETRYCOLLECTION(${polygons
               .map((d) => d.wkt)
               .join(',')})`
-          : JSON.stringify({
+          : jsonFormatter.serialize({
             type: 'GeometryCollection',
             geometries: polygons.map((d) => parseFromWK(d.wkt)),
-          }, null, 2);
+          });
+    },
+    getAsFeatureCollection(state) {
+      const {polygons} = state;
+
+      const asFeatColl = {
+        type: 'FeatureCollection',
+        features: polygons.map((d) => parseFromWK(d.wkt, true, {
+            id: d.id,
+          })),
+      };
+
+      return jsonFormatter.serialize(asFeatColl);
     },
     getPolygonArea: (state) => (id) => {
       const obj = state.polygons.find((d) => d.id === id);

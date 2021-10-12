@@ -39,6 +39,7 @@
     "yarn": "^1.21.1"
   },
   "devDependencies": {
+    "@vue/runtime-dom": "^3.2.20",
     "eslint": "^5.4",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^5.0.0",
