@@ -34,6 +34,7 @@ import {mapGetters, mapActions, mapState} from 'vuex';
 import ClipboardMixin from '@/mixins/ClipboardMixin';
 import DownloadMixin from '@/mixins/DownloadMixin';
 import {parseFromWK} from 'wkt-parser-helper';
+import {Formatter} from 'fracturedjsonjs';
 
 export default {
   name: 'ResultItem',
@@ -51,7 +52,9 @@ export default {
       const {wkt} = this.polygon;
 
       if (this.format === 'geojson') {
-        return JSON.stringify(parseFromWK(wkt), null, 2);
+        const formatter = new Formatter();
+
+        return formatter.serialize(parseFromWK(wkt));
       } else {
         return wkt;
       }

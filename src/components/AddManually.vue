@@ -7,8 +7,8 @@ b-tabs(pills, no-fade)
 </template>
 
 <script>
-import AddManuallyFromWkt from '@/components/AddManuallyFromWkt';
-import AddManuallyFromGeojson from '@/components/AddManuallyFromGeojson';
+import AddManuallyFromWkt from '@/components/AddManuallyFromWkt.vue';
+import AddManuallyFromGeojson from '@/components/AddManuallyFromGeojson.vue';
 
 export default {
   name: 'AddManually',

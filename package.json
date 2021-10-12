@@ -3,9 +3,9 @@
   "version": "1.0.2",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint src"
   },
   "repository": {
     "url": "https://github.com/alrico88/simple-shapes"
@@ -15,12 +15,14 @@
     "url": "https://alrico.es"
   },
   "dependencies": {
+    "@babel/eslint-parser": "^7.15.0",
     "@turf/area": "^6.0.1",
     "@turf/circle": "^6.0.1",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.21.2",
     "clipboard": "^2.0.4",
     "core-js": "^3.4.4",
+    "fracturedjsonjs": "^2.2.0",
     "jquery": "^3.4.1",
     "lodash": "^4.17.20",
     "number-helper-functions": "^4.0.0",
@@ -33,20 +35,20 @@
     "vue2-transitions": "^0.3.0",
     "vuex": "^3.1.2",
     "vuex-persist": "^2.2.0",
-    "wkt-parser-helper": "^3.0.0",
+    "wkt-parser-helper": "^4.0.1",
     "yarn": "^1.21.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.1.0",
-    "@vue/cli-plugin-eslint": "^4.1.0",
-    "@vue/cli-plugin-vuex": "^4.1.0",
-    "@vue/cli-service": "^4.1.0",
-    "babel-eslint": "^10.0.3",
     "eslint": "^5.4",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^5.0.0",
+    "pug": "^3.0.2",
+    "pug-plain-loader": "^1.1.0",
+    "sass": "^1.42.1",
     "sass-loader": "^10.1.1",
-    "vue-cli-plugin-pug": "^1.0.7",
-    "vue-template-compiler": "^2.6.10"
+    "vite": "^2.6.7",
+    "vite-plugin-vue2": "^1.8.2",
+    "vue-template-compiler": "^2.6.10",
+    "yorkie": "^2.0.0"
   }
 }

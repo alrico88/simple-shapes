@@ -1,25 +1,21 @@
-# simple-wkt
+# Simple Shapes
+
+Web app to draw geometries and get their GeoJSON or WKT representation.
 
 ## Project setup
+
 ```
-yarn install
+pnpm i
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
-yarn serve
+pnpm dev
 ```
 
 ### Compiles and minifies for production
-```
-yarn build
-```
 
-### Lints and fixes files
 ```
-yarn lint
+pnpm build
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-# Simple-WKT

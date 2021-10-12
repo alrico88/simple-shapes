@@ -6,7 +6,7 @@
 <script>
 import uniqueId from 'lodash/uniqueId';
 import {parseFromWK} from 'wkt-parser-helper';
-import {mapGetters} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 import circle from '@turf/circle';
 
 const tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
@@ -30,14 +30,19 @@ export default {
   },
   mounted() {
     this.map = L.map(this.id).setView([0, 0], 3);
+
     tileLayer.addTo(this.map);
+
     const drawControl = new L.Control.Draw({
       draw: {
         circlemarker: false,
       },
     });
+
     this.map.addControl(drawControl);
-    const store = this.$store;
+
+    const vm = this;
+
     this.map.on('draw:created', (e) => {
       const {layer, layerType} = e;
       let asJSON;
@@ -50,13 +55,19 @@ export default {
       } else {
         asJSON = layer.toGeoJSON();
       }
-      store.dispatch('addPolygon', asJSON.geometry);
+      vm.addPolygon(asJSON.geometry);
     });
+
+    setTimeout(() => {
+      this.map.invalidateSize();
+    }, 100);
+
     if (this.getPolygons.length > 0) {
       this.drawPolygons(this.getPolygons);
     }
   },
   methods: {
+    ...mapActions(['addPolygon']),
     removeDrawn() {
       if (this.drawn) {
         this.map.removeLayer(this.drawn);

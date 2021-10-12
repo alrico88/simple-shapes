@@ -6,7 +6,12 @@ b-form.mt-3(@submit.prevent='createWktFromText')
     valid-feedback='Valid WKT'
   )
     b-form-textarea(v-model='wkt', :state='isValid', rows='4', max-rows='20')
-  b-button(type='submit', variant='success', block) #[b-icon-plus] Add WKT
+  b-button(
+    type='submit',
+    variant='success',
+    :disabled="!hasEnteredText",
+    block
+  ) #[b-icon-plus] Add WKT
 </template>
 
 <script>

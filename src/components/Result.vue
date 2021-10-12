@@ -21,9 +21,7 @@
   b-modal#manualAddModal(
     ref='manualAddModal',
     title='Add manually',
-    ok-only,
-    ok-title='Close',
-    ok-variant='secondary'
+    :hide-footer="true"
   )
     add-manually(@done='closeAddModal')
 </template>
@@ -31,13 +29,13 @@
 <script>
 import {mapGetters} from 'vuex';
 import {ZoomCenterTransition} from 'vue2-transitions';
-import EmptyState from '@/components/EmptyState';
-import ResultItem from '@/components/ResultItem';
-import ResultRemoveAllItems from '@/components/ResultRemoveAllItems';
-import ResultCopyAllItems from '@/components/ResultCopyAllItems';
-import AddManually from '@/components/AddManually';
-import Settings from '@/components/Settings';
-import Credits from '@/components/Credits';
+import EmptyState from '@/components/EmptyState.vue';
+import ResultItem from '@/components/ResultItem.vue';
+import ResultRemoveAllItems from '@/components/ResultRemoveAllItems.vue';
+import ResultCopyAllItems from '@/components/ResultCopyAllItems.vue';
+import AddManually from '@/components/AddManually.vue';
+import Settings from '@/components/Settings.vue';
+import Credits from '@/components/Credits.vue';
 
 export default {
   components: {

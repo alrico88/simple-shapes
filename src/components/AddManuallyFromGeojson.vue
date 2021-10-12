@@ -11,7 +11,12 @@ b-form.mt-3(@submit.prevent='createPolygonFromText')
       rows='4',
       max-rows='20'
     )
-  b-button(type='submit', variant='success', block) #[b-icon-plus] Add GeoJSON
+  b-button(
+    type='submit',
+    variant='success',
+    :disabled="!hasEnteredText",
+    block
+  ) #[b-icon-plus] Add GeoJSON
 </template>
 
 <script>
