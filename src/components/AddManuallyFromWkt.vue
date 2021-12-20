@@ -10,6 +10,7 @@ b-form.mt-3(@submit.prevent='createWktFromText')
       rows='4',
       max-rows='20',
       @drop.prevent="handleDrop",
+      @dragover.prevent,
       placeholder="Enter the Well-Known-Text representation of a geometry here or drag and drop a file to this box"
     )
   b-button(

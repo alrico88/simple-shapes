@@ -10,6 +10,7 @@ b-form.mt-3(@submit.prevent='createPolygonFromText')
       rows='4',
       max-rows='20',
       @drop.prevent="handleDrop",
+      @dragover.prevent,
       placeholder="Paste a GeoJSON representation of a geometry here or drag and drop a file to this box"
     )
   b-button(
