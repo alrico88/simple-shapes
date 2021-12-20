@@ -14,9 +14,9 @@
         )
       empty-state(:show='getPolygons.length === 0')
       ZoomCenterTransition
-        result-copy-all-items(v-show='showMultipleActions')
+        result-copy-all-items(v-if='showMultipleActions.copy')
       ZoomCenterTransition
-        result-remove-all-items(v-show='showMultipleActions')
+        result-remove-all-items.mt-2(v-if='showMultipleActions.delete')
   credits
   b-modal#manualAddModal(
     ref='manualAddModal',
@@ -51,7 +51,12 @@ export default {
   computed: {
     ...mapGetters(['getPolygons', 'getAsGeometryCollection', 'getPolygonArea']),
     showMultipleActions() {
-      return this.getPolygons.length > 1;
+      const len = this.getPolygons.length;
+
+      return {
+        copy: len > 0,
+        delete: len > 1,
+      };
     },
   },
   methods: {

@@ -1,7 +1,7 @@
 <template lang="pug">
 .row
   .col
-    b-alert.border-primary(variant='primary', show)
+    b-alert.border-primary.mb-2.auto-mb(variant='primary', show)
       .row
         .col
           p.mb-2 Get all features as #[strong GeometryCollection]
@@ -19,7 +19,7 @@
             size='sm',
             @click='downloadFile("allFeatures", getAsGeometryCollection)'
           ) #[b-icon-download] Download as file
-    b-alert.border-primary(variant="primary", :show="showFeatureCollection")
+    b-alert.border-primary.mb-2.auto-mb(variant="primary", :show="showFeatureCollection")
       .row
         .col
           p.mb-2 Get all features as #[strong FeatureCollection]
