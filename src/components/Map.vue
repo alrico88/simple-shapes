@@ -6,7 +6,7 @@
 <script>
 import uniqueId from 'lodash/uniqueId';
 import {parseFromWK} from 'wkt-parser-helper';
-import {mapActions, mapGetters} from 'vuex';
+import {mapActions, mapGetters, mapState} from 'vuex';
 import circle from '@turf/circle';
 
 const tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
@@ -21,11 +21,15 @@ export default {
     };
   },
   computed: {
+    ...mapState(['showLabels']),
     ...mapGetters(['getPolygons']),
   },
   watch: {
-    getPolygons(polygons) {
-      this.drawPolygons(polygons);
+    getPolygons() {
+      this.drawPolygons();
+    },
+    showLabels() {
+      this.drawPolygons();
     },
   },
   mounted() {
@@ -78,15 +82,19 @@ export default {
       this.drawn = featureLayer;
       featureLayer.addTo(this.map);
     },
-    drawPolygons(polygons) {
+    drawPolygons() {
+      const {getPolygons, showLabels} = this;
+
       const featureGroup = L.featureGroup();
-      polygons.forEach((polygon) => {
+      getPolygons.forEach((polygon) => {
         const parsed = parseFromWK(polygon.wkt);
         function onEachFeature(feature, layer) {
-          layer.bindTooltip(polygon.id, {
-            permanent: true,
-            direction: 'top',
-          });
+          if (showLabels) {
+            layer.bindTooltip(polygon.id, {
+              permanent: true,
+              direction: 'top',
+            });
+          }
         }
         L.geoJSON(parsed, {
           onEachFeature,

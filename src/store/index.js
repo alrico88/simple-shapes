@@ -31,6 +31,7 @@ export default new Vuex.Store({
   state: {
     polygons: [],
     format: 'wkt',
+    showLabels: true,
   },
   getters: {
     getPolygons(state) {
@@ -81,6 +82,9 @@ export default new Vuex.Store({
     },
     changeFormat(state, format) {
       state.format = format;
+    },
+    changeShowLabels(state, status) {
+      state.showLabels = status;
     },
   },
   actions: {

@@ -17,6 +17,9 @@
         result-copy-all-items(v-if='showMultipleActions.copy')
       ZoomCenterTransition
         result-remove-all-items.mt-2(v-if='showMultipleActions.delete')
+  .row
+    .col.mb-1
+      b-button(@click="openMapOpts") #[b-icon-map] Map options
   credits
   b-modal#manualAddModal(
     ref='manualAddModal',
@@ -24,10 +27,15 @@
     :hide-footer="true"
   )
     add-manually(@done='closeAddModal')
+  b-modal#mapOptsModal(title="Map Options", hide-footer)
+    .form-group.mb-0
+      .form-check
+        input#showLabelsCheck.form-check-input(type="checkbox", v-model="showLabelsComp")
+        label.form-check-label(for="showLabelsCheck") Show labels in map
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters, mapMutations, mapState} from 'vuex';
 import {ZoomCenterTransition} from 'vue2-transitions';
 import EmptyState from '@/components/EmptyState.vue';
 import ResultItem from '@/components/ResultItem.vue';
@@ -49,6 +57,7 @@ export default {
     Settings,
   },
   computed: {
+    ...mapState(['showLabels']),
     ...mapGetters(['getPolygons', 'getAsGeometryCollection', 'getPolygonArea']),
     showMultipleActions() {
       const len = this.getPolygons.length;
@@ -58,10 +67,22 @@ export default {
         delete: len > 1,
       };
     },
+    showLabelsComp: {
+      get() {
+        return this.showLabels;
+      },
+      set(val) {
+        this.changeShowLabels(val);
+      },
+    },
   },
   methods: {
+    ...mapMutations(['changeShowLabels']),
     closeAddModal() {
       this.$refs.manualAddModal.hide();
+    },
+    openMapOpts() {
+      this.$bvModal.show('mapOptsModal');
     },
   },
 };
