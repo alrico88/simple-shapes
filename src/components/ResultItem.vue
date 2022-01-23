@@ -15,7 +15,7 @@ c-card.mb-2(no-body)
     .d-flex.align-items-center.justify-content-between(v-if="isEditing")
       .hstack.gap-2
         input.form-control.form-control-color(type="color", v-model="polygon.color")
-        input.form-control(type="text", v-model="polygon.id")
+        input.form-control(type="text", v-model="polygon.id", @keydown.enter="toggleEdit")
       .ms-auto
         button.btn.btn-primary.btn-sm(@click="toggleEdit") Close
   c-card-body.p-0
