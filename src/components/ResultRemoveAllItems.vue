@@ -1,19 +1,16 @@
 <template lang="pug">
-b-alert.border-danger.mb-0(variant='danger', show)
-  .row.align-items-center
-    .col
-      p.mb-0 Remove all drawn features at once
-    .col-4.text-right
-      b-button(variant='danger', size='sm', @click='deleteAllPolygons') #[b-icon-trash] Remove
+.alert.alert-danger.border-danger.mb-0
+  .d-flex.align-items-center.justify-content-between
+    div Remove all drawn features at once
+    div
+      button.btn.btn-danger.btn-sm(
+        @click='() => store.clearPolygons()'
+      ) #[icon-trash] Remove
 </template>
 
-<script>
-import {mapActions} from 'vuex';
+<script setup lang="ts">
+import { useMainStore } from '../store/main';
+import IconTrash from '~icons/bi/trash';
 
-export default {
-  name: 'ResultRemoveAllItems',
-  methods: {
-    ...mapActions(['deleteAllPolygons']),
-  },
-};
+const store = useMainStore();
 </script>

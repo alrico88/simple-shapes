@@ -1,58 +1,74 @@
 <template lang="pug">
 .row
   .col
-    b-alert.border-primary.mb-2.auto-mb(variant='primary', show)
+    .alert.alert-primary.border-primary.mb-2.auto-mb
+      .row.mb-2
+        .col
+          .hstack.gap-2.align-items-center
+            div Get all features as
+            c-form-select.w-50(:options="options", v-model="collMode")
       .row
         .col
-          p.mb-2 Get all features as #[strong GeometryCollection]
-      .row
-        .col
-          b-button.mr-2(
-            variant='primary',
-            size='sm',
-            v-clipboard:copy='getAsGeometryCollection',
-            v-clipboard:success='notifyClipSuccess',
-            v-clipboard:error='notifyClipError'
-          ) #[b-icon-clipboard] Copy to clipboard
-          b-button(
-            variant='primary',
-            size='sm',
-            @click='downloadFile("allFeatures", getAsGeometryCollection)'
-          ) #[b-icon-download] Download as file
-    b-alert.border-primary.mb-2.auto-mb(variant="primary", :show="showFeatureCollection")
-      .row
-        .col
-          p.mb-2 Get all features as #[strong FeatureCollection]
-      .row
-        .col
-          b-button.mr-2(
-            variant='primary',
-            size='sm',
-            v-clipboard:copy='getAsFeatureCollection',
-            v-clipboard:success='notifyClipSuccess',
-            v-clipboard:error='notifyClipError'
-          ) #[b-icon-clipboard] Copy to clipboard
-          b-button(
-            variant='primary',
-            size='sm',
-            @click='downloadFile("allFeatures", getAsFeatureCollection)'
-          ) #[b-icon-download] Download as file
+          .hstack.gap-1
+            clipboard-button(
+              size="sm",
+              text="Copy",
+              :value="toCopy"
+            )
+            button.btn.btn-primary.btn-sm(
+              @click='downloadAll'
+            ) #[icon-download] Download
 </template>
 
-<script>
-import DownloadMixin from '@/mixins/DownloadMixin';
-import ClipboardMixin from '@/mixins/ClipboardMixin';
-import {mapGetters, mapState} from 'vuex';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { Formatter } from 'fracturedjsonjs';
+import { CFormSelect } from '@coreui/bootstrap-vue';
+import ClipboardButton from './ClipboardButton.vue';
+import { useMainStore } from '../store/main';
+import { useDownload } from '../composables/useDownload';
+import IconDownload from '~icons/bi/download';
 
-export default {
-  name: 'ResultCopyAllItems',
-  mixins: [DownloadMixin, ClipboardMixin],
-  computed: {
-    ...mapState(['format']),
-    ...mapGetters(['getAsGeometryCollection', 'getAsFeatureCollection']),
-    showFeatureCollection() {
-      return this.format === 'geojson';
+enum CollMode {
+    GeometryCollection = 'geomColl',
+    FeatureCollection = 'featColl'
+}
+
+const formatter = new Formatter();
+
+const store = useMainStore();
+
+const { format, getAsGeometryCollection, getAsFeatureCollection } = storeToRefs(store);
+
+const collMode = ref(CollMode.GeometryCollection);
+
+const options = computed(() => {
+  const baseOpts = [
+    {
+      label: 'GeometryCollection',
+      value: CollMode.GeometryCollection,
     },
-  },
-};
+  ];
+
+  if (format.value === 'geojson') {
+    baseOpts.push({
+      label: 'FeatureCollection',
+      value: CollMode.FeatureCollection,
+    });
+  }
+
+  return baseOpts;
+});
+
+const geomCollText = computed(() => formatter.serialize(getAsGeometryCollection.value));
+const featCollText = computed(() => formatter.serialize(getAsFeatureCollection.value));
+
+const toCopy = computed(() => (collMode.value === CollMode.GeometryCollection ? geomCollText.value : featCollText.value));
+
+const { downloadFile } = useDownload(format);
+
+function downloadAll() {
+  downloadFile(toCopy.value, 'allFeatures');
+}
 </script>

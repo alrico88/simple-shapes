@@ -1,15 +1,16 @@
 <template lang="pug">
-b-alert.border-primary.mb-0(variant='primary', :show='show') #[b-icon-brush] Draw or add some shapes first
+.alert.alert-primary.border-primary.mb-0(
+  v-show='show'
+) #[icon-brush] Draw or add some shapes first
 </template>
 
-<script>
-export default {
-  name: 'EmptyState',
-  props: {
-    show: {
-      type: Boolean,
-      required: true,
-    },
+<script setup lang="ts">
+import IconBrush from '~icons/bi/brush';
+
+const props = defineProps({
+  show: {
+    type: Boolean,
+    required: true,
   },
-};
+});
 </script>

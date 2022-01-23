@@ -1,85 +1,77 @@
 <template lang="pug">
-b-form.mt-3(@submit.prevent='createWktFromText')
-  b-form-group(
-    :invalid-feedback='error',
-    valid-feedback='Valid WKT'
-  )
-    b-form-textarea(
-      v-model='wkt',
-      :state='isValid',
+form.form.mt-3(@submit.prevent='createWktFromText')
+  .form-group
+    textarea.form-control.bg-white(
+      v-model='enteredText',
       rows='4',
       max-rows='20',
       @drop.prevent="handleDrop",
       @dragover.prevent,
       placeholder="Enter the Well-Known-Text representation of a geometry here or drag and drop a file to this box"
     )
-  b-button(
+    .valid-feedback.d-block(v-if="isValid === true") Valid WKT
+    .invalid-feedback.d-block(v-if="isValid === false") {{ error }}
+  button.btn.btn-success.w-100(
     type='submit',
-    variant='success',
-    :disabled="!hasEnteredText",
-    block
-  ) #[b-icon-plus] Add WKT
+    :disabled="btnDisabled"
+  ) #[icon-plus] Add WKT
 </template>
 
-<script>
-import {mapActions} from 'vuex';
-import {validateWKT} from '@/helpers/validators';
-import debounce from 'lodash/debounce';
-import {readAsText} from 'promise-file-reader';
-import ToastMixin, {toastVariants} from '../mixins/ToastMixin';
+<script setup lang="ts">
+import { readAsText } from 'promise-file-reader';
+import { computed, ref } from 'vue';
+import { debouncedWatch } from '@vueuse/core';
+import { replace } from 'lodash-es';
+import { parseFromWK } from 'wkt-parser-helper';
+import { validateWKT } from '../helpers/validators';
+import { useMainStore } from '../store/main';
+import IconPlus from '~icons/bi/plus';
 
-export default {
-  name: 'AddManuallyFromWkt',
-  mixins: [ToastMixin],
-  data() {
-    return {
-      wkt: '',
-      isValid: null,
-      error: '',
-    };
-  },
-  computed: {
-    hasEnteredText() {
-      return this.wkt !== '';
-    },
-  },
-  watch: {
-    wkt(value) {
-      this.validate(value);
-    },
-  },
-  methods: {
-    ...mapActions(['addWkt']),
-    createWktFromText() {
-      this.addWkt(this.wkt);
-      this.$emit('done');
-    },
-    validate: debounce(function (value) {
-      let error, valid;
-      if (this.hasEnteredText) {
-        try {
-          validateWKT(value);
-          valid = true;
-          error = '';
-        } catch (e) {
-          valid = false;
-          error = e.message;
-        }
-      } else {
-        valid = null;
-        error = '';
-      }
+const store = useMainStore();
 
-      this.isValid = valid;
-      this.error = error;
-    }, 500),
-    async handleDrop(e) {
-      try {
-        this.wkt = await readAsText(e.dataTransfer.files[0]);
-      } catch (_) {
-        this.showToast('Error', 'Error loading file', toastVariants.ERROR);
-      }
-    },
-  },
-};
+const enteredText = ref('');
+const wkt = computed(() => replace(enteredText.value, '"', ''));
+const isValid = ref<boolean | null>(null);
+const error = ref('');
+
+const hasEnteredText = computed(() => wkt.value !== '');
+
+function validate(str: string): void {
+  if (hasEnteredText.value) {
+    try {
+      validateWKT(str);
+      isValid.value = true;
+      error.value = '';
+    } catch (e: any) {
+      isValid.value = false;
+      error.value = e.message;
+    }
+  } else {
+    isValid.value = null;
+    error.value = '';
+  }
+}
+
+debouncedWatch(wkt, (val) => {
+  validate(val);
+}, {
+  debounce: 500,
+});
+
+const btnDisabled = computed(() => !hasEnteredText.value || !isValid.value);
+
+const emit = defineEmits(['done']);
+
+function createWktFromText() {
+  const parsed = parseFromWK(wkt.value);
+
+  store.addShapes(parsed);
+  emit('done');
+}
+
+async function handleDrop(e: DragEvent): Promise<void> {
+  if (e.dataTransfer) {
+    enteredText.value = await readAsText(e.dataTransfer.files[0]);
+  }
+}
 </script>

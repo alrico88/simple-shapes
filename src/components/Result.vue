@@ -2,90 +2,58 @@
 .col.maxHeight.border-left
   .row.bg-blue.mb-3
     .col.py-3
-      h2.mb-0 Simple Shapes
+      h4.mb-0.fw-bolder Simple Shapes
   settings
   .row
-    .col.mb-1
-      ZoomCenterTransition(:group='true')
-        result-item(
-          v-for='(polygon, index) of getPolygons',
-          :key='"card_" + index',
-          :polygon='polygon'
-        )
-      empty-state(:show='getPolygons.length === 0')
-      ZoomCenterTransition
-        result-copy-all-items(v-if='showMultipleActions.copy')
-      ZoomCenterTransition
-        result-remove-all-items.mt-2(v-if='showMultipleActions.delete')
+    .col
+      button.btn.btn-primary.btn-sm.w-100.py-2(
+        @click='openAddModal'
+      ) #[icon-plus] Add shape manually
+  hr
   .row
     .col.mb-1
-      b-button(@click="openMapOpts") #[b-icon-map] Map options
+      result-item(
+        v-for='(polygon, index) of polygons',
+        :key='"card_" + index',
+        :polygon='polygon'
+      )
+      empty-state.mb-2.auto-mb(:show='polygons.length === 0')
+      result-copy-all-items.mb-2.auto-mb(v-if='showMultipleActions.copy')
+      result-remove-all-items.mb-2.auto-mb(v-if='showMultipleActions.delete')
   credits
-  b-modal#manualAddModal(
-    ref='manualAddModal',
-    title='Add manually',
-    :hide-footer="true"
-  )
-    add-manually(@done='closeAddModal')
-  b-modal#mapOptsModal(title="Map Options", hide-footer)
-    .form-group.mb-0
-      .form-check
-        input#showLabelsCheck.form-check-input(type="checkbox", v-model="showLabelsComp")
-        label.form-check-label(for="showLabelsCheck") Show labels in map
 </template>
 
-<script>
-import {mapGetters, mapMutations, mapState} from 'vuex';
-import {ZoomCenterTransition} from 'vue2-transitions';
-import EmptyState from '@/components/EmptyState.vue';
-import ResultItem from '@/components/ResultItem.vue';
-import ResultRemoveAllItems from '@/components/ResultRemoveAllItems.vue';
-import ResultCopyAllItems from '@/components/ResultCopyAllItems.vue';
-import AddManually from '@/components/AddManually.vue';
-import Settings from '@/components/Settings.vue';
-import Credits from '@/components/Credits.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import EmptyState from './EmptyState.vue';
+import ResultItem from './ResultItem.vue';
+import ResultRemoveAllItems from './ResultRemoveAllItems.vue';
+import ResultCopyAllItems from './ResultCopyAllItems.vue';
+import Settings from './Settings.vue';
+import Credits from './Credits.vue';
+import { useMainStore } from '../store/main';
+import IconPlus from '~icons/bi/plus';
+import { useModalsStore } from '../store/modals';
 
-export default {
-  components: {
-    Credits,
-    AddManually,
-    ResultCopyAllItems,
-    ResultRemoveAllItems,
-    ResultItem,
-    EmptyState,
-    ZoomCenterTransition,
-    Settings,
-  },
-  computed: {
-    ...mapState(['showLabels']),
-    ...mapGetters(['getPolygons', 'getAsGeometryCollection', 'getPolygonArea']),
-    showMultipleActions() {
-      const len = this.getPolygons.length;
+const store = useMainStore();
+const modalsStore = useModalsStore();
 
-      return {
-        copy: len > 0,
-        delete: len > 1,
-      };
-    },
-    showLabelsComp: {
-      get() {
-        return this.showLabels;
-      },
-      set(val) {
-        this.changeShowLabels(val);
-      },
-    },
-  },
-  methods: {
-    ...mapMutations(['changeShowLabels']),
-    closeAddModal() {
-      this.$refs.manualAddModal.hide();
-    },
-    openMapOpts() {
-      this.$bvModal.show('mapOptsModal');
-    },
-  },
-};
+const { polygons } = storeToRefs(store);
+const { addModal } = storeToRefs(modalsStore);
+
+const showMultipleActions = computed(() => {
+  const len = polygons.value.length;
+
+  return {
+    copy: len > 0,
+    delete: len > 1,
+  };
+});
+
+function openAddModal() {
+  addModal.value = true;
+}
 </script>
 
 <style scoped>

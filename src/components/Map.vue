@@ -1,109 +1,120 @@
 <template lang="pug">
 .col-lg-8.col-md-7.col-6.vh-100.px-0
-  .h-100(:id='id')
+  .h-100(:id="mapDiv")
 </template>
 
-<script>
-import uniqueId from 'lodash/uniqueId';
-import {parseFromWK} from 'wkt-parser-helper';
-import {mapActions, mapGetters, mapState} from 'vuex';
+<script lang="ts" setup>
+import L, { LatLng, LatLngBounds } from 'leaflet';
+import 'leaflet-draw';
+import { parseFromWK } from 'wkt-parser-helper';
 import circle from '@turf/circle';
+import { storeToRefs } from 'pinia';
+import {
+  computed, onMounted, watch,
+} from 'vue';
+import { uniqueId } from 'lodash-es';
+import { useMainStore } from '../store/main';
+import mapEmitter from '../emitters/mapEmitter';
 
-const tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012',
-});
+(window as any).type = true;
 
-export default {
-  data() {
-    return {
-      id: uniqueId('mapDiv'),
-      drawn: null,
-    };
-  },
-  computed: {
-    ...mapState(['showLabels']),
-    ...mapGetters(['getPolygons']),
-  },
-  watch: {
-    getPolygons() {
-      this.drawPolygons();
+const store = useMainStore();
+
+const mapDiv = uniqueId('mapDiv');
+
+const { polygons, showLabels, tile } = storeToRefs(store);
+
+const parsedPolygons = computed(() => polygons.value.map(({ wkt, id, color }) => ({
+  id,
+  color,
+  shape: parseFromWK(wkt),
+})));
+
+onMounted(() => {
+  const map = new L.Map(mapDiv, {
+    center: [0, 0],
+    zoom: 3,
+  });
+
+  const drawControl = new L.Control.Draw({
+    draw: {
+      circlemarker: false,
     },
-    showLabels() {
-      this.drawPolygons();
-    },
-  },
-  mounted() {
-    this.map = L.map(this.id).setView([0, 0], 3);
+  });
 
-    tileLayer.addTo(this.map);
+  let tileLayer = new L.TileLayer(tile.value.url, {
+    attribution: tile.value.attribution,
+  });
 
-    const drawControl = new L.Control.Draw({
-      draw: {
-        circlemarker: false,
-      },
+  tileLayer.addTo(map);
+
+  watch(tile, (val) => {
+    tileLayer.removeFrom(map);
+    tileLayer = new L.TileLayer(val.url, {
+      attribution: val.attribution,
     });
+    tileLayer.addTo(map);
+  });
 
-    this.map.addControl(drawControl);
+  map.addControl(drawControl);
 
-    const vm = this;
-
-    this.map.on('draw:created', (e) => {
-      const {layer, layerType} = e;
-      let asJSON;
-      if (layerType === 'circle') {
-        const {lat, lng} = layer._latlng;
-        asJSON = circle([lng, lat], layer.getRadius(), {
-          steps: 100,
-          units: 'meters',
-        });
-      } else {
-        asJSON = layer.toGeoJSON();
-      }
-      vm.addPolygon(asJSON.geometry);
-    });
-
-    setTimeout(() => {
-      this.map.invalidateSize();
-    }, 100);
-
-    if (this.getPolygons.length > 0) {
-      this.drawPolygons(this.getPolygons);
-    }
-  },
-  methods: {
-    ...mapActions(['addPolygon']),
-    removeDrawn() {
-      if (this.drawn) {
-        this.map.removeLayer(this.drawn);
-      }
-    },
-    addDrawn(featureLayer) {
-      this.removeDrawn();
-      this.drawn = featureLayer;
-      featureLayer.addTo(this.map);
-    },
-    drawPolygons() {
-      const {getPolygons, showLabels} = this;
-
-      const featureGroup = L.featureGroup();
-      getPolygons.forEach((polygon) => {
-        const parsed = parseFromWK(polygon.wkt);
-        function onEachFeature(feature, layer) {
-          if (showLabels) {
-            layer.bindTooltip(polygon.id, {
-              permanent: true,
-              direction: 'top',
-            });
-          }
-        }
-        L.geoJSON(parsed, {
-          onEachFeature,
-          fillColor: '#39528E',
-          color: '#39528E',
-        }).addTo(featureGroup);
+  map.on('draw:created', (e: any) => {
+    const { layer, layerType } = e;
+    let asJSON;
+    if (layerType === 'circle') {
+      // eslint-disable-next-line no-underscore-dangle
+      const { lat, lng } = layer._latlng;
+      asJSON = circle([lng, lat], layer.getRadius(), {
+        steps: 100,
+        units: 'meters',
       });
-      this.addDrawn(featureGroup);
-    },
-  },
-};
+    } else {
+      asJSON = layer.toGeoJSON();
+    }
+    store.addPolygon(asJSON.geometry);
+  });
+
+  let layerGroup = new L.LayerGroup();
+
+  watch([parsedPolygons, showLabels], ([polys]) => {
+    const newLayerGroup = new L.LayerGroup();
+
+    polys.forEach((poly) => {
+      const layer = new L.GeoJSON(poly.shape, {
+        style: {
+          color: poly.color,
+          fillColor: poly.color,
+        },
+      });
+
+      if (showLabels.value) {
+        layer.bindTooltip(poly.id, {
+          direction: 'top',
+          permanent: true,
+        });
+      }
+
+      newLayerGroup.addLayer(layer);
+    });
+
+    layerGroup.removeFrom(map);
+    layerGroup = newLayerGroup;
+    layerGroup.addTo(map);
+  }, {
+    immediate: true,
+  });
+
+  map.on('ready', () => {
+    map.invalidateSize();
+  });
+
+  mapEmitter.on('goTo' as any, (bbox: number[]): void => {
+    const leafletBounds = new LatLngBounds(
+      new LatLng(bbox[1], bbox[0]),
+      new LatLng(bbox[3], bbox[2]),
+    );
+
+    map.flyToBounds(leafletBounds);
+  });
+});
 </script>
