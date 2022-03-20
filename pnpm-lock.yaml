@@ -17,7 +17,7 @@ specifiers:
   '@vitejs/plugin-vue': ^2.0.1
   '@vue/compiler-sfc': ^3.2.27
   '@vueuse/core': ^7.5.3
-  bbox-helper-functions: ^3.0.1
+  bbox-helper-functions: ^3.2.4
   bootstrap: ^5.1.3
   chroma-js: ^2.1.2
   eslint: ^8.7.0
@@ -30,7 +30,7 @@ specifiers:
   leaflet-draw: ^1.0.4
   lodash-es: ^4.17.21
   mitt: ^3.0.0
-  number-helper-functions: ^4.0.0
+  number-helper-functions: ^4.1.1
   pinia: ^2.0.9
   promise-file-reader: ^1.0.3
   pug: ^3.0.2
@@ -51,7 +51,7 @@ dependencies:
   '@turf/area': 6.5.0
   '@turf/circle': 6.5.0
   '@vueuse/core': 7.5.3_vue@3.2.27
-  bbox-helper-functions: 3.0.1
+  bbox-helper-functions: 3.2.4
   bootstrap: 5.1.3_@popperjs+core@2.11.2
   chroma-js: 2.1.2
   file-saver: 2.0.5
@@ -60,7 +60,7 @@ dependencies:
   leaflet-draw: 1.0.4
   lodash-es: 4.17.21
   mitt: 3.0.0
-  number-helper-functions: 4.0.0
+  number-helper-functions: 4.1.1
   pinia: 2.0.9_typescript@4.5.4+vue@3.2.27
   promise-file-reader: 1.0.3
   shortid: 2.2.16
@@ -1425,8 +1425,8 @@ packages:
       rollup: 2.64.0
     dev: true
 
-  /@sindresorhus/is/4.3.0:
-    resolution: {integrity: sha512-wwOvh0eO3PiTEivGJWiZ+b946SlMSb4pe+y+Ur/4S87cwo09pYi+FWHHnbrM3W9W7cBYKDqQXcrFYjYUCOJUEQ==}
+  /@sindresorhus/is/4.6.0:
+    resolution: {integrity: sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==}
     engines: {node: '>=10'}
     dev: false
 
@@ -2032,13 +2032,13 @@ packages:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
 
-  /bbox-helper-functions/3.0.1:
-    resolution: {integrity: sha512-vNry25Hc26StY8t2K33EL33MPRyFerlz8ozujLl2ZJu5A9ZjlI/u6jh5tRdlJ3C6Zk1xpgMaSDBhNd5zhf1GvA==}
+  /bbox-helper-functions/3.2.4:
+    resolution: {integrity: sha512-c7ORxVWnv9Fc74Y2NQOAsPgW5BEMYfLj3ab71D9OpLtvKQXcZ6bUYzQRywIffF8ZXFzfIFboKrdHy0o2vs1R8g==}
     dependencies:
-      '@sindresorhus/is': 4.3.0
+      '@sindresorhus/is': 4.6.0
       '@turf/bbox': 6.5.0
-      geohashes-between: 2.0.4
-      lodash: 4.17.21
+      dlv: 1.1.3
+      geohashes-between: 2.2.0
       ngeohash: 0.6.3
       string-object-formatter: 2.0.0
       wkt-parser-helper: 4.0.1
@@ -2294,6 +2294,10 @@ packages:
     dependencies:
       path-type: 4.0.0
     dev: true
+
+  /dlv/1.1.3:
+    resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
+    dev: false
 
   /doctrine/2.1.0:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
@@ -2918,16 +2922,14 @@ packages:
     engines: {node: '>=6.9.0'}
     dev: true
 
-  /geohashes-between/2.0.4:
-    resolution: {integrity: sha512-3oSNRNnSMgwUGUPnpFr8V+udun7bQSFGcSry/dfpUq+mlulb3Facy+oTyfs6+spEUwKVzYmSbeh6FVd5Oxxw/g==}
-    engines: {node: '>=10'}
+  /geohashes-between/2.2.0:
+    resolution: {integrity: sha512-kMJEBB+N4Wsm5CvDYsP81wfJzGQx+Yy6ii/8k3rlAfjdx9rjSn4Jt1YNLoBhG1gKMIbsStgm1stGfy3DgOHY2g==}
     dependencies:
       '@turf/bearing': 6.5.0
       '@turf/helpers': 6.5.0
-      bbox-helper-functions: 3.0.1
       lineclip: 1.1.5
       ngeohash: 0.6.3
-      number-helper-functions: 4.0.0
+      number-helper-functions: 4.1.1
     dev: false
 
   /get-intrinsic/1.1.1:
@@ -3413,6 +3415,7 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: true
 
   /lru-cache/6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
@@ -3509,9 +3512,9 @@ packages:
       path-key: 3.1.1
     dev: true
 
-  /number-helper-functions/4.0.0:
-    resolution: {integrity: sha512-+pDcE1ClYfFdq1MlTQpsaMVGasr1F9BRmOGF2/qiqlvWNMIltfh677ozsZ4TEmGRZa14/cif+onvPVTftL29fw==}
-    engines: {node: '>=10'}
+  /number-helper-functions/4.1.1:
+    resolution: {integrity: sha512-EN2T0B0DFBO7Wm+vjtOKGn6eX7kFRYXPqV2rSGXLbuhhvPK9qIQ7bDM8Z9KvFBPviJGE1x5Px4GiAJeCixfLNQ==}
+    engines: {node: '>=12'}
     dev: false
 
   /object-assign/4.1.1:

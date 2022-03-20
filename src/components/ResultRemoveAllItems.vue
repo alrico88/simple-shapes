@@ -1,6 +1,6 @@
 <template lang="pug">
 .alert.alert-danger.border-danger.mb-0
-  .d-flex.align-items-center.justify-content-between
+  justify-between(:gap="2")
     div Remove all drawn features at once
     div
       button.btn.btn-danger.btn-sm(
@@ -11,6 +11,7 @@
 <script setup lang="ts">
 import { useMainStore } from '../store/main';
 import IconTrash from '~icons/bi/trash';
+import JustifyBetween from './JustifyBetween.vue';
 
 const store = useMainStore();
 </script>

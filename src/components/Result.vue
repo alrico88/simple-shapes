@@ -6,7 +6,7 @@
   settings
   .row
     .col
-      button.btn.btn-primary.btn-sm.w-100.py-2(
+      button.btn.btn-primary.btn-sm.w-100(
         @click='openAddModal'
       ) #[icon-plus] Add shape manually
   hr

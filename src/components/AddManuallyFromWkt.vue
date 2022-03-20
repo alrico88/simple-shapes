@@ -52,9 +52,7 @@ function validate(str: string): void {
   }
 }
 
-debouncedWatch(wkt, (val) => {
-  validate(val);
-}, {
+debouncedWatch(wkt, validate, {
   debounce: 500,
 });
 

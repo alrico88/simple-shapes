@@ -1,9 +1,9 @@
 <template lang="pug">
 c-card.mb-2(no-body)
   c-card-header.p-2
-    .d-flex.justify-content-between.align-items-center(v-if="!isEditing")
+    justify-between(:gap="2", v-if="!isEditing")
       .hstack.gap-2
-        icon-square(:style="iconStyle")
+        color-preview(:color="polygon.color")
         .fw-bold {{polygon.id}}
       .hstack.gap-2
         button.btn.btn-outline-primary.btn-sm(
@@ -12,12 +12,11 @@ c-card.mb-2(no-body)
         button.btn.btn-outline-primary.btn-sm(
           @click="toggleEdit"
         ) #[icon-edit] Edit info
-    .d-flex.align-items-center.justify-content-between(v-if="isEditing")
+    justify-between(:gap="2", v-if="isEditing")
       .hstack.gap-2
         input.form-control.form-control-color(type="color", v-model="polygon.color")
         input.form-control(type="text", v-model="polygon.id", @keydown.enter="toggleEdit")
-      .ms-auto
-        button.btn.btn-primary.btn-sm(@click="toggleEdit") Close
+      button.btn.btn-primary.btn-sm(@click="toggleEdit") Close
   c-card-body.p-0
     textarea.form-control.font-monospace.border-0(
       readonly,
@@ -26,8 +25,8 @@ c-card.mb-2(no-body)
       :value='text'
     )
   c-card-footer.p-2
-    .d-flex.justify-content-between
-      .hstack.gap-1
+    justify-between(:gap="2")
+      .hstack.gap-2
         clipboard-button(text="Copy", :value="text", size="sm")
         button.btn.btn-primary.btn-sm(
           @click='() => { downloadFile(text, polygon.id) }'
@@ -51,9 +50,10 @@ import { useDownload } from '../composables/useDownload';
 import IconDownload from '~icons/bi/download';
 import IconTrash from '~icons/bi/trash';
 import IconEdit from '~icons/bi/pencil-square';
-import IconSquare from '~icons/bi/square-fill';
 import IconGeolocate from '~icons/bi/geo-fill';
 import mapEmitter from '../emitters/mapEmitter';
+import JustifyBetween from './JustifyBetween.vue';
+import ColorPreview from './ColorPreview.vue';
 
 const props = defineProps<{
   polygon: StorePolygon
@@ -73,10 +73,6 @@ const text = computed(() => {
 
   return props.polygon.wkt;
 });
-
-const iconStyle = computed(() => ({
-  color: polygon.value.color,
-}));
 
 function removePolygon() {
   store.deletePolygon(props.polygon.id);
@@ -98,5 +94,6 @@ function centerOnFeature() {
 <style scoped>
 .form-control[readonly] {
   background: white;
+  font-size: 0.9rem;
 }
 </style>

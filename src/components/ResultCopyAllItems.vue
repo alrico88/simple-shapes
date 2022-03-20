@@ -4,18 +4,19 @@
     .alert.alert-primary.border-primary.mb-2.auto-mb
       .row.mb-2
         .col
-          .hstack.gap-2.align-items-center
+          justify-between(:gap="2")
             div Get all features as
-            c-form-select.w-50(:options="options", v-model="collMode")
+            .flex-grow-1
+              c-form-select.w-100(:options="options", v-model="collMode")
       .row
         .col
-          .hstack.gap-1
-            clipboard-button(
+          .hstack.gap-2
+            clipboard-button.w-100(
               size="sm",
               text="Copy",
               :value="toCopy"
             )
-            button.btn.btn-primary.btn-sm(
+            button.btn.btn-primary.btn-sm.w-100(
               @click='downloadAll'
             ) #[icon-download] Download
 </template>
@@ -29,6 +30,7 @@ import ClipboardButton from './ClipboardButton.vue';
 import { useMainStore } from '../store/main';
 import { useDownload } from '../composables/useDownload';
 import IconDownload from '~icons/bi/download';
+import JustifyBetween from './JustifyBetween.vue';
 
 enum CollMode {
     GeometryCollection = 'geomColl',
