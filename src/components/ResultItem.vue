@@ -2,9 +2,11 @@
 c-card.mb-2(no-body)
   c-card-header.p-2
     justify-between(:gap="2", v-if="!isEditing")
-      .hstack.gap-2
+      .hstack.gap-2.align-items-center
         color-preview(:color="polygon.color")
-        .fw-bold {{polygon.id}}
+        .vstack.gap-0
+          .fw-bold {{polygon.id}}
+          .small {{ polygonArea }} km²
       .hstack.gap-2
         button.btn.btn-outline-primary.btn-sm(
           @click="centerOnFeature"
@@ -43,6 +45,7 @@ import {
   CCard, CCardHeader, CCardFooter, CCardBody,
 } from '@coreui/bootstrap-vue';
 import { getWKTBBox } from 'bbox-helper-functions';
+import area from '@turf/area';
 import { useMainStore } from '../store/main';
 import { StorePolygon } from '../models/StorePolygon';
 import ClipboardButton from './ClipboardButton.vue';
@@ -54,6 +57,7 @@ import IconGeolocate from '~icons/bi/geo-fill';
 import mapEmitter from '../emitters/mapEmitter';
 import JustifyBetween from './JustifyBetween.vue';
 import ColorPreview from './ColorPreview.vue';
+import { processNumber } from 'number-helper-functions';
 
 const props = defineProps<{
   polygon: StorePolygon
@@ -89,6 +93,10 @@ function toggleEdit(): void {
 function centerOnFeature() {
   mapEmitter.emit('goTo', getWKTBBox(polygon.value.wkt));
 }
+
+const polygonArea = computed(() => processNumber(area(
+  parseFromWK(props.polygon.wkt) as any,
+) / 1000000));
 </script>
 
 <style scoped>
