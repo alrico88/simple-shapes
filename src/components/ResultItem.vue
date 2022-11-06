@@ -20,12 +20,12 @@ c-card.mb-2(no-body)
         input.form-control(type="text", v-model="polygon.id", @keydown.enter="toggleEdit")
       button.btn.btn-primary.btn-sm(@click="toggleEdit") Close
   c-card-body.p-0
-    textarea.form-control.font-monospace.border-0(
-      readonly,
-      rows='4',
-      max-rows='4',
-      :value='text'
-    )
+    .max-editor-height
+      prism-editor.py-2.px-3(
+        v-model="text",
+        :highlight="highlighter",
+        readonly
+      )
   c-card-footer.p-2
     justify-between(:gap="2")
       .hstack.gap-2
@@ -46,6 +46,9 @@ import {
 } from '@coreui/bootstrap-vue';
 import { getWKTBBox } from 'bbox-helper-functions';
 import area from '@turf/area';
+import { processNumber } from 'number-helper-functions';
+import { highlight, languages } from 'prismjs';
+import { PrismEditor } from 'vue-prism-editor';
 import { useMainStore } from '../store/main';
 import { StorePolygon } from '../models/StorePolygon';
 import ClipboardButton from './ClipboardButton.vue';
@@ -57,7 +60,7 @@ import IconGeolocate from '~icons/bi/geo-fill';
 import mapEmitter from '../emitters/mapEmitter';
 import JustifyBetween from './JustifyBetween.vue';
 import ColorPreview from './ColorPreview.vue';
-import { processNumber } from 'number-helper-functions';
+import 'prismjs/components/prism-json';
 
 const props = defineProps<{
   polygon: StorePolygon
@@ -72,7 +75,7 @@ const text = computed(() => {
   if (format.value === 'geojson') {
     const formatter = new Formatter();
 
-    return formatter.serialize(parseFromWK(props.polygon.wkt));
+    return formatter.Serialize(parseFromWK(props.polygon.wkt)) as string;
   }
 
   return props.polygon.wkt;
@@ -97,11 +100,20 @@ function centerOnFeature() {
 const polygonArea = computed(() => processNumber(area(
   parseFromWK(props.polygon.wkt) as any,
 ) / 1000000));
+
+function highlighter(code: string): string {
+  return highlight(code, languages.json, 'json');
+}
 </script>
 
 <style scoped>
 .form-control[readonly] {
   background: white;
   font-size: 0.9rem;
+}
+
+.max-editor-height {
+  max-height: 200px;
+  overflow-y: auto;
 }
 </style>

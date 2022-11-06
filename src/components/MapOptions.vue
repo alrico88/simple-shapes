@@ -4,7 +4,7 @@ c-modal-header
 c-modal-body
   .form-group.mb-2.auto-mb
     .form-floating
-      select.form-select(v-model="selectedMapStyle", id="mapStyleSelect")
+      select.form-select.bg-white(v-model="selectedMapStyle", id="mapStyleSelect")
         option(v-for="option of mapStyles", :value="option.key") {{ option.text }}
       label(for="mapStyleSelect") Map style
   .form-group.mb-2.auto-mb

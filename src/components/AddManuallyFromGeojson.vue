@@ -1,14 +1,10 @@
 <template lang="pug">
 form.form.mt-3(@submit.prevent='createPolygonFromText')
   .form-group
-    textarea.form-control.bg-white(
-      v-model='geojson',
-      rows='4',
-      max-rows='20',
-      @drop.prevent="handleDrop",
-      @dragover.prevent,
-      placeholder="Paste a GeoJSON representation of a geometry here or drag and drop a file to this box"
-    )
+    .max-input-height
+      text-input.form-control.bg-white(v-model:text='geojson')
+    .form-text Paste a GeoJSON representation of a geometry here
+      |  or drag and drop a file to the input
     .valid-feedback.d-block(v-if="isValid === true") Valid GeoJSON
     .invalid-feedback.d-block(v-if="isValid === false") {{ error }}
   button.btn.btn-success.w-100(
@@ -18,17 +14,13 @@ form.form.mt-3(@submit.prevent='createPolygonFromText')
 </template>
 
 <script setup lang="ts">
-import { readAsText } from 'promise-file-reader';
-import {
-  computed, ref,
-} from 'vue';
+import { computed, ref } from 'vue';
 import { debouncedWatch } from '@vueuse/core';
-import { Formatter } from 'fracturedjsonjs';
 import { validateGeoJSON } from '../helpers/validators';
 import { useMainStore } from '../store/main';
 import IconPlus from '~icons/bi/plus';
+import TextInput from './TextInput.vue';
 
-const formatter = new Formatter();
 const emit = defineEmits(['done']);
 
 const geojson = ref('');
@@ -53,40 +45,17 @@ debouncedWatch(geojson, (val) => {
 
 const btnDisabled = computed(() => !hasEnteredText.value || !isValid.value);
 
-function getBasicGeometriesToAdd(parsed: any): void {
-  const { type } = parsed;
-
-  if (type === 'FeatureCollection') {
-    parsed.features.forEach((feature: any) => {
-      getBasicGeometriesToAdd(feature);
-    });
-  } else if (type === 'Feature') {
-    store.addPolygon(parsed.geometry);
-  } else if (type === 'GeometryCollection') {
-    parsed.geometries.forEach((geometry: any) => {
-      store.addPolygon(geometry);
-    });
-  } else {
-    store.addPolygon(parsed);
-  }
-}
-
 function createPolygonFromText() {
   const parsed = JSON.parse(geojson.value);
 
   store.addShapes(parsed);
   emit('done');
 }
-
-async function handleDrop(e: DragEvent): Promise<void> {
-  if (e.dataTransfer) {
-    try {
-      const textGeoJSON = await readAsText(e.dataTransfer.files[0]);
-      const parsed = JSON.parse(textGeoJSON);
-      geojson.value = formatter.serialize(parsed);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-}
 </script>
+
+<style lang="scss" scoped>
+.max-input-height {
+  max-height: 300px;
+  overflow-y: auto;
+}
+</style>

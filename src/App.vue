@@ -20,6 +20,8 @@ import Result from './components/Result.vue';
 import AddManually from './components/AddManually.vue';
 import MapOptions from './components/MapOptions.vue';
 import { useModalsStore } from './store/modals';
+import 'vue-prism-editor/dist/prismeditor.min.css';
+import 'prismjs/themes/prism-coy.css';
 
 const store = useModalsStore();
 const { addModal, mapSettings } = storeToRefs(store);

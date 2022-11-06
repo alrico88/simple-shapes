@@ -1,14 +1,10 @@
 <template lang="pug">
 form.form.mt-3(@submit.prevent='createWktFromText')
   .form-group
-    textarea.form-control.bg-white(
-      v-model='enteredText',
-      rows='4',
-      max-rows='20',
-      @drop.prevent="handleDrop",
-      @dragover.prevent,
-      placeholder="Enter the Well-Known-Text representation of a geometry here or drag and drop a file to this box"
-    )
+    .max-input-height
+      text-input(v-model:text="enteredText")
+    .form-text Enter the Well-Known-Text representation of a geometry here
+      |  or drag and drop a file to the input
     .valid-feedback.d-block(v-if="isValid === true") Valid WKT
     .invalid-feedback.d-block(v-if="isValid === false") {{ error }}
   button.btn.btn-success.w-100(
@@ -18,7 +14,6 @@ form.form.mt-3(@submit.prevent='createWktFromText')
 </template>
 
 <script setup lang="ts">
-import { readAsText } from 'promise-file-reader';
 import { computed, ref } from 'vue';
 import { debouncedWatch } from '@vueuse/core';
 import { replace } from 'lodash-es';
@@ -26,6 +21,7 @@ import { parseFromWK } from 'wkt-parser-helper';
 import { validateWKT } from '../helpers/validators';
 import { useMainStore } from '../store/main';
 import IconPlus from '~icons/bi/plus';
+import TextInput from './TextInput.vue';
 
 const store = useMainStore();
 
@@ -66,10 +62,11 @@ function createWktFromText() {
   store.addShapes(parsed);
   emit('done');
 }
-
-async function handleDrop(e: DragEvent): Promise<void> {
-  if (e.dataTransfer) {
-    enteredText.value = await readAsText(e.dataTransfer.files[0]);
-  }
-}
 </script>
+
+<style lang="scss" scoped>
+.max-input-height {
+  max-height: 300px;
+  overflow-y: auto;
+}
+</style>

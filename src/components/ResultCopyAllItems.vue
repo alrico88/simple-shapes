@@ -63,10 +63,12 @@ const options = computed(() => {
   return baseOpts;
 });
 
-const geomCollText = computed(() => formatter.serialize(getAsGeometryCollection.value));
-const featCollText = computed(() => formatter.serialize(getAsFeatureCollection.value));
+const geomCollText = computed(() => formatter.Serialize(getAsGeometryCollection.value) as string);
+const featCollText = computed(() => formatter.Serialize(getAsFeatureCollection.value) as string);
 
-const toCopy = computed(() => (collMode.value === CollMode.GeometryCollection ? geomCollText.value : featCollText.value));
+const toCopy = computed(() => (collMode.value === CollMode.GeometryCollection
+  ? geomCollText.value
+  : featCollText.value));
 
 const { downloadFile } = useDownload(format);
 

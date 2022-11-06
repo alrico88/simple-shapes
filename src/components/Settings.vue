@@ -42,7 +42,8 @@ const formats = [
   {
     text: 'WKT',
     value: 'wkt',
-  }, {
+  },
+  {
     text: 'GeoJSON',
     value: 'geojson',
   },
