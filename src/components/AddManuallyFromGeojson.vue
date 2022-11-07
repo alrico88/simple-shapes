@@ -1,8 +1,7 @@
 <template lang="pug">
 form.form.mt-3(@submit.prevent='createPolygonFromText')
   .form-group
-    .max-input-height
-      text-input.form-control.bg-white(v-model:text='geojson')
+    text-input(v-model:text='geojson')
     .form-text Paste a GeoJSON representation of a geometry here
       |  or drag and drop a file to the input
     .valid-feedback.d-block(v-if="isValid === true") Valid GeoJSON
@@ -52,10 +51,3 @@ function createPolygonFromText() {
   emit('done');
 }
 </script>
-
-<style lang="scss" scoped>
-.max-input-height {
-  max-height: 300px;
-  overflow-y: auto;
-}
-</style>

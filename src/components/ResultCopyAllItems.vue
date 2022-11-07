@@ -24,7 +24,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
-import { Formatter } from 'fracturedjsonjs';
 import { CFormSelect } from '@coreui/bootstrap-vue';
 import ClipboardButton from './ClipboardButton.vue';
 import { useMainStore } from '../store/main';
@@ -36,8 +35,6 @@ enum CollMode {
     GeometryCollection = 'geomColl',
     FeatureCollection = 'featColl'
 }
-
-const formatter = new Formatter();
 
 const store = useMainStore();
 
@@ -63,16 +60,16 @@ const options = computed(() => {
   return baseOpts;
 });
 
-const geomCollText = computed(() => formatter.Serialize(getAsGeometryCollection.value) as string);
-const featCollText = computed(() => formatter.Serialize(getAsFeatureCollection.value) as string);
-
-const toCopy = computed(() => (collMode.value === CollMode.GeometryCollection
-  ? geomCollText.value
-  : featCollText.value));
+const toCopy = computed(() => {
+  if (collMode.value === CollMode.GeometryCollection) {
+    return getAsGeometryCollection.value;
+  }
+  return getAsFeatureCollection.value;
+});
 
 const { downloadFile } = useDownload(format);
 
 function downloadAll() {
-  downloadFile(toCopy.value, 'allFeatures');
+  downloadFile(toCopy.value as string, 'allFeatures');
 }
 </script>

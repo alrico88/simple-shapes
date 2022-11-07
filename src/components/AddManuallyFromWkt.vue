@@ -1,8 +1,7 @@
 <template lang="pug">
 form.form.mt-3(@submit.prevent='createWktFromText')
   .form-group
-    .max-input-height
-      text-input(v-model:text="enteredText")
+    text-input(v-model:text="enteredText")
     .form-text Enter the Well-Known-Text representation of a geometry here
       |  or drag and drop a file to the input
     .valid-feedback.d-block(v-if="isValid === true") Valid WKT
@@ -63,10 +62,3 @@ function createWktFromText() {
   emit('done');
 }
 </script>
-
-<style lang="scss" scoped>
-.max-input-height {
-  max-height: 300px;
-  overflow-y: auto;
-}
-</style>

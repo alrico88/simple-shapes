@@ -1,11 +1,12 @@
 <template lang='pug'>
-prism-editor.form-control.bg-white(
-  :highlight="highlighter",
-  v-model='enteredText',
-  line-numbers,
-  @drop.prevent="handleDrop",
-  @dragover.prevent,
-)
+.max-input-height
+  prism-editor.form-control.bg-white(
+    :highlight="highlighter",
+    v-model='enteredText',
+    line-numbers,
+    @drop.prevent="handleDrop",
+    @dragover.prevent,
+  )
 </template>
 
 <script setup lang="ts">
@@ -30,3 +31,10 @@ function highlighter(code: string): string {
   return highlight(code, languages.json, 'json');
 }
 </script>
+
+<style lang="scss" scoped>
+.max-input-height {
+  max-height: 300px;
+  overflow-y: auto;
+}
+</style>

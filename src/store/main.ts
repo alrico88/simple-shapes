@@ -1,8 +1,11 @@
 import { defineStore } from 'pinia';
 import { convertToWK, parseFromWK } from 'wkt-parser-helper';
 import { useLocalStorage } from '@vueuse/core';
+import { Formatter } from 'fracturedjsonjs';
 import { StorePolygon } from '../models/StorePolygon';
 import { getBasicGeometriesToAdd } from '../helpers/validators';
+
+const formatter = new Formatter();
 
 export const useMainStore = defineStore('main', {
   state: () => ({
@@ -58,18 +61,18 @@ export const useMainStore = defineStore('main', {
         return `GEOMETRYCOLLECTION(${state.polygons.map((d) => d.wkt).join(',')})`;
       }
 
-      return {
+      return formatter.Serialize({
         type: 'GeometryCollection',
         geometries: state.polygons.map(({ wkt }) => parseFromWK(wkt)),
-      };
+      }) as string;
     },
     getAsFeatureCollection(state) {
-      return {
+      return formatter.Serialize({
         type: 'FeatureCollection',
         features: state.polygons.map((d) => parseFromWK(d.wkt, true, {
           id: d.id,
         })),
-      };
+      }) as string;
     },
     tile(state) {
       const fallbackStyle = state.mapStyles[5];
