@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@coreui/bootstrap-vue': ^1.0.0-beta.0
   '@iconify/json': ^1.1.457
-  '@popperjs/core': ^2.11.2
+  '@popperjs/core': ^2.11.6
   '@turf/area': ^6.0.1
   '@turf/circle': ^6.0.1
   '@types/chroma-js': ^2.1.3
@@ -13,6 +13,7 @@ specifiers:
   '@types/lodash-es': ^4.17.5
   '@types/prismjs': ^1.26.0
   '@types/shortid': ^0.0.29
+  '@types/web-bluetooth': ^0.0.16
   '@typescript-eslint/eslint-plugin': ^5.42.0
   '@typescript-eslint/parser': ^5.42.0
   '@vitejs/plugin-vue': ^3.2.0
@@ -51,12 +52,12 @@ specifiers:
 
 dependencies:
   '@coreui/bootstrap-vue': 1.0.0-beta.0_vue@3.2.41
-  '@popperjs/core': 2.11.2
+  '@popperjs/core': 2.11.6
   '@turf/area': 6.5.0
   '@turf/circle': 6.5.0
   '@vueuse/core': 9.4.0_vue@3.2.41
   bbox-helper-functions: 3.2.4
-  bootstrap: 5.2.2_@popperjs+core@2.11.2
+  bootstrap: 5.2.2_@popperjs+core@2.11.6
   chroma-js: 2.4.2
   file-saver: 2.0.5
   fracturedjsonjs: 3.0.2
@@ -82,6 +83,7 @@ devDependencies:
   '@types/lodash-es': 4.17.5
   '@types/prismjs': 1.26.0
   '@types/shortid': 0.0.29
+  '@types/web-bluetooth': 0.0.16
   '@typescript-eslint/eslint-plugin': 5.42.0_axesnprokjpsn4woxxq25jz5cu
   '@typescript-eslint/parser': 5.42.0_esueefhpt5ql6xiqdj4wcgwfzi
   '@vitejs/plugin-vue': 3.2.0_vite@3.2.2+vue@3.2.41
@@ -1437,8 +1439,8 @@ packages:
       fastq: 1.13.0
     dev: true
 
-  /@popperjs/core/2.11.2:
-    resolution: {integrity: sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==}
+  /@popperjs/core/2.11.6:
+    resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
     dev: false
 
   /@rollup/plugin-babel/5.3.1_rw3hudt2pmn5afxog7l3b6qtze:
@@ -1634,7 +1636,6 @@ packages:
 
   /@types/web-bluetooth/0.0.16:
     resolution: {integrity: sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ==}
-    dev: false
 
   /@typescript-eslint/eslint-plugin/5.42.0_axesnprokjpsn4woxxq25jz5cu:
     resolution: {integrity: sha512-5TJh2AgL6+wpL8H/GTSjNb4WrjKoR2rqvFxR/DDTqYNk6uXn8BJMEcncLSpMbf/XV1aS0jAjYwn98uvVCiAywQ==}
@@ -2158,12 +2159,12 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /bootstrap/5.2.2_@popperjs+core@2.11.2:
+  /bootstrap/5.2.2_@popperjs+core@2.11.6:
     resolution: {integrity: sha512-dEtzMTV71n6Fhmbg4fYJzQsw1N29hJKO1js5ackCgIpDcGid2ETMGC6zwSYw09v05Y+oRdQ9loC54zB1La3hHQ==}
     peerDependencies:
       '@popperjs/core': ^2.11.6
     dependencies:
-      '@popperjs/core': 2.11.2
+      '@popperjs/core': 2.11.6
     dev: false
 
   /brace-expansion/1.1.11:
