@@ -5,13 +5,14 @@ c-card.mb-2(no-body)
       .hstack.gap-2.align-items-center
         color-preview(:color="polygon.color")
         .vstack.gap-0
-          .fw-bold {{polygon.id}}
+          .fw-bold.cursor-pointer(@click="centerOnFeature") {{polygon.id}}
           .small {{ polygonArea }} km²
       .hstack.gap-2
-        button.btn.btn-outline-primary.btn-sm(
-          @click="centerOnFeature"
-        ) #[icon-geolocate] Go to
-        button.btn.btn-outline-primary.btn-sm(
+        form-check(v-model="polygon.visible", label="Visible")
+        c-button(
+          color="primary",
+          variant="outline",
+          size="sm",
           @click="toggleEdit"
         ) #[icon-edit] Edit info
     justify-between(:gap="2", v-if="isEditing")
@@ -21,7 +22,7 @@ c-card.mb-2(no-body)
       button.btn.btn-primary.btn-sm(@click="toggleEdit") Close
   c-card-body.p-0
     .max-editor-height
-      prism-editor.py-2.px-3(
+      prism-editor.bg-white.py-2.px-3(
         v-model="text",
         :highlight="highlighter",
         readonly
@@ -30,10 +31,17 @@ c-card.mb-2(no-body)
     justify-between(:gap="2")
       .hstack.gap-2
         clipboard-button(text="Copy", :value="text", size="sm")
-        button.btn.btn-primary.btn-sm(
+        c-button(
+          color="primary",
+          size="sm",
           @click='() => { downloadFile(text, polygon.id) }'
         ) #[icon-download] Download
-      button.btn.btn-danger.btn-sm(@click='removePolygon') #[icon-trash] Remove
+        more-button(color="secondary", :wkt="polygon.wkt", size="sm", :id="polygon.id")
+      c-button(
+        color="danger",
+        size="sm",
+        @click='deleteHandler'
+      ) #[icon-trash] {{ deleteConfirmation ? 'Sure?' : 'Remove' }}
 </template>
 
 <script setup lang="ts">
@@ -42,13 +50,18 @@ import { parseFromWK } from 'wkt-parser-helper';
 import { Formatter } from 'fracturedjsonjs';
 import { storeToRefs } from 'pinia';
 import {
-  CCard, CCardHeader, CCardFooter, CCardBody,
+  CCard,
+  CCardHeader,
+  CCardFooter,
+  CCardBody,
+  CButton,
 } from '@coreui/bootstrap-vue';
 import { getWKTBBox } from 'bbox-helper-functions';
 import area from '@turf/area';
 import { processNumber } from 'number-helper-functions';
 import { highlight, languages } from 'prismjs';
 import { PrismEditor } from 'vue-prism-editor';
+import FormCheck from './FormCheck.vue';
 import { useMainStore } from '../store/main';
 import { StorePolygon } from '../models/StorePolygon';
 import ClipboardButton from './ClipboardButton.vue';
@@ -56,11 +69,13 @@ import { useDownload } from '../composables/useDownload';
 import IconDownload from '~icons/bi/download';
 import IconTrash from '~icons/bi/trash';
 import IconEdit from '~icons/bi/pencil-square';
-import IconGeolocate from '~icons/bi/geo-fill';
 import mapEmitter from '../emitters/mapEmitter';
 import JustifyBetween from './JustifyBetween.vue';
 import ColorPreview from './ColorPreview.vue';
 import 'prismjs/components/prism-json';
+import MoreButton from './MoreButton.vue';
+import { useGeoFormat } from '../composables/useGeoFormat';
+import { useDeleteConfirm } from '../composables/useDeleteConfirm';
 
 const props = defineProps<{
   polygon: StorePolygon
@@ -81,11 +96,13 @@ const text = computed(() => {
   return props.polygon.wkt;
 });
 
-function removePolygon() {
+const { deleteHandler, deleteConfirmation } = useDeleteConfirm(() => {
   store.deletePolygon(props.polygon.id);
-}
+});
 
-const { downloadFile } = useDownload(format);
+const extension = useGeoFormat(format);
+
+const { downloadFile } = useDownload(extension);
 
 const isEditing = ref(false);
 

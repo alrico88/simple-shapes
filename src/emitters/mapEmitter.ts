@@ -1,3 +1,8 @@
 import mitt from 'mitt';
 
-export default mitt<Record<'goTo', number[]>>();
+type MapEmitterChannels = {
+  goTo: number[],
+  download: void
+}
+
+export default mitt<MapEmitterChannels>();

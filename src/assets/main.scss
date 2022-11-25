@@ -5,10 +5,14 @@ $regular-blue: #eaf4ff;
 
 $font-size-base: 1rem;
 $body-bg: $light-blue;
-$primary: #085cb7;
+$primary: #355A7F;
 $card-bg: $light-blue;
 $modal-content-bg: $light-blue;
 $modal-header-border-color: $regular-blue;
+
+html {
+  font-size: 14px;
+}
 
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 
@@ -33,5 +37,18 @@ body {
 }
 
 .form-group {
+  margin-bottom: 10px;
+}
+
+.cursor-pointer:hover {
+  cursor: pointer;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+hr {
+  margin-top: 10px;
   margin-bottom: 10px;
 }
