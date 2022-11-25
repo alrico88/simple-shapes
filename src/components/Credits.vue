@@ -1,7 +1,6 @@
 <template lang="pug">
-.row.pb-3
+.row
   .col
-    hr
     .d-flex.justify-content-between.align-items-center
       div
         p.mb-0 #[icon-laptop] Made by #[a.font-weight-bold(href="https://alrico.es", target='_blank') Alberto Rico]

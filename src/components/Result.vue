@@ -1,40 +1,52 @@
 <template lang="pug">
-.col.maxHeight.border-left
-  .row.bg-blue.mb-3
-    .col.py-3
-      h4.mb-0.fw-bolder Simple Shapes
-  settings
-  .row
-    .col
-      button.btn.btn-primary.btn-sm.w-100(
-        @click='openAddModal'
-      ) #[icon-plus] Add shape manually
-  hr
-  .row
-    .col.mb-1
-      result-item(
-        v-for='(polygon, index) of polygons',
-        :key='"card_" + index',
-        :polygon='polygon'
-      )
-      empty-state.mb-2.auto-mb(:show='polygons.length === 0')
-      result-copy-all-items.mb-2.auto-mb(v-if='showMultipleActions.copy')
-      result-remove-all-items.mb-2.auto-mb(v-if='showMultipleActions.delete')
-  credits
+.d-flex.flex-column.h-100
+  .bg-blue.mb-3
+    .container-fluid
+      .row
+        .col.py-3
+          .hstack.gap-2.align-items-center.justify-content-between
+            h4.mb-0.fw-bolder Simple Shapes
+            c-button(
+              color="primary",
+              @click='openAddModal'
+            ) #[icon-plus] Add shape manually
+  .container-fluid
+    .row
+      .col
+        settings
+        map-actions
+        divider-line(title="Shapes")
+  .container-fluid.h-100.overflow-y-auto.flex-grow-1
+    .row.g-2
+      .col
+        result-item(
+          v-for='(polygon, index) of polygons',
+          :key='"card_" + index',
+          :polygon='polygon'
+        )
+        empty-state.mb-2.auto-mb(:show='polygons.length === 0')
+  .py-3.border-top.border-2.bg-white
+    .container-fluid
+      .row
+        .col
+          result-copy-all-items.mb-2.auto-mb(v-if='showMultipleActions.copy')
+          credits
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
+import { CButton } from '@coreui/bootstrap-vue';
 import EmptyState from './EmptyState.vue';
 import ResultItem from './ResultItem.vue';
-import ResultRemoveAllItems from './ResultRemoveAllItems.vue';
 import ResultCopyAllItems from './ResultCopyAllItems.vue';
 import Settings from './Settings.vue';
 import Credits from './Credits.vue';
 import { useMainStore } from '../store/main';
 import IconPlus from '~icons/bi/plus';
 import { useModalsStore } from '../store/modals';
+import MapActions from './MapActions.vue';
+import DividerLine from './DividerLine.vue';
 
 const store = useMainStore();
 const modalsStore = useModalsStore();
@@ -56,7 +68,7 @@ function openAddModal() {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .maxHeight {
   max-height: 100vh;
   overflow-y: auto;

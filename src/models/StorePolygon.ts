@@ -8,9 +8,12 @@ export class StorePolygon {
 
   public color?: string;
 
+  public visible: boolean;
+
   constructor(wkt: string) {
     this.id = shortid();
     this.wkt = wkt;
     this.color = chroma.random().hex();
+    this.visible = true;
   }
 }

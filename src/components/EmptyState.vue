@@ -1,7 +1,6 @@
 <template lang="pug">
-.alert.alert-primary.border-primary.mb-0(
-  v-show='show'
-) #[icon-brush] Draw or add some shapes first
+.card.rounded(v-show='show')
+  .card-body.text-center #[icon-brush] Draw or add some shapes first
 </template>
 
 <script setup lang="ts">

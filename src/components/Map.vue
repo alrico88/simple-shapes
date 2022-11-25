@@ -1,6 +1,5 @@
 <template lang="pug">
-.col-lg-8.col-md-7.col-6.vh-100.px-0
-  .h-100(:id="mapDiv")
+.h-100.w-100(:id="mapDiv")
 </template>
 
 <script lang="ts" setup>
@@ -12,7 +11,8 @@ import { storeToRefs } from 'pinia';
 import {
   computed, onMounted, watch,
 } from 'vue';
-import { uniqueId } from 'lodash-es';
+import domToImage from 'dom-to-image';
+import { saveAs } from 'file-saver';
 import { useMainStore } from '../store/main';
 import mapEmitter from '../emitters/mapEmitter';
 
@@ -20,14 +20,17 @@ import mapEmitter from '../emitters/mapEmitter';
 
 const store = useMainStore();
 
-const mapDiv = uniqueId('mapDiv');
+const mapDiv = 'mapContainer';
 
 const { polygons, showLabels, tile } = storeToRefs(store);
 
-const parsedPolygons = computed(() => polygons.value.map(({ wkt, id, color }) => ({
+const parsedPolygons = computed(() => polygons.value.map(({
+  wkt, id, color, visible,
+}) => ({
   id,
   color,
   shape: parseFromWK(wkt),
+  visible,
 })));
 
 onMounted(() => {
@@ -80,6 +83,10 @@ onMounted(() => {
     const newLayerGroup = new L.LayerGroup();
 
     polys.forEach((poly) => {
+      if (!poly.visible) {
+        return;
+      }
+
       const layer = new L.GeoJSON(poly.shape, {
         style: {
           color: poly.color,
@@ -115,6 +122,14 @@ onMounted(() => {
     );
 
     map.flyToBounds(leafletBounds);
+  });
+
+  mapEmitter.on('download', async () => {
+    const blob = await domToImage.toBlob(
+      document.getElementById(mapDiv)?.parentNode as HTMLElement,
+    );
+
+    saveAs(blob, 'map.png');
   });
 });
 </script>

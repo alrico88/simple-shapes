@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { convertToWK, parseFromWK } from 'wkt-parser-helper';
 import { useLocalStorage } from '@vueuse/core';
 import { Formatter } from 'fracturedjsonjs';
+import { getGeoJSONBBox } from 'bbox-helper-functions';
 import { StorePolygon } from '../models/StorePolygon';
 import { getBasicGeometriesToAdd } from '../helpers/validators';
 
@@ -91,11 +92,18 @@ export const useMainStore = defineStore('main', {
         attribution: info.attr,
       };
     },
+    polygonsBBox() {
+      return getGeoJSONBBox(JSON.parse(this.getAsFeatureCollection as any));
+    },
   },
   actions: {
-    addPolygon(geojson: any): void {
+    addPolygon(geojson: any, id?: string): void {
       const wkt = convertToWK(geojson);
       const newPolygon = new StorePolygon(wkt);
+
+      if (id) {
+        newPolygon.id = id;
+      }
 
       this.polygons.push(newPolygon);
     },
@@ -120,6 +128,18 @@ export const useMainStore = defineStore('main', {
     },
     clearPolygons(): void {
       this.polygons = [];
+    },
+    toggleVisibility() {
+      this.polygons.forEach((poly) => {
+        // eslint-disable-next-line no-param-reassign
+        poly.visible = !poly.visible;
+      });
+    },
+    turnVisibility(status: boolean) {
+      this.polygons.forEach((poly) => {
+        // eslint-disable-next-line no-param-reassign
+        poly.visible = status;
+      });
     },
   },
 });

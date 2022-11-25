@@ -30,6 +30,7 @@ import { useMainStore } from '../store/main';
 import { useDownload } from '../composables/useDownload';
 import IconDownload from '~icons/bi/download';
 import JustifyBetween from './JustifyBetween.vue';
+import { useGeoFormat } from '../composables/useGeoFormat';
 
 enum CollMode {
     GeometryCollection = 'geomColl',
@@ -67,7 +68,9 @@ const toCopy = computed(() => {
   return getAsFeatureCollection.value;
 });
 
-const { downloadFile } = useDownload(format);
+const extension = useGeoFormat(format);
+
+const { downloadFile } = useDownload(extension);
 
 function downloadAll() {
   downloadFile(toCopy.value as string, 'allFeatures');
