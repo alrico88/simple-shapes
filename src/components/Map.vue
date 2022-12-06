@@ -11,7 +11,7 @@ import { storeToRefs } from 'pinia';
 import {
   computed, onMounted, watch,
 } from 'vue';
-import domToImage from 'dom-to-image';
+import { toBlob } from '@bubkoo/html-to-image';
 import { saveAs } from 'file-saver';
 import { useMainStore } from '../store/main';
 import mapEmitter from '../emitters/mapEmitter';
@@ -125,9 +125,18 @@ onMounted(() => {
   });
 
   mapEmitter.on('download', async () => {
-    const blob = await domToImage.toBlob(
-      document.getElementById(mapDiv)?.parentNode as HTMLElement,
-    );
+    const blob = await toBlob(
+      document.getElementById(mapDiv) as HTMLElement,
+      {
+        filter(node) {
+          if (!node.classList) {
+            return true;
+          }
+
+          return !node.classList.contains('leaflet-top');
+        },
+      },
+    ) as Blob;
 
     saveAs(blob, 'map.png');
   });

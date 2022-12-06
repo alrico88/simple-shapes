@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@bubkoo/html-to-image': ^1.11.1
   '@coreui/bootstrap-vue': ^1.0.0-beta.0
   '@iconify/json': ^1.1.457
   '@popperjs/core': ^2.11.6
@@ -54,6 +55,7 @@ specifiers:
   wkt-parser-helper: ^4.1.0
 
 dependencies:
+  '@bubkoo/html-to-image': 1.11.1
   '@coreui/bootstrap-vue': 1.0.0-beta.0_vue@3.2.45
   '@popperjs/core': 2.11.6
   '@turf/area': 6.5.0
@@ -1306,6 +1308,10 @@ packages:
       '@babel/helper-string-parser': 7.19.4
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
+
+  /@bubkoo/html-to-image/1.11.1:
+    resolution: {integrity: sha512-wy3N25AliTv8T/jUUgPw/2MPhAzPhi1EEa2EK1aT2E054cyH0P8JeBQU4RFXmyWubRVpxQNtcaOLUYuNSSZoww==, tarball: download/@bubkoo/html-to-image/1.11.1/f38799ac6807f7395e20b46855dd0c2ebb839957}
+    dev: false
 
   /@coreui/bootstrap-vue/1.0.0-beta.0_vue@3.2.45:
     resolution: {integrity: sha512-5UWEqIzwLlaewaafkZMIlM9HEGcnKUQ6b9a+D38RNugu+a7twEhE6DDl/kYgaPlko7yLONeuyHehbSo2J0NtUA==}
