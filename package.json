@@ -15,7 +15,6 @@
     "url": "https://alrico.es"
   },
   "dependencies": {
-    "@bubkoo/html-to-image": "^1.11.1",
     "@coreui/bootstrap-vue": "^1.0.0-beta.0",
     "@popperjs/core": "^2.11.6",
     "@turf/area": "^6.0.1",
@@ -27,6 +26,7 @@
     "dom-to-image": "^2.6.0",
     "file-saver": "^2.0.5",
     "fracturedjsonjs": "^3.0.2",
+    "html-to-image": "^1.11.1",
     "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",
     "lodash-es": "^4.17.21",

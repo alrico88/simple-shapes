@@ -1,7 +1,6 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@bubkoo/html-to-image': ^1.11.1
   '@coreui/bootstrap-vue': ^1.0.0-beta.0
   '@iconify/json': ^1.1.457
   '@popperjs/core': ^2.11.6
@@ -32,6 +31,7 @@ specifiers:
   eslint-plugin-vue: ^8.3.0
   file-saver: ^2.0.5
   fracturedjsonjs: ^3.0.2
+  html-to-image: ^1.11.1
   leaflet: ^1.7.1
   leaflet-draw: ^1.0.4
   lodash-es: ^4.17.21
@@ -55,7 +55,6 @@ specifiers:
   wkt-parser-helper: ^4.1.0
 
 dependencies:
-  '@bubkoo/html-to-image': 1.11.1
   '@coreui/bootstrap-vue': 1.0.0-beta.0_vue@3.2.45
   '@popperjs/core': 2.11.6
   '@turf/area': 6.5.0
@@ -67,6 +66,7 @@ dependencies:
   dom-to-image: 2.6.0
   file-saver: 2.0.5
   fracturedjsonjs: 3.0.2
+  html-to-image: 1.11.1
   leaflet: 1.7.1
   leaflet-draw: 1.0.4
   lodash-es: 4.17.21
@@ -1308,10 +1308,6 @@ packages:
       '@babel/helper-string-parser': 7.19.4
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
-
-  /@bubkoo/html-to-image/1.11.1:
-    resolution: {integrity: sha512-wy3N25AliTv8T/jUUgPw/2MPhAzPhi1EEa2EK1aT2E054cyH0P8JeBQU4RFXmyWubRVpxQNtcaOLUYuNSSZoww==, tarball: download/@bubkoo/html-to-image/1.11.1/f38799ac6807f7395e20b46855dd0c2ebb839957}
-    dev: false
 
   /@coreui/bootstrap-vue/1.0.0-beta.0_vue@3.2.45:
     resolution: {integrity: sha512-5UWEqIzwLlaewaafkZMIlM9HEGcnKUQ6b9a+D38RNugu+a7twEhE6DDl/kYgaPlko7yLONeuyHehbSo2J0NtUA==}
@@ -3432,6 +3428,10 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
     dev: true
+
+  /html-to-image/1.11.1:
+    resolution: {integrity: sha512-W6ZXctQQfhFA2tCcDbK1jCywwT9Oo1ucyXwlxku3zHacyhLPeMhs+h2OLBNeoYrPSgzgeOqhhSs+MbEmL2fDLw==}
+    dev: false
 
   /human-signals/2.1.0:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}

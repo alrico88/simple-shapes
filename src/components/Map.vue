@@ -11,7 +11,7 @@ import { storeToRefs } from 'pinia';
 import {
   computed, onMounted, watch,
 } from 'vue';
-import { toBlob } from '@bubkoo/html-to-image';
+import { toBlob } from 'html-to-image';
 import { saveAs } from 'file-saver';
 import { useMainStore } from '../store/main';
 import mapEmitter from '../emitters/mapEmitter';
