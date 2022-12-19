@@ -4,5 +4,6 @@ export const useModalsStore = defineStore('modals', {
   state: () => ({
     addModal: false,
     mapSettings: false,
+    searchInterface: false,
   }),
 });

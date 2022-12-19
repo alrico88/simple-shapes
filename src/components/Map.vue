@@ -14,11 +14,13 @@ import {
 import { toBlob } from 'html-to-image';
 import { saveAs } from 'file-saver';
 import { useMainStore } from '../store/main';
+import { useSearchStore } from '../store/search';
 import mapEmitter from '../emitters/mapEmitter';
 
 (window as any).type = true;
 
 const store = useMainStore();
+const searchStore = useSearchStore();
 
 const mapDiv = 'mapContainer';
 
@@ -77,6 +79,32 @@ onMounted(() => {
     store.addPolygon(asJSON.geometry);
   });
 
+  const { selectedSearch } = storeToRefs(searchStore);
+
+  let searchLayer = new L.LayerGroup();
+
+  watch(selectedSearch, (val) => {
+    if (val === null) {
+      searchLayer.removeFrom(map);
+
+      return;
+    }
+
+    const point = new L.Marker(
+      [val.geometry.coordinates[1], val.geometry.coordinates[0]],
+    );
+
+    const newLayerGroup = new L.LayerGroup();
+
+    newLayerGroup.addLayer(point);
+
+    searchLayer.removeFrom(map);
+    searchLayer = newLayerGroup;
+    searchLayer.addTo(map);
+  }, {
+    immediate: true,
+  });
+
   let layerGroup = new L.LayerGroup();
 
   watch([parsedPolygons, showLabels], ([polys]) => {
@@ -122,6 +150,10 @@ onMounted(() => {
     );
 
     map.flyToBounds(leafletBounds);
+  });
+
+  mapEmitter.on('focusOn' as any, (coords: [number, number]): void => {
+    map.flyTo(new LatLng(coords[1], coords[0]), 14);
   });
 
   mapEmitter.on('download', async () => {

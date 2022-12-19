@@ -6,10 +6,15 @@
         .col.py-3
           .hstack.gap-2.align-items-center.justify-content-between
             h4.mb-0.fw-bolder Simple Shapes
-            c-button(
-              color="primary",
-              @click='openAddModal'
-            ) #[icon-plus] Add shape manually
+            .hstack.gap-2
+              c-button(
+                color="secondary",
+                @click="openSearchInterface"
+              ) #[icon-search] Search
+              c-button(
+                color="primary",
+                @click='openAddModal'
+              ) #[icon-plus] Add shape manually
   .container-fluid
     .row
       .col
@@ -44,6 +49,7 @@ import Settings from './Settings.vue';
 import Credits from './Credits.vue';
 import { useMainStore } from '../store/main';
 import IconPlus from '~icons/bi/plus';
+import IconSearch from '~icons/bi/search';
 import { useModalsStore } from '../store/modals';
 import MapActions from './MapActions.vue';
 import DividerLine from './DividerLine.vue';
@@ -52,7 +58,7 @@ const store = useMainStore();
 const modalsStore = useModalsStore();
 
 const { polygons } = storeToRefs(store);
-const { addModal } = storeToRefs(modalsStore);
+const { addModal, searchInterface } = storeToRefs(modalsStore);
 
 const showMultipleActions = computed(() => {
   const len = polygons.value.length;
@@ -65,6 +71,10 @@ const showMultipleActions = computed(() => {
 
 function openAddModal() {
   addModal.value = true;
+}
+
+function openSearchInterface() {
+  searchInterface.value = true;
 }
 </script>
 
