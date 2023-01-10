@@ -10,7 +10,7 @@
       button.list-group-item.list-group-item-action(
         v-for="place of suggestions",
         :key="place.properties.osm_id",
-        @click="() => store.selectSearch(place)"
+        @click="() => searchStore.selectSearch(place)"
       )
         .hstack.gap-2.justify-content-between
           .vstack.gap-1
@@ -22,21 +22,41 @@
     .card-body.p-0
       search-details(:place="selectedSearch.properties")
     .card-footer
-      button.btn.btn-secondary.w-100(@click="store.removeSearchSelection") Remove search pin
+      .vstack.gap-2
+        .hstack.gap-2
+          button.btn.btn-primary.w-100(@click="addPoint")
+            icon-point
+            |  Add as point
+          button.btn.btn-primary.w-100(
+            @click="addExtent",
+            :disabled="!selectedSearch.properties.extent"
+          )
+            icon-bbox
+            |  Add as BBox
+        button.btn.btn-secondary.w-100(@click="searchStore.removeSearchSelection")
+          icon-remove-pin
+          |  Remove search pin
 </template>
 
 <script setup lang="ts">
 import { debouncedWatch } from '@vueuse/core';
+import { BBoxToGeoJSONPolygon } from 'bbox-helper-functions';
 import { search, asSimpleArray } from 'photon-geocoder';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
+import { useMainStore } from '../store/main';
 import { useSearchStore } from '../store/search';
 import SearchDetails from './SearchDetails.vue';
+import IconPoint from '~icons/gis/copy-point';
+import IconBbox from '~icons/gis/bbox-alt';
+import IconRemovePin from '~icons/pixelarticons/remove-box';
 
-const store = useSearchStore();
+const mainStore = useMainStore();
+
+const searchStore = useSearchStore();
 const {
   searchTerm, suggestions, loading, selectedSearch,
-} = storeToRefs(store);
+} = storeToRefs(searchStore);
 
 const showList = computed(() => loading.value || suggestions.value.length > 0);
 
@@ -63,4 +83,18 @@ debouncedWatch(searchTerm, async (val) => {
 }, {
   debounce: 300,
 });
+
+function addPoint() {
+  mainStore.addPolygon(
+    selectedSearch.value,
+    selectedSearch.value?.properties.name,
+  );
+}
+
+function addExtent() {
+  mainStore.addPolygon(
+    BBoxToGeoJSONPolygon(selectedSearch.value?.properties.extent),
+    `${selectedSearch.value?.properties.name}_extent`,
+  );
+}
 </script>
