@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@coreui/bootstrap-vue': ^1.0.0-beta.0
   '@iconify/json': ^1.1.457
+  '@mapbox/tilebelt': ^1.0.2
   '@popperjs/core': ^2.11.6
   '@turf/area': ^6.0.1
   '@turf/circle': ^6.0.1
@@ -12,6 +13,7 @@ specifiers:
   '@types/leaflet': ^1.7.8
   '@types/leaflet-draw': ^1.0.5
   '@types/lodash-es': ^4.17.5
+  '@types/mapbox__tilebelt': ^1.0.0
   '@types/prismjs': ^1.26.0
   '@types/shortid': ^0.0.29
   '@types/web-bluetooth': ^0.0.16
@@ -57,6 +59,7 @@ specifiers:
 
 dependencies:
   '@coreui/bootstrap-vue': 1.0.0-beta.0_vue@3.2.45
+  '@mapbox/tilebelt': 1.0.2
   '@popperjs/core': 2.11.6
   '@turf/area': 6.5.0
   '@turf/circle': 6.5.0
@@ -91,6 +94,7 @@ devDependencies:
   '@types/leaflet': 1.7.8
   '@types/leaflet-draw': 1.0.5
   '@types/lodash-es': 4.17.5
+  '@types/mapbox__tilebelt': 1.0.0
   '@types/prismjs': 1.26.0
   '@types/shortid': 0.0.29
   '@types/web-bluetooth': 0.0.16
@@ -1436,6 +1440,10 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
+  /@mapbox/tilebelt/1.0.2:
+    resolution: {integrity: sha512-tGJN2VIgWrXqBTPIxFVklklIpcy6ss8W5ouq+cjNLXPXFraRaDR4Ice+5Q8/uLX+6aH23lWBMydOIn8PcdVcpA==}
+    dev: false
+
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -1638,6 +1646,12 @@ packages:
 
   /@types/lodash/4.14.178:
     resolution: {integrity: sha512-0d5Wd09ItQWH1qFbEyQ7oTQ3GZrMfth5JkbN3EvTKLXcHLRDSXeLnlvlOn0wvxVIwK5o2M8JzP/OWz7T3NRsbw==}
+    dev: true
+
+  /@types/mapbox__tilebelt/1.0.0:
+    resolution: {integrity: sha512-g6AmvxPWl+Yt7EV3XxHCSDT1551fF7ZaHCLlfZuItZGPMMbjVvZ0jKIeeUYTrbReBO1YvruOhs2u4iLGcb6mBA==}
+    dependencies:
+      '@types/geojson': 7946.0.8
     dev: true
 
   /@types/node/18.11.9:

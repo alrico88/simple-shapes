@@ -12,11 +12,19 @@ c-nav(variant="pills", no-fade)
       :active="tab === 'geojson'",
       @click="() => { setTab('geojson') }"
     ) From GeoJSON
+  c-nav-item
+    c-nav-link(
+      href="javascript:void(0);"
+      :active="tab === 'tilenames'",
+      @click="() => { setTab('tilenames') }"
+    ) From Tilename
 c-tab-content
   c-tab-pane(:visible="tab === 'wkt'")
     add-manually-from-wkt(@done='sendDone')
   c-tab-pane(:visible="tab === 'geojson'")
     add-manually-from-geojson(@done='sendDone')
+  c-tab-pane(:visible="tab === 'tilenames'")
+    add-manually-from-tile(@done='sendDone')
 </template>
 
 <script setup lang="ts">
@@ -26,6 +34,7 @@ import {
 import { ref } from 'vue';
 import AddManuallyFromWkt from './AddManuallyFromWkt.vue';
 import AddManuallyFromGeojson from './AddManuallyFromGeojson.vue';
+import AddManuallyFromTile from './AddManuallyFromTile.vue';
 
 const emit = defineEmits(['done']);
 

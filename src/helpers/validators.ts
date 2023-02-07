@@ -24,3 +24,13 @@ export function getBasicGeometriesToAdd(parsed: any): any[] {
   }
   return [parsed];
 }
+
+export function validateTilenames(tilenames: string) {
+  tilenames.split('\n').forEach((tile) => {
+    const parsed = JSON.parse(tile);
+
+    if (parsed.length < 3) {
+      throw new Error('invalid tilename length');
+    }
+  });
+}
