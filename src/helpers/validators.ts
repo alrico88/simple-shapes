@@ -17,15 +17,17 @@ export function getBasicGeometriesToAdd(parsed: any): any[] {
 
   if (type === 'FeatureCollection') {
     return parsed.features.flatMap((d: any) => getBasicGeometriesToAdd(d));
-  } if (type === 'Feature') {
+  }
+  if (type === 'Feature') {
     return [parsed.geometry];
-  } if (type === 'GeometryCollection') {
+  }
+  if (type === 'GeometryCollection') {
     return parsed.geometries;
   }
   return [parsed];
 }
 
-export function validateTilenames(tilenames: string) {
+export function validateTilenames(tilenames: string): void {
   tilenames.split('\n').forEach((tile) => {
     const parsed = JSON.parse(tile);
 
@@ -33,4 +35,16 @@ export function validateTilenames(tilenames: string) {
       throw new Error('invalid tilename length');
     }
   });
+}
+
+export function validateBBox(bboxStr: string): void {
+  const parsed = JSON.parse(bboxStr);
+
+  if (!Array.isArray(parsed)) {
+    throw new Error('BBox should be an array');
+  }
+
+  if (parsed.length !== 4) {
+    throw new Error('BBox should have 4 coordinates');
+  }
 }

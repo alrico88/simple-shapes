@@ -14,7 +14,7 @@ c-card.mb-2(no-body)
           variant="outline",
           size="sm",
           @click="toggleEdit"
-        ) #[icon-edit] Edit info
+        ) #[icon-edit] Edit name
     justify-between(:gap="2", v-if="isEditing")
       .hstack.gap-2
         input.form-control.form-control-color(type="color", v-model="polygon.color")

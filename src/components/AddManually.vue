@@ -1,30 +1,14 @@
 <template lang="pug">
 c-nav(variant="pills", no-fade)
-  c-nav-item
+  c-nav-item(v-for="mode of modes", :key="mode.value")
     c-nav-link(
       href="javascript:void(0);"
-      :active="tab === 'wkt'",
-      @click="() => { setTab('wkt') }"
-    ) From WKT
-  c-nav-item
-    c-nav-link(
-      href="javascript:void(0);"
-      :active="tab === 'geojson'",
-      @click="() => { setTab('geojson') }"
-    ) From GeoJSON
-  c-nav-item
-    c-nav-link(
-      href="javascript:void(0);"
-      :active="tab === 'tilenames'",
-      @click="() => { setTab('tilenames') }"
-    ) From Tilename
+      :active="tab === mode.value",
+      @click="() => { setTab(mode.value) }"
+    ) {{ mode.text }}
 c-tab-content
-  c-tab-pane(:visible="tab === 'wkt'")
-    add-manually-from-wkt(@done='sendDone')
-  c-tab-pane(:visible="tab === 'geojson'")
-    add-manually-from-geojson(@done='sendDone')
-  c-tab-pane(:visible="tab === 'tilenames'")
-    add-manually-from-tile(@done='sendDone')
+  c-tab-pane(v-for="mode of modes", :key="mode.value" :visible="tab === mode.value")
+    component(:is="mode.component", @done='sendDone')
 </template>
 
 <script setup lang="ts">
@@ -35,10 +19,34 @@ import { ref } from 'vue';
 import AddManuallyFromWkt from './AddManuallyFromWkt.vue';
 import AddManuallyFromGeojson from './AddManuallyFromGeojson.vue';
 import AddManuallyFromTile from './AddManuallyFromTile.vue';
+import AddManuallyFromBbox from './AddManuallyFromBbox.vue';
 
 const emit = defineEmits(['done']);
 
 const tab = ref('wkt');
+
+const modes = [
+  {
+    text: 'From WKT',
+    value: 'wkt',
+    component: AddManuallyFromWkt,
+  },
+  {
+    text: 'From GeoJSON',
+    value: 'gejson',
+    component: AddManuallyFromGeojson,
+  },
+  {
+    text: 'From Tilename',
+    value: 'tilenames',
+    component: AddManuallyFromTile,
+  },
+  {
+    text: 'From BBox',
+    value: 'bbox',
+    component: AddManuallyFromBbox,
+  },
+];
 
 function setTab(newTab: string): void {
   tab.value = newTab;
