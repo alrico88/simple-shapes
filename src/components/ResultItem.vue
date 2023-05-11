@@ -5,11 +5,11 @@ c-card.mb-2(no-body)
       .hstack.gap-2.align-items-center
         color-preview(:color="polygon.color")
         .vstack.gap-0
-          .fw-bold.cursor-pointer(@click="centerOnFeature") {{polygon.id}}
+          .fw-bold.cursor-pointer.text-break(@click="centerOnFeature") {{polygon.id}}
           .small {{ polygonArea }} km²
       .hstack.gap-2
         form-check(v-model="polygon.visible", label="Visible")
-        c-button(
+        c-button.text-nowrap(
           color="primary",
           variant="outline",
           size="sm",
