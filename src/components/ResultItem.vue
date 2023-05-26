@@ -114,9 +114,15 @@ function centerOnFeature() {
   mapEmitter.emit('goTo', getWKTBBox(polygon.value.wkt));
 }
 
-const polygonArea = computed(() => processNumber(area(
-  parseFromWK(props.polygon.wkt) as any,
-) / 1000000));
+const polygonArea = computed(() => {
+  const calcArea = area(
+    parseFromWK(props.polygon.wkt) as any,
+  ) / 1000000;
+
+  const rounded = processNumber(calcArea);
+
+  return rounded === 0 ? processNumber(calcArea, 4) : rounded;
+});
 
 function highlighter(code: string): string {
   return highlight(code, languages.json, 'json');
