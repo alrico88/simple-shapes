@@ -20,6 +20,7 @@ import AddManuallyFromWkt from './AddManuallyFromWkt.vue';
 import AddManuallyFromGeojson from './AddManuallyFromGeojson.vue';
 import AddManuallyFromTile from './AddManuallyFromTile.vue';
 import AddManuallyFromBbox from './AddManuallyFromBbox.vue';
+import AddManuallyFromCoords from './AddManuallyFromCoords.vue';
 
 const emit = defineEmits(['done']);
 
@@ -45,6 +46,11 @@ const modes = [
     text: 'From BBox',
     value: 'bbox',
     component: AddManuallyFromBbox,
+  },
+  {
+    text: 'From coordinates',
+    value: 'boords',
+    component: AddManuallyFromCoords,
   },
 ];
 
