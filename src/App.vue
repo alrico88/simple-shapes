@@ -4,7 +4,7 @@
     map-component.flex-grow-1
   .col.border-left.vh-100
     result
-  c-modal(:visible="addModal", @close="() => { addModal = false }")
+  c-modal(:visible="addModal", size="lg", @close="() => { addModal = false }")
     c-modal-header
       h5.modal-title Add manually
     c-modal-body

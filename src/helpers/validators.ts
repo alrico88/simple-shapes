@@ -48,3 +48,23 @@ export function validateBBox(bboxStr: string): void {
     throw new Error('BBox should have 4 coordinates');
   }
 }
+
+export function validateCoordinates(coordinates: string): void {
+  coordinates.split('\n').forEach((coord) => {
+    const elements = coord.split(',');
+
+    if (elements.length !== 2) {
+      throw new Error('only latitude,longitude are supported');
+    }
+
+    const [latitude, longitude] = elements.map(Number);
+
+    if (latitude < -90 || latitude > 90) {
+      throw new Error(`invalid latitude ${latitude}. should be between -90 and 90`);
+    }
+
+    if (longitude < -180 || longitude > 180) {
+      throw new Error(`invalid longitude ${longitude}. should be between -180 and 180`);
+    }
+  });
+}
