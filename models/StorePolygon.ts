@@ -1,6 +1,5 @@
 import shortid from "shortid";
 import chroma from "chroma-js";
-import { uniqueId } from "lodash-es";
 
 export class StorePolygon {
   public wkt: string;
@@ -14,8 +13,10 @@ export class StorePolygon {
   public visible: boolean;
 
   constructor(wkt: string) {
-    this.id = shortid();
-    this.name = uniqueId("polygon_");
+    const key = shortid();
+
+    this.id = key;
+    this.name = key;
     this.wkt = wkt;
     this.color = chroma.random().hex();
     this.visible = true;
