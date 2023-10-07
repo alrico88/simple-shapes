@@ -37,7 +37,6 @@
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.1",
     "number-helper-functions": "^4.1.1",
-    "nuxt-umami": "^2.5.4",
     "photon-geocoder": "^1.0.1",
     "pinia": "^2.1.6",
     "prismjs": "^1.29.0",

@@ -1,6 +1,5 @@
 export default defineNuxtConfig({
   ssr: false,
-  extends: ["nuxt-umami"],
   app: {
     head: {
       title: "Simple Shapes",
@@ -38,6 +37,14 @@ export default defineNuxtConfig({
         {
           rel: "stylesheet",
           href: "https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css",
+        },
+      ],
+      script: [
+        {
+          src: "https://stats.alrico.es/umami.js",
+          async: true,
+          defer: true,
+          "data-website-id": "97d1bf85-a121-48f4-9ef9-72a005d50171",
         },
       ],
     },
