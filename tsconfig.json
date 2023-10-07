@@ -1,21 +1,9 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "useDefineForClassFields": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "jsx": "preserve",
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
-    "types": ["unplugin-icons/types/vue", "web-bluetooth"]
-  },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  // https://v3.nuxtjs.org/concepts/typescript
+  "extends": "./.nuxt/tsconfig.json",
   "vueCompilerOptions": {
     "plugins": [
-      "@volar/vue-language-plugin-pug"
+      "@vue/language-plugin-pug"
     ]
   }
 }
