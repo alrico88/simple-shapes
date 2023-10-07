@@ -2,9 +2,7 @@ $font-family-sans-serif: 'Fira Sans', Helvetica, Arial, sans-serif;
 
 $light-blue: #f6faff;
 $regular-blue: #eaf4ff;
-
 $font-size-base: 1rem;
-$body-bg: $light-blue;
 $primary: #355A7F;
 $card-bg: $light-blue;
 $modal-content-bg: $light-blue;
@@ -21,7 +19,8 @@ html {
 }
 
 body {
-  color: $primary
+  color: $primary;
+  background-color: $light-blue;
 }
 
 .alert-primary {
@@ -51,4 +50,8 @@ body {
 hr {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.b-overlay-wrap {
+  z-index: 1000;
 }

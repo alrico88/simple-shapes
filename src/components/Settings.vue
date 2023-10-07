@@ -1,17 +1,17 @@
 <template lang="pug">
 .row.mb-2
   .col
-    c-form(@submit.prevent)
+    b-form(@submit.prevent)
       .row.row-cols-1.row-cols-md-2.gx-2
         .col
           .form-group.mb-0(label="Format")
             label Shape format
-            c-button-group.d-flex(size="sm", role="group")
-              c-button.w-100(
+            b-button-group.d-flex(size="sm", role="group")
+              b-button.w-100(
                 v-for="item of formats"
                 :key="item.value",
                 @click="format = item.value" ,
-                color="secondary",
+                variant="secondary",
                 :class="{active: format === item.value}"
               ) {{ item.text }}
         .col
@@ -23,7 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import { CForm, CButton, CButtonGroup } from '@coreui/bootstrap-vue';
 import { storeToRefs } from 'pinia';
 import { useMainStore } from '../store/main';
 import { useModalsStore } from '../store/modals';

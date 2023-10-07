@@ -1,31 +1,25 @@
 <template lang='pug'>
-c-dropdown
-  c-dropdown-toggle(:color="color", :size="size") #[icon-three-dots] More
-  c-dropdown-menu
-    c-dropdown-item(@click="copyBBox", href="#", :size="size") Copy BBox
-    c-dropdown-item(@click="createBBox", href="#", :size="size") Add BBox as new shape
-    c-dropdown-item(@click="convertToKml", href="#", :size="size") Convert to KML
+b-dropdown(:variant="color", :size="size")
+  template(#button-content) #[icon-three-dots] More
+  b-dropdown-item(@click="copyBBox", href="#", :size="size") Copy BBox
+  b-dropdown-item(@click="createBBox", href="#", :size="size") Add BBox as new shape
+  b-dropdown-item(@click="convertToKml", href="#", :size="size") Convert to KML
 </template>
 
 <script setup lang="ts">
-import {
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem,
-} from '@coreui/bootstrap-vue';
 import { useClipboard } from '@vueuse/core';
 import { BBoxToGeoJSONFeature, getWKTBBox } from 'bbox-helper-functions';
 import tokml from 'tokml';
 import { parseFromWK } from 'wkt-parser-helper';
+import type { ColorVariant, Size } from 'bootstrap-vue-next';
 import { useDownload } from '../composables/useDownload';
 import IconThreeDots from '~icons/bi/three-dots';
 import { useMainStore } from '../store/main';
 
 const props = withDefaults(defineProps<{
-  color?: string,
+  color?: ColorVariant,
   wkt: string,
-  size?: string,
+  size?: Size,
   id: string
 }>(), {
   size: 'md',

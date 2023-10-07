@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import './assets/main.scss';
+import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 import App from './App.vue';
 
 const app = createApp(App);

@@ -24,22 +24,27 @@
     .card-footer
       .vstack.gap-2
         .hstack.gap-2
-          button.btn.btn-primary.w-100(@click="addPoint")
+          b-button.w-100(
+            variant="primary"
+            @click="addPoint"
+            :disabled="addedPoint"
+          )
             icon-point
-            |  Add as point
-          button.btn.btn-primary.w-100(
+            |  {{ addedPoint ? 'Added' : 'Add as point' }}
+          b-button.w-100(
+            variant="primary"
             @click="addExtent",
-            :disabled="!selectedSearch.properties.extent"
+            :disabled="!selectedSearch.properties.extent || addedBBox"
           )
             icon-bbox
-            |  Add as BBox
-        button.btn.btn-secondary.w-100(@click="searchStore.removeSearchSelection")
+            |  {{ addedBBox ? 'Added' : 'Add as BBox' }}
+        b-button.w-100(variant="secondary" @click="searchStore.removeSearchSelection")
           icon-remove-pin
           |  Remove search pin
 </template>
 
 <script setup lang="ts">
-import { debouncedWatch } from '@vueuse/core';
+import { debouncedWatch, refAutoReset } from '@vueuse/core';
 import { BBoxToGeoJSONPolygon } from 'bbox-helper-functions';
 import { search, asSimpleArray } from 'photon-geocoder';
 import { storeToRefs } from 'pinia';
@@ -59,6 +64,11 @@ const {
 } = storeToRefs(searchStore);
 
 const showList = computed(() => loading.value || suggestions.value.length > 0);
+
+const refReset = 2000;
+
+const addedPoint = refAutoReset(false, refReset);
+const addedBBox = refAutoReset(false, refReset);
 
 debouncedWatch(searchTerm, async (val) => {
   try {
@@ -89,6 +99,8 @@ function addPoint() {
     selectedSearch.value,
     selectedSearch.value?.properties.name,
   );
+
+  addedPoint.value = true;
 }
 
 function addExtent() {
@@ -96,5 +108,7 @@ function addExtent() {
     BBoxToGeoJSONPolygon(selectedSearch.value?.properties.extent),
     `${selectedSearch.value?.properties.name}_extent`,
   );
+
+  addedBBox.value = true;
 }
 </script>

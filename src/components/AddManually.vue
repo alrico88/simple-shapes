@@ -1,20 +1,10 @@
 <template lang="pug">
-c-nav(variant="pills", no-fade)
-  c-nav-item(v-for="mode of modes", :key="mode.value")
-    c-nav-link(
-      href="javascript:void(0);"
-      :active="tab === mode.value",
-      @click="() => { setTab(mode.value) }"
-    ) {{ mode.text }}
-c-tab-content
-  c-tab-pane(v-for="mode of modes", :key="mode.value" :visible="tab === mode.value")
+b-tabs(v-model="tab", pills)
+  b-tab(v-for="mode of modes", :key="mode.value", :title="mode.text")
     component(:is="mode.component", @done='sendDone')
 </template>
 
 <script setup lang="ts">
-import {
-  CNav, CNavItem, CNavLink, CTabContent, CTabPane,
-} from '@coreui/bootstrap-vue';
 import { ref } from 'vue';
 import AddManuallyFromWkt from './AddManuallyFromWkt.vue';
 import AddManuallyFromGeojson from './AddManuallyFromGeojson.vue';
@@ -24,7 +14,7 @@ import AddManuallyFromCoords from './AddManuallyFromCoords.vue';
 
 const emit = defineEmits(['done']);
 
-const tab = ref('wkt');
+const tab = ref(0);
 
 const modes = [
   {
@@ -54,8 +44,8 @@ const modes = [
   },
 ];
 
-function setTab(newTab: string): void {
-  tab.value = newTab;
+function setTab(tabIdx: number): void {
+  tab.value = tabIdx;
 }
 
 function sendDone() {

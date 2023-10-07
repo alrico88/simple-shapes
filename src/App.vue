@@ -4,28 +4,36 @@
     map-component.flex-grow-1
   .col.border-left.vh-100
     result
-  c-modal(:visible="addModal", size="lg", @close="() => { addModal = false }")
-    c-modal-header
-      h5.modal-title Add manually
-    c-modal-body
-      add-manually(@done='() => { addModal = false }')
-  c-modal(:visible="mapSettings", @close="() => { mapSettings = false }")
+  b-modal(
+    v-model="addModal"
+    size="lg"
+    @close="() => { addModal = false }"
+    title="Add manually"
+    title-class="modal-title"
+    hide-footer
+    lazy
+  )
+    add-manually(@done='() => { addModal = false }')
+  b-modal(
+    v-model="mapSettings"
+    @close="() => { mapSettings = false }"
+    title="Map Options"
+    title-class="modal-title"
+    hide-footer
+    lazy
+  )
     map-options
-  c-offcanvas(:visible="searchInterface", placement="end", @hide="hideSearchInterface")
-    c-offcanvas-header
-      .hstack.gap-2.justify-content-between.align-items-center.w-100
-        .fw-bold.text-uppercase Search
-        div
-          c-close-button(@click="hideSearchInterface")
-    c-offcanvas-body.p-0
-      .p-2.bg-white
-        the-search
+  b-offcanvas(
+    v-model="searchInterface",
+    placement="end"
+    @hide="hideSearchInterface"
+    title="Search"
+  )
+    .p-2.bg-white
+      the-search
 </template>
 
 <script setup lang="ts">
-import {
-  CModal, CModalHeader, CModalBody, COffcanvas, COffcanvasHeader, COffcanvasBody, CCloseButton,
-} from '@coreui/bootstrap-vue';
 import { storeToRefs } from 'pinia';
 import MapComponent from './components/Map.vue';
 import Result from './components/Result.vue';

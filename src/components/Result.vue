@@ -7,12 +7,12 @@
           .hstack.gap-2.align-items-center.justify-content-between
             h4.mb-0.fw-bolder Simple Shapes
             .hstack.gap-2
-              c-button(
-                color="secondary",
+              b-button(
+                variant="secondary",
                 @click="openSearchInterface"
               ) #[icon-search] Search
-              c-button(
-                color="primary",
+              b-button(
+                variant="primary",
                 @click='openAddModal'
               ) #[icon-plus] Add shape manually
   .container-fluid
@@ -20,16 +20,22 @@
       .col
         settings
         map-actions
-        divider-line(title="Shapes")
+        divider-line(:title="`Shapes (${polygons.length})`")
   .container-fluid.h-100.overflow-y-auto.flex-grow-1
     .row.g-2
       .col
         result-item(
-          v-for='(polygon, index) of polygons',
-          :key='"card_" + index',
+          v-for='polygon of currentPageItems',
+          :key='polygon.id',
           :polygon='polygon'
         )
         empty-state.mb-2.auto-mb(:show='polygons.length === 0')
+        b-pagination(
+          v-if="showPagination"
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="perPage"
+        )
   .py-3.border-top.border-2.bg-white
     .container-fluid
       .row
@@ -41,7 +47,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { storeToRefs } from 'pinia';
-import { CButton } from '@coreui/bootstrap-vue';
+import { usePagination } from '../composables/usePagination';
 import EmptyState from './EmptyState.vue';
 import ResultItem from './ResultItem.vue';
 import ResultCopyAllItems from './ResultCopyAllItems.vue';
@@ -76,6 +82,17 @@ function openAddModal() {
 function openSearchInterface() {
   searchInterface.value = true;
 }
+
+const {
+  currentPage,
+  currentPageItems,
+  totalRows,
+  perPage,
+  showPagination,
+} = usePagination(polygons, {
+  perPage: 20,
+  resetOnChange: true,
+});
 </script>
 
 <style lang="scss" scoped>

@@ -12,10 +12,10 @@
     "lib": ["esnext", "dom"],
     "types": ["unplugin-icons/types/vue", "web-bluetooth"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "components.d.ts"],
   "vueCompilerOptions": {
     "plugins": [
-      "@volar/vue-language-plugin-pug"
+      "@vue/language-plugin-pug"
     ]
   }
 }

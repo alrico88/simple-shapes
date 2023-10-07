@@ -4,41 +4,37 @@
     label Actions
 .row.g-2.row-cols-md-4.row-cols-2
   .col
-    c-dropdown.w-100(color="secondary", variant="btn-group")
-      c-button.text-truncate(
-        size="sm",
-        color="secondary",
-        @click="toggleVisibility"
-      ) Toggle visibility
-      c-dropdown-toggle(split, color="secondary", size="sm")
-      c-dropdown-menu
-        c-dropdown-item(href="#", @click="() => store.turnVisibility(true)") Show all
-        c-dropdown-item(href="#", @click="() => store.turnVisibility(false)") Hide all
+    b-dropdown.w-100(
+      variant="secondary"
+      split
+      size="sm"
+      text="Toggle visibility"
+      @click="toggleVisibility"
+    )
+      b-dropdown-item(href="#", @click.prevent="store.turnVisibility(true)") Show all
+      b-dropdown-item(href="#", @click.prevent="store.turnVisibility(false)") Hide all
   .col
-    c-button.text-truncate.w-100(
+    b-button.text-truncate.w-100(
       size="sm",
-      color="secondary",
+      variant="secondary",
       @click="fitAllShapes"
     ) Fit all shapes
   .col
-    c-button.text-truncate.w-100(
+    b-button.text-truncate.w-100(
       size="sm",
-      color="secondary",
+      variant="secondary",
       @click="downloadMap"
     ) Export map
   .col
-    c-button.text-truncate.w-100(
+    b-button.text-truncate.w-100(
       size="sm",
-      color="danger",
+      variant="danger",
       @click="deleteHandler"
       :disabled="polygons.length === 0"
     ) {{ deleteConfirmation ? 'Sure?' : 'Remove all' }}
 </template>
 
 <script setup lang="ts">
-import {
-  CButton, CDropdown, CDropdownMenu, CDropdownToggle, CDropdownItem,
-} from '@coreui/bootstrap-vue';
 import { storeToRefs } from 'pinia';
 import { useDeleteConfirm } from '../composables/useDeleteConfirm';
 import mapEmitter from '../emitters/mapEmitter';

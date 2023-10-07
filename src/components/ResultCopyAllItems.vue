@@ -7,7 +7,7 @@
           justify-between(:gap="2")
             div Get all features as
             .flex-grow-1
-              c-form-select.w-100(:options="options", v-model="collMode")
+              b-form-select.w-100(:options="options", v-model="collMode")
       .row
         .col
           .hstack.gap-2
@@ -24,7 +24,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
-import { CFormSelect } from '@coreui/bootstrap-vue';
 import ClipboardButton from './ClipboardButton.vue';
 import { useMainStore } from '../store/main';
 import { useDownload } from '../composables/useDownload';
@@ -46,14 +45,14 @@ const collMode = ref(CollMode.GeometryCollection);
 const options = computed(() => {
   const baseOpts = [
     {
-      label: 'GeometryCollection',
+      text: 'GeometryCollection',
       value: CollMode.GeometryCollection,
     },
   ];
 
   if (format.value === 'geojson') {
     baseOpts.push({
-      label: 'FeatureCollection',
+      text: 'FeatureCollection',
       value: CollMode.FeatureCollection,
     });
   }

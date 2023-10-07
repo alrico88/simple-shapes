@@ -1,6 +1,6 @@
 <template lang="pug">
-c-card.mb-2(no-body)
-  c-card-header.p-2
+b-card.mb-2(no-body)
+  b-card-header.p-2
     justify-between(:gap="2", v-if="!isEditing")
       .hstack.gap-2.align-items-center
         color-preview(:color="polygon.color")
@@ -9,9 +9,8 @@ c-card.mb-2(no-body)
           .small {{ polygonArea }} km²
       .hstack.gap-2
         form-check(v-model="polygon.visible", label="Visible")
-        c-button.text-nowrap(
-          color="primary",
-          variant="outline",
+        b-button.text-nowrap(
+          variant="outline-primary",
           size="sm",
           @click="toggleEdit"
         ) #[icon-edit] Edit name
@@ -20,25 +19,25 @@ c-card.mb-2(no-body)
         input.form-control.form-control-color(type="color", v-model="polygon.color")
         input.form-control(type="text", v-model="polygon.id", @keydown.enter="toggleEdit")
       button.btn.btn-primary.btn-sm(@click="toggleEdit") Close
-  c-card-body.p-0
+  b-card-body.p-0
     .max-editor-height
       prism-editor.bg-white.py-2.px-3(
         v-model="text",
         :highlight="highlighter",
         readonly
       )
-  c-card-footer.p-2
+  b-card-footer.p-2
     justify-between(:gap="2")
       .hstack.gap-2
         clipboard-button(text="Copy", :value="text", size="sm")
-        c-button(
-          color="primary",
+        b-button(
+          variant="primary",
           size="sm",
           @click='() => { downloadFile(text, polygon.id) }'
         ) #[icon-download] Download
         more-button(color="secondary", :wkt="polygon.wkt", size="sm", :id="polygon.id")
-      c-button(
-        color="danger",
+      b-button(
+        variant="danger",
         size="sm",
         @click='deleteHandler'
       ) #[icon-trash] {{ deleteConfirmation ? 'Sure?' : 'Remove' }}
@@ -49,13 +48,6 @@ import { computed, toRefs, ref } from 'vue';
 import { parseFromWK } from 'wkt-parser-helper';
 import { Formatter } from 'fracturedjsonjs';
 import { storeToRefs } from 'pinia';
-import {
-  CCard,
-  CCardHeader,
-  CCardFooter,
-  CCardBody,
-  CButton,
-} from '@coreui/bootstrap-vue';
 import { getWKTBBox } from 'bbox-helper-functions';
 import area from '@turf/area';
 import { processNumber } from 'number-helper-functions';
