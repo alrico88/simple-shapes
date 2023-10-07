@@ -2,20 +2,22 @@
 
 Web app to draw geometries and get their GeoJSON or WKT representation.
 
+Built with [Nuxt 3](https://nuxt.com), and [Leaflet](https://leafletjs.com/).
+
 ## Project setup
 
 ```
-pnpm i
+bun install
 ```
 
 ### Compiles and hot-reloads for development
 
 ```
-pnpm dev
+bun run dev
 ```
 
 ### Compiles and minifies for production
 
 ```
-pnpm build
+bun run generate
 ```
