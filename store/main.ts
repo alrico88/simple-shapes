@@ -9,9 +9,9 @@ import { getBasicGeometriesToAdd } from "../helpers/validators";
 const formatter = new Formatter();
 
 export const useMainStore = defineStore("main", () => {
-  const polygons = useLocalStorage<StorePolygon[]>("polygons", []);
-  const format = useLocalStorage<"wkt" | "geojson">("format", "wkt");
-  const showLabels = useLocalStorage("showLabels", true);
+  const polygons = usePersistedRef<StorePolygon[]>("polygons", []);
+  const format = usePersistedRef<"wkt" | "geojson">("format", "wkt");
+  const showLabels = usePersistedRef("showLabels", true);
 
   const mapStyles = [
     {
@@ -75,6 +75,8 @@ export const useMainStore = defineStore("main", () => {
         features: polygons.value.map((d) =>
           parseFromWK(d.wkt, true, {
             id: d.id,
+            name: d.name,
+            color: d.color,
           }),
         ),
       }) as string,
@@ -104,12 +106,12 @@ export const useMainStore = defineStore("main", () => {
     return getGeoJSONBBox(parsed);
   });
 
-  function addPolygon(geojson: any, id?: string): void {
+  function addPolygon(geojson: any, name?: string): void {
     const wkt = convertToWK(geojson);
     const newPolygon = new StorePolygon(wkt);
 
-    if (id) {
-      newPolygon.id = id;
+    if (name) {
+      newPolygon.name = name;
     }
 
     polygons.value.push(newPolygon);

@@ -11,8 +11,10 @@
 
 <script setup lang="ts">
 import { readAsText } from "promise-file-reader";
-import { highlight, languages } from "prismjs";
+import prism from "prismjs";
 import { PrismEditor } from "vue-prism-editor";
+
+const { highlight, languages } = prism;
 
 const props = defineProps<{
   text: string;

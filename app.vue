@@ -35,8 +35,6 @@
 
 <script setup lang="ts">
 import { useModalsStore } from "./store/modals";
-import "vue-prism-editor/dist/prismeditor.min.css";
-import "prismjs/themes/prism-coy.css";
 
 const store = useModalsStore();
 const { addModal, mapSettings, searchInterface } = storeToRefs(store);

@@ -4,13 +4,10 @@
     label Actions
 .row.g-2.row-cols-md-4.row-cols-2
   .col
-    b-dropdown.w-100(
-      variant="secondary"
-      split
-      size="sm"
-      text="Toggle visibility"
-      @click="toggleVisibility"
-    )
+    b-dropdown.w-100(variant="secondary", size="sm")
+      template(#button-content) Visibility
+      b-dropdown-item(href="#", @click.prevent="toggleVisibility") Toggle visibility
+      b-dropdown-divider
       b-dropdown-item(href="#", @click.prevent="store.turnVisibility(true)") Show all
       b-dropdown-item(href="#", @click.prevent="store.turnVisibility(false)") Hide all
   .col

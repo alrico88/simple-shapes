@@ -5,7 +5,7 @@ b-card.mb-2(no-body)
       .hstack.gap-2.align-items-center
         color-preview(:color="polygon.color")
         .vstack.gap-0
-          .fw-bold.cursor-pointer.text-break(@click="centerOnFeature") {{polygon.id}}
+          .fw-bold.cursor-pointer.text-break(@click="centerOnFeature") {{ polygon.name }}
           .small {{ polygonArea }} km²
       .hstack.gap-2
         form-check(v-model="polygon.visible", label="Visible")
@@ -17,7 +17,7 @@ b-card.mb-2(no-body)
     justify-between(:gap="2", v-if="isEditing")
       .hstack.gap-2
         input.form-control.form-control-color(type="color", v-model="polygon.color")
-        input.form-control(type="text", v-model="polygon.id", @keydown.enter="toggleEdit")
+        input.form-control(type="text", v-model="polygon.name", @keydown.enter="toggleEdit")
       button.btn.btn-primary.btn-sm(@click="toggleEdit") Close
   b-card-body.p-0
     .max-editor-height
@@ -33,9 +33,9 @@ b-card.mb-2(no-body)
         b-button(
           variant="primary",
           size="sm",
-          @click='() => { downloadFile(text, polygon.id) }'
+          @click='() => { downloadFile(text, polygon.name) }'
         ) #[icon(name="bi:download")] Download
-        more-button(color="secondary", :wkt="polygon.wkt", size="sm", :id="polygon.id")
+        more-button(color="secondary", :wkt="polygon.wkt", size="sm", :name="polygon.name")
       b-button(
         variant="danger",
         size="sm",
@@ -49,12 +49,14 @@ import { Formatter } from "fracturedjsonjs";
 import { getWKTBBox } from "bbox-helper-functions";
 import area from "@turf/area";
 import { processNumber } from "number-helper-functions";
-import { highlight, languages } from "prismjs";
+import prism from "prismjs";
 import { PrismEditor } from "vue-prism-editor";
 import { useMainStore } from "../store/main";
 import { StorePolygon } from "../models/StorePolygon";
 import mapEmitter from "../emitters/mapEmitter";
 import "prismjs/components/prism-json";
+
+const { highlight, languages } = prism;
 
 const props = defineProps<{
   polygon: StorePolygon;
@@ -69,7 +71,13 @@ const text = computed(() => {
   if (format.value === "geojson") {
     const formatter = new Formatter();
 
-    return formatter.Serialize(parseFromWK(props.polygon.wkt)) as string;
+    return formatter.Serialize(
+      parseFromWK(props.polygon.wkt, true, {
+        name: props.polygon.name,
+        id: props.polygon.id,
+        color: props.polygon.color,
+      }),
+    ) as string;
   }
 
   return props.polygon.wkt;

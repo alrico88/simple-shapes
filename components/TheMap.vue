@@ -23,8 +23,9 @@ const mapDiv = "mapContainer";
 const { polygons, showLabels, tile } = storeToRefs(store);
 
 const parsedPolygons = computed(() =>
-  polygons.value.map(({ wkt, id, color, visible }) => ({
+  polygons.value.map(({ wkt, id, name, color, visible }) => ({
     id,
+    name,
     color,
     shape: parseFromWK(wkt),
     visible,
@@ -37,8 +38,6 @@ onMounted(() => {
       center: [0, 0],
       zoom: 3,
     });
-
-    console.log(map);
 
     const drawControl = new L.Control.Draw({
       draw: {
@@ -129,7 +128,7 @@ onMounted(() => {
           });
 
           if (showLabels.value) {
-            layer.bindTooltip(poly.id, {
+            layer.bindTooltip(poly.name, {
               direction: "top",
               permanent: true,
             });

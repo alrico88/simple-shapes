@@ -18,7 +18,7 @@ const props = withDefaults(
     color?: ColorVariant;
     wkt: string;
     size?: Size;
-    id: string;
+    name: string;
   }>(),
   {
     size: "md",
@@ -38,13 +38,13 @@ function copyBBox() {
 function createBBox() {
   store.addPolygon(
     BBoxToGeoJSONFeature(getWKTBBox(props.wkt)),
-    `${props.id}_bbox`,
+    `${props.name}_bbox`,
   );
 }
 
 function convertToKml() {
   const asGeoJSON = parseFromWK(props.wkt);
 
-  downloadFile(tokml(asGeoJSON), props.id);
+  downloadFile(tokml(asGeoJSON), props.name);
 }
 </script>
