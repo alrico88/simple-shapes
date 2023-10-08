@@ -20,12 +20,12 @@ b-card.mb-2(no-body)
         input.form-control(type="text", v-model="polygon.name", @keydown.enter="toggleEdit")
       button.btn.btn-primary.btn-sm(@click="toggleEdit") Close
   b-card-body.p-0
-    .max-editor-height
-      prism-editor.bg-white.py-2.px-3(
-        v-model="text",
-        :highlight="highlighter",
-        readonly
-      )
+    codemirror(
+      v-model="text",
+      disabled,
+      :extensions="extensions",
+      :style="style"
+    )
   b-card-footer.p-2
     justify-between(:gap="2")
       .hstack.gap-2
@@ -49,14 +49,10 @@ import { Formatter } from "fracturedjsonjs";
 import { getWKTBBox } from "bbox-helper-functions";
 import area from "@turf/area";
 import { processNumber } from "number-helper-functions";
-import prism from "prismjs";
-import { PrismEditor } from "vue-prism-editor";
 import { useMainStore } from "../store/main";
 import { StorePolygon } from "../models/StorePolygon";
 import mapEmitter from "../emitters/mapEmitter";
-import "prismjs/components/prism-json";
-
-const { highlight, languages } = prism;
+import { Codemirror } from "vue-codemirror";
 
 const props = defineProps<{
   polygon: StorePolygon;
@@ -66,6 +62,8 @@ const store = useMainStore();
 
 const { format } = storeToRefs(store);
 const { polygon } = toRefs(props);
+
+const { style, extensions } = useCodeStyle();
 
 const text = computed(() => {
   if (format.value === "geojson") {
@@ -108,10 +106,6 @@ const polygonArea = computed(() => {
 
   return rounded === 0 ? processNumber(calcArea, 4) : rounded;
 });
-
-function highlighter(code: string): string {
-  return highlight(code, languages.json, "json");
-}
 </script>
 
 <style scoped>

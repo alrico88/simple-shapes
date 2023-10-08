@@ -1,24 +1,24 @@
 <template lang="pug">
 .max-input-height
-  prism-editor.form-control.bg-white(
-    :highlight="highlighter",
+  codemirror.form-control(
     v-model='enteredText',
     line-numbers,
     @drop.prevent="handleDrop",
     @dragover.prevent,
+    :style="style",
+    :extensions="extensions"
   )
 </template>
 
 <script setup lang="ts">
 import { readAsText } from "promise-file-reader";
-import prism from "prismjs";
-import { PrismEditor } from "vue-prism-editor";
-
-const { highlight, languages } = prism;
+import { Codemirror } from "vue-codemirror";
 
 const props = defineProps<{
   text: string;
 }>();
+
+const { style, extensions } = useCodeStyle();
 
 const enteredText = useVModel(props, "text");
 
@@ -26,10 +26,6 @@ async function handleDrop(e: DragEvent): Promise<void> {
   if (e.dataTransfer) {
     enteredText.value = await readAsText(e.dataTransfer.files[0]);
   }
-}
-
-function highlighter(code: string): string {
-  return highlight(code, languages.json, "json");
 }
 </script>
 
