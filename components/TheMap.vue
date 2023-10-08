@@ -37,6 +37,7 @@ onMounted(() => {
     const map = new L.Map(mapDiv, {
       center: [0, 0],
       zoom: 3,
+      preferCanvas: true,
     });
 
     const drawControl = new L.Control.Draw({
