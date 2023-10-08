@@ -133,10 +133,11 @@ export const useMainStore = defineStore("main", () => {
 
   function addShapes(parsed: any): void {
     const geomsToAdd = getBasicGeometriesToAdd(parsed);
+    const newPolygons = geomsToAdd.map(
+      (geom) => new StorePolygon(convertToWK(geom)),
+    );
 
-    geomsToAdd.forEach((geom) => {
-      addPolygon(geom);
-    });
+    polygons.value = [...polygons.value, ...newPolygons];
   }
 
   function clearPolygons(): void {
