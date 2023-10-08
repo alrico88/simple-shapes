@@ -1,13 +1,12 @@
 <template lang="pug">
-.max-input-height
-  codemirror.form-control(
-    v-model='enteredText',
-    line-numbers,
-    @drop.prevent="handleDrop",
-    @dragover.prevent,
-    :style="style",
-    :extensions="extensions"
-  )
+codemirror.form-control(
+  v-model='enteredText',
+  line-numbers,
+  @drop.prevent="handleDrop",
+  @dragover.prevent,
+  :style="style",
+  :extensions="extensions"
+)
 </template>
 
 <script setup lang="ts">
@@ -28,10 +27,3 @@ async function handleDrop(e: DragEvent): Promise<void> {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.max-input-height {
-  max-height: 300px;
-  overflow-y: auto;
-}
-</style>
