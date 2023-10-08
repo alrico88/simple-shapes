@@ -17,6 +17,7 @@
     "url": "https://alrico.es"
   },
   "dependencies": {
+    "@codemirror/lang-json": "^6.0.1",
     "@mapbox/tilebelt": "^1.0.2",
     "@nuxtjs/google-fonts": "^3.0.2",
     "@turf/area": "^6.0.1",
@@ -27,6 +28,7 @@
     "bootstrap": "^5.3.2",
     "bootstrap-vue-next": "^0.14.8",
     "chroma-js": "^2.4.2",
+    "codemirror": "^6.0.1",
     "dom-to-image": "^2.6.0",
     "file-saver": "^2.0.5",
     "fracturedjsonjs": "^3.1.0",
@@ -39,11 +41,10 @@
     "number-helper-functions": "^4.1.1",
     "photon-geocoder": "^1.0.1",
     "pinia": "^2.1.6",
-    "prismjs": "^1.29.0",
     "promise-file-reader": "^1.0.3",
     "shortid": "^2.2.16",
     "tokml": "^0.4.0",
-    "vue-prism-editor": "2.0.0-alpha.2",
+    "vue-codemirror": "^6.1.1",
     "wkt-parser-helper": "^4.1.0"
   },
   "devDependencies": {
@@ -57,7 +58,6 @@
     "@types/leaflet-draw": "^1.0.5",
     "@types/lodash-es": "^4.17.9",
     "@types/mapbox__tilebelt": "^1.0.0",
-    "@types/prismjs": "^1.26.1",
     "@types/shortid": "^0.0.30",
     "@vite-pwa/nuxt": "^0.1.1",
     "@vue/eslint-config-prettier": "^8.0.0",

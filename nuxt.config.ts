@@ -49,11 +49,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: [
-    "@/assets/main.scss",
-    "vue-prism-editor/dist/prismeditor.min.css",
-    "prismjs/themes/prism-coy.css",
-  ],
+  css: ["@/assets/main.scss"],
   modules: [
     "nuxt-icon",
     "@vueuse/nuxt",
@@ -105,6 +101,7 @@ export default defineNuxtConfig({
   googleFonts: {
     families: {
       "Fira+Sans": [400, 500, 700],
+      "Fira+Code": [400],
     },
   },
 });

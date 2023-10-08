@@ -2,7 +2,7 @@
 .row.mx-0.g-0
   .col-lg-8.col-md-7.col-6.vh-100
     the-map
-  .col.border-left.vh-100
+  .col-lg-4.border-left.vh-100
     the-result
   b-modal(
     v-model="addModal"
