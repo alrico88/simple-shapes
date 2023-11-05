@@ -1,5 +1,5 @@
 <template lang="pug">
-codemirror.form-control(
+codemirror(
   v-model='enteredText',
   line-numbers,
   :style="style",
