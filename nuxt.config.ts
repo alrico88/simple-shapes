@@ -41,9 +41,8 @@ export default defineNuxtConfig({
       ],
       script: [
         {
-          src: "https://stats.alrico.es/umami.js",
+          src: "https://stats.alrico.es/script.js",
           async: true,
-          defer: true,
           "data-website-id": "97d1bf85-a121-48f4-9ef9-72a005d50171",
         },
       ],
