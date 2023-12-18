@@ -6,7 +6,7 @@ b-card.mb-2(no-body)
         color-preview(:color="polygon.color")
         .vstack.gap-0
           .fw-bold.cursor-pointer.text-break(@click="centerOnFeature") {{ polygon.name }}
-          .small {{ polygonArea }} km²
+          .small {{ shapeDetails }}
       .hstack.gap-2
         form-check(v-model="polygon.visible", label="Visible")
         b-button.text-nowrap(
@@ -48,6 +48,7 @@ import { parseFromWK } from "wkt-parser-helper";
 import { Formatter } from "fracturedjsonjs";
 import { getWKTBBox } from "bbox-helper-functions";
 import area from "@turf/area";
+import length from "@turf/length";
 import { processNumber } from "number-helper-functions";
 import { useMainStore } from "../store/main";
 import { StorePolygon } from "../models/StorePolygon";
@@ -99,12 +100,30 @@ function centerOnFeature() {
   mapEmitter.emit("goTo", getWKTBBox(polygon.value.wkt));
 }
 
-const polygonArea = computed(() => {
-  const calcArea = area(parseFromWK(props.polygon.wkt) as any) / 1000000;
+const shapeDetails = computed(() => {
+  const lineTypes = ["LineString", "MultiLineString"];
+  const parsed = parseFromWK(props.polygon.wkt);
+  const isLine = lineTypes.includes(parsed.type);
 
-  const rounded = processNumber(calcArea);
+  if (isLine) {
+    let lengthUnit = "m";
+    let lineLength = length(parsed as any, {
+      units: "meters",
+    });
 
-  return rounded === 0 ? processNumber(calcArea, 4) : rounded;
+    if (lineLength > 1000) {
+      lengthUnit = "km";
+      lineLength = lineLength / 1000;
+    }
+
+    return `Length: ${processNumber(lineLength)} ${lengthUnit}.`;
+  } else {
+    const calcArea = area(parsed as any) / 1000000;
+    const rounded = processNumber(calcArea);
+    const toReturn = rounded === 0 ? processNumber(calcArea, 4) : rounded;
+
+    return `Area: ${toReturn} m2`;
+  }
 });
 </script>
 
