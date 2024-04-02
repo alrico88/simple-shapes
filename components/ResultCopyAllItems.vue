@@ -1,7 +1,7 @@
 <template lang="pug">
 .row
   .col
-    .alert.alert-primary.border-primary.mb-2.auto-mb
+    b-alert.border-primary.mb-2.auto-mb(:value="true", variant="primary")
       .row.mb-2
         .col
           justify-between(:gap="2")
@@ -11,14 +11,8 @@
       .row
         .col
           .hstack.gap-2
-            clipboard-button.w-100(
-              size="sm",
-              text="Copy",
-              :value="toCopy"
-            )
-            button.btn.btn-primary.btn-sm.w-100(
-              @click='downloadAll'
-            ) #[icon(name="bi:download")] Download
+            clipboard-button.w-100(size="sm", text="Copy", :value="toCopy")
+            b-button(block, variant="primary", size="sm", @click="downloadAll") #[icon(name="bi:download")] Download
 </template>
 
 <script setup lang="ts">

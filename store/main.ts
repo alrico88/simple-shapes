@@ -77,9 +77,9 @@ export const useMainStore = defineStore("main", () => {
             id: d.id,
             name: d.name,
             color: d.color,
-          }),
+          })
         ),
-      }) as string,
+      }) as string
   );
 
   const tile = computed(() => {
@@ -134,7 +134,7 @@ export const useMainStore = defineStore("main", () => {
   function addShapes(parsed: any): void {
     const geomsToAdd = getBasicGeometriesToAdd(parsed);
     const newPolygons = geomsToAdd.map(
-      (geom) => new StorePolygon(convertToWK(geom)),
+      (geom) => new StorePolygon(convertToWK(geom))
     );
 
     polygons.value = [...polygons.value, ...newPolygons];

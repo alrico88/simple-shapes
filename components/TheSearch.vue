@@ -1,7 +1,11 @@
 <template lang="pug">
 .vstack.gap-2
   .form-group.mb-0
-    input.form-control(v-model="searchTerm", type="text", placeholder="Enter a search term")
+    input.form-control(
+      v-model="searchTerm",
+      type="text",
+      placeholder="Enter a search term"
+    )
   .list-group(v-if="showList")
     template(v-if="loading")
       .list-group-item.text-center
@@ -25,22 +29,28 @@
       .vstack.gap-2
         .hstack.gap-2
           b-button.w-100(
-            variant="primary"
-            @click="addPoint"
+            variant="primary",
+            @click="addPoint",
             :disabled="addedPoint"
           )
             icon(name="gis:copy-point")
-            |  {{ addedPoint ? 'Added' : 'Add as point' }}
+            |
+            | {{ addedPoint ? "Added" : "Add as point" }}
           b-button.w-100(
-            variant="primary"
+            variant="primary",
             @click="addExtent",
             :disabled="!selectedSearch.properties.extent || addedBBox"
           )
             icon(name="gis:bbox-alt")
-            |  {{ addedBBox ? 'Added' : 'Add as BBox' }}
-        b-button.w-100(variant="secondary" @click="searchStore.removeSearchSelection")
+            |
+            | {{ addedBBox ? "Added" : "Add as BBox" }}
+        b-button.w-100(
+          variant="secondary",
+          @click="searchStore.removeSearchSelection"
+        )
           icon(name="pixelarticons:remove-box")
-          |  Remove search pin
+          |
+          | Remove search pin
 </template>
 
 <script setup lang="ts">
@@ -77,7 +87,7 @@ debouncedWatch(
       const places = asSimpleArray(
         await search(val, {
           language: "en",
-        }),
+        })
       );
 
       suggestions.value = places;
@@ -89,13 +99,13 @@ debouncedWatch(
   },
   {
     debounce: 300,
-  },
+  }
 );
 
 function addPoint() {
   mainStore.addPolygon(
     selectedSearch.value,
-    selectedSearch.value?.properties.name,
+    selectedSearch.value?.properties.name
   );
 
   addedPoint.value = true;
@@ -104,7 +114,7 @@ function addPoint() {
 function addExtent() {
   mainStore.addPolygon(
     BBoxToGeoJSONPolygon(selectedSearch.value?.properties.extent),
-    `${selectedSearch.value?.properties.name}_extent`,
+    `${selectedSearch.value?.properties.name}_extent`
   );
 
   addedBBox.value = true;

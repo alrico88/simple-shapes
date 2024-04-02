@@ -7,14 +7,8 @@
           .hstack.gap-2.align-items-center.justify-content-between
             h4.mb-0.fw-bolder Simple Shapes
             .hstack.gap-2
-              b-button(
-                variant="secondary",
-                @click="openSearchInterface"
-              ) #[icon(name="bi:search")] Search
-              b-button(
-                variant="primary",
-                @click='openAddModal'
-              ) #[icon(name="bi:plus")] Add shape manually
+              b-button(variant="secondary", @click="openSearchInterface") #[icon(name="bi:search")] Search
+              b-button(variant="primary", @click="openAddModal") #[icon(name="bi:plus")] Add shape manually
   .container-fluid
     .row
       .col
@@ -25,22 +19,22 @@
     .row.g-2
       .col
         result-item(
-          v-for='polygon of currentPageItems',
-          :key='polygon.id',
-          :polygon='polygon'
+          v-for="polygon of currentPageItems",
+          :key="polygon.id",
+          :polygon="polygon"
         )
-        empty-state.mb-2.auto-mb(:show='polygons.length === 0')
+        empty-state.mb-2.auto-mb(:show="polygons.length === 0")
         b-pagination(
-          v-if="showPagination"
-          v-model="currentPage"
-          :total-rows="totalRows"
+          v-if="showPagination",
+          v-model="currentPage",
+          :total-rows="totalRows",
           :per-page="perPage"
         )
   .py-3.border-top.border-2.bg-white
     .container-fluid
       .row
         .col
-          result-copy-all-items.mb-2.auto-mb(v-if='showMultipleActions.copy')
+          result-copy-all-items.mb-2.auto-mb(v-if="showMultipleActions.copy")
           the-credits
 </template>
 

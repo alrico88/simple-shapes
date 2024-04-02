@@ -16,8 +16,15 @@ b-card.mb-2(no-body)
         ) #[icon(name="bi:pencil-square")] Edit name
     justify-between(:gap="2", v-if="isEditing")
       .hstack.gap-2
-        input.form-control.form-control-color(type="color", v-model="polygon.color")
-        input.form-control(type="text", v-model="polygon.name", @keydown.enter="toggleEdit")
+        input.form-control.form-control-color(
+          type="color",
+          v-model="polygon.color"
+        )
+        input.form-control(
+          type="text",
+          v-model="polygon.name",
+          @keydown.enter="toggleEdit"
+        )
       button.btn.btn-primary.btn-sm(@click="toggleEdit") Close
   b-card-body.p-0
     codemirror(
@@ -33,14 +40,15 @@ b-card.mb-2(no-body)
         b-button(
           variant="primary",
           size="sm",
-          @click='() => { downloadFile(text, polygon.name) }'
+          @click="() => { downloadFile(text, polygon.name); }"
         ) #[icon(name="bi:download")] Download
-        more-button(color="secondary", :wkt="polygon.wkt", size="sm", :name="polygon.name")
-      b-button(
-        variant="danger",
-        size="sm",
-        @click='deleteHandler'
-      ) #[icon(name="bi:trash")] {{ deleteConfirmation ? 'Sure?' : 'Remove' }}
+        more-button(
+          color="secondary",
+          :wkt="polygon.wkt",
+          size="sm",
+          :name="polygon.name"
+        )
+      b-button(variant="danger", size="sm", @click="deleteHandler") #[icon(name="bi:trash")] {{ deleteConfirmation ? "Sure?" : "Remove" }}
 </template>
 
 <script setup lang="ts">
@@ -75,7 +83,7 @@ const text = computed(() => {
         name: props.polygon.name,
         id: props.polygon.id,
         color: props.polygon.color,
-      }),
+      })
     ) as string;
   }
 
@@ -122,7 +130,7 @@ const shapeDetails = computed(() => {
     const rounded = processNumber(calcArea);
     const toReturn = rounded === 0 ? processNumber(calcArea, 4) : rounded;
 
-    return `Area: ${toReturn} m2`;
+    return `Area: ${toReturn} km2`;
   }
 });
 </script>

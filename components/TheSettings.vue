@@ -8,18 +8,16 @@
             label Shape format
             b-button-group.d-flex(size="sm", role="group")
               b-button.w-100(
-                v-for="item of formats"
+                v-for="item of formats",
                 :key="item.value",
-                @click="() => format = item.value"
+                @click="() => (format = item.value)",
                 variant="secondary",
-                :class="{active: format === item.value}"
+                :class="{ active: format === item.value }"
               ) {{ item.text }}
         .col
           .form-group.mb-0
             label.w-100 Map options
-            button.btn.btn-secondary.btn-sm.w-100(
-              @click="openMapSettings"
-            ) Show options
+            button.btn.btn-secondary.btn-sm.w-100(@click="openMapSettings") Show options
 </template>
 
 <script setup lang="ts">

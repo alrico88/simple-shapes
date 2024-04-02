@@ -1,16 +1,13 @@
 <template lang="pug">
-form.form.mt-3(@submit.prevent='createGeoJSONFromTilenames')
-  .form-group
+b-form.mt-3(@submit.prevent="createGeoJSONFromTilenames")
+  b-form-group(
+    valid-feedback="Valid tile(s)",
+    :invalid-feedback="error",
+    :state="isValid",
+    description="Enter the Slippy map tilename input in the [x, y, z] format or drag and drop a file to the input. You can add multiple tilenames at once, separated by new lines"
+  )
     text-input(v-model:text="enteredText")
-    .form-text Enter the Slippy map tilename input in the [x, y, z] format
-      |  or drag and drop a file to the input
-    .form-text You can add multiple tilenames at once, separated by new lines
-    .valid-feedback.d-block(v-if="isValid === true") Valid tiles
-    .invalid-feedback.d-block(v-if="isValid === false") {{ error }}
-  button.btn.btn-success.w-100(
-    type='submit',
-    :disabled="btnDisabled"
-  ) #[icon(name="bi:plus")] Add tile(s)
+  b-button.w-100(variant="success", type="submit", :disabled="btnDisabled") #[icon(name="bi:plus")] Add tile(s)
 </template>
 
 <script setup lang="ts">

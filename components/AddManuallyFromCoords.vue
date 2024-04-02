@@ -1,16 +1,13 @@
 <template lang="pug">
-form.form.mt-3(@submit.prevent='createGeoJSONFromCoordinates')
-  .form-group
+b-form.mt-3(@submit.prevent="createGeoJSONFromCoordinates")
+  b-form-group(
+    valid-feedback="Valid coordinates",
+    :invalid-feedback="error",
+    :state="isValid",
+    description="Enter the coordinates in latitude,longitude format (in that order) or drag and drop a file to the input. You can add multiple coordinates at once, separated by new lines"
+  )
     text-input(v-model:text="enteredText")
-    .form-text Enter the coordinates in latitude,longitude format (in that order)
-      |  or drag and drop a file to the input
-    .form-text You can add multiple coordinates at once, separated by new lines
-    .valid-feedback.d-block(v-if="isValid === true") Valid coordinates
-    .invalid-feedback.d-block(v-if="isValid === false") {{ error }}
-  button.btn.btn-success.w-100(
-    type='submit',
-    :disabled="btnDisabled"
-  ) #[icon(name="bi:plus")] Add coordinate(s)
+  b-button.w-100(variant="success", type="submit", :disabled="btnDisabled") #[icon(name="bi:plus")] Add coordinate(s)
 </template>
 
 <script setup lang="ts">
@@ -61,7 +58,7 @@ function createGeoJSONFromCoordinates() {
           coordinates: [longitude, latitude],
         },
       },
-      d,
+      d
     );
   });
 

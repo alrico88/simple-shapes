@@ -1,6 +1,6 @@
 <template lang="pug">
 codemirror(
-  v-model='enteredText',
+  v-model="text",
   line-numbers,
   :style="style",
   :extensions="extensions"
@@ -10,11 +10,7 @@ codemirror(
 <script setup lang="ts">
 import { Codemirror } from "vue-codemirror";
 
-const props = defineProps<{
-  text: string;
-}>();
+const text = defineModel<string>("text");
 
 const { style, extensions } = useCodeStyle();
-
-const enteredText = useVModel(props, "text");
 </script>

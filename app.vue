@@ -5,28 +5,28 @@
   .col-lg-4.border-left.vh-100
     the-result
   b-modal(
-    v-model="addModal"
-    size="lg"
-    @close="() => { addModal = false }"
-    title="Add manually"
-    title-class="modal-title"
-    hide-footer
+    v-model="addModal",
+    size="lg",
+    @close="() => { addModal = false; }",
+    title="Add manually",
+    title-class="modal-title",
+    hide-footer,
     lazy
   )
-    add-manually(@done='() => { addModal = false }')
+    add-manually(@done="() => { addModal = false; }")
   b-modal(
-    v-model="mapSettings"
-    @close="() => { mapSettings = false }"
-    title="Map Options"
-    title-class="modal-title"
-    hide-footer
+    v-model="mapSettings",
+    @close="() => { mapSettings = false; }",
+    title="Map Options",
+    title-class="modal-title",
+    hide-footer,
     lazy
   )
     map-options
   b-offcanvas(
     v-model="searchInterface",
-    placement="end"
-    @hide="hideSearchInterface"
+    placement="end",
+    @hide="hideSearchInterface",
     title="Search"
   )
     .p-2.bg-white

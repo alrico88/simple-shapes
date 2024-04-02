@@ -1,5 +1,5 @@
 <template lang="pug">
-.previewBlock.rounded(:style="{backgroundColor: color}")
+.previewBlock.rounded(:style="{ backgroundColor: color }")
 </template>
 
 <script lang="ts" setup>

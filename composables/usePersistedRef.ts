@@ -18,7 +18,7 @@ export function usePersistedRef<T>(storageKey: string, initialValue: T) {
     },
     {
       deep: true,
-    },
+    }
   );
 
   return valRef;

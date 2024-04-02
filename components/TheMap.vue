@@ -29,7 +29,7 @@ const parsedPolygons = computed(() =>
     color,
     shape: parseFromWK(wkt),
     visible,
-  })),
+  }))
 );
 
 onMounted(() => {
@@ -106,7 +106,7 @@ onMounted(() => {
       },
       {
         immediate: true,
-      },
+      }
     );
 
     let layerGroup = new L.LayerGroup();
@@ -144,7 +144,7 @@ onMounted(() => {
       },
       {
         immediate: true,
-      },
+      }
     );
 
     map.on("ready", () => {
@@ -154,7 +154,7 @@ onMounted(() => {
     mapEmitter.on("goTo" as any, (bbox: number[]): void => {
       const leafletBounds = new LatLngBounds(
         new LatLng(bbox[1], bbox[0]),
-        new LatLng(bbox[3], bbox[2]),
+        new LatLng(bbox[3], bbox[2])
       );
 
       map.flyToBounds(leafletBounds);
@@ -175,7 +175,7 @@ onMounted(() => {
 
             return !node.classList.contains("leaflet-top");
           },
-        },
+        }
       )) as Blob;
 
       saveAs(blob, "map.png");

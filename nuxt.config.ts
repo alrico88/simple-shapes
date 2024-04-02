@@ -59,7 +59,7 @@ export default defineNuxtConfig({
       },
     ],
     "@vite-pwa/nuxt",
-    "@nuxtjs/google-fonts",
+    "@nuxt/fonts",
     "@bootstrap-vue-next/nuxt",
   ],
   pwa: {
@@ -97,10 +97,18 @@ export default defineNuxtConfig({
       cleanupOutdatedCaches: true,
     },
   },
-  googleFonts: {
-    families: {
-      "Fira+Sans": [400, 500, 700],
-      "Fira+Code": [400],
-    },
+  fonts: {
+    families: [
+      {
+        provider: "google",
+        name: "Fira Sans",
+        weights: [400, 500, 700],
+      },
+      {
+        provider: "google",
+        name: "Fira Code",
+        weights: [400],
+      },
+    ],
   },
 });

@@ -1,11 +1,12 @@
 <template lang="pug">
 button.btn(
-  :class="{[btnVariant]: true, [`btn-${size}`]: true}",
-  @click='() => copy()'
+  :class="{ [btnVariant]: true, [`btn-${size}`]: true }",
+  @click="() => copy()"
 )
   icon(name="bi:clipboard-plus", v-show="!copied")
   icon(name="bi:clipboard-check", v-show="copied")
-  |  {{ text }}
+  |
+  | {{ text }}
 </template>
 
 <script lang="ts" setup>
@@ -34,6 +35,6 @@ const { copy, copied } = useClipboard({
 });
 
 const btnVariant = computed(() =>
-  copied.value ? "btn-success" : "btn-outline-primary",
+  copied.value ? "btn-success" : "btn-outline-primary"
 );
 </script>

@@ -23,7 +23,7 @@ const props = withDefaults(
   {
     size: "md",
     color: "primary",
-  },
+  }
 );
 
 const { copy } = useClipboard();
@@ -38,7 +38,7 @@ function copyBBox() {
 function createBBox() {
   store.addPolygon(
     BBoxToGeoJSONFeature(getWKTBBox(props.wkt)),
-    `${props.name}_bbox`,
+    `${props.name}_bbox`
   );
 }
 

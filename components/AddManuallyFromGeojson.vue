@@ -1,15 +1,13 @@
 <template lang="pug">
-form.form.mt-3(@submit.prevent='createPolygonFromText')
-  .form-group
-    text-input(v-model:text='geojson')
-    .form-text Paste a GeoJSON representation of a geometry here
-      |  or drag and drop a file to the input
-    .valid-feedback.d-block(v-if="isValid === true") Valid GeoJSON
-    .invalid-feedback.d-block(v-if="isValid === false") {{ error }}
-  button.btn.btn-success.w-100(
-    type='submit',
-    :disabled="btnDisabled"
-  ) #[icon(name="bi:plus")] Add GeoJSON
+b-form.mt-3(@submit.prevent="createPolygonFromText")
+  b-form-group(
+    valid-feedback="Valid GeoJSON",
+    :invalid-feedback="error",
+    :state="isValid",
+    description="Paste a GeoJSON representation of a geometry here or drag and drop a file to the input"
+  )
+    text-input(v-model:text="geojson")
+  b-button.w-100(variant="success", type="submit", :disabled="btnDisabled") #[icon(name="bi:plus")] Add GeoJSON
 </template>
 
 <script setup lang="ts">
@@ -39,7 +37,7 @@ debouncedWatch(
   },
   {
     debounce: 500,
-  },
+  }
 );
 
 const btnDisabled = computed(() => !hasEnteredText.value || !isValid.value);

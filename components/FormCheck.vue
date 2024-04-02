@@ -1,10 +1,6 @@
 <template lang="pug">
 .form-check.mb-0
-  input.form-check-input(
-    :id="id",
-    type="checkbox",
-    v-model="val"
-  )
+  input.form-check-input(:id="id", type="checkbox", v-model="val")
   label.form-check-label(:for="id") {{ props.label }}
 </template>
 

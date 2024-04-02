@@ -3,7 +3,7 @@ export function usePagination<T>(
   startOptions: {
     perPage?: number;
     resetOnChange?: boolean;
-  } = {},
+  } = {}
 ) {
   const defaults = {
     perPage: 50,

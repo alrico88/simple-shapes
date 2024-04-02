@@ -1,13 +1,9 @@
 <template lang="pug">
 .vstack.gap-2
   b-form-group(label="Map Style")
-    b-form-select(v-model="selectedMapStyle" :options="mapStyleOptions")
+    b-form-select(v-model="selectedMapStyle", :options="mapStyleOptions")
   b-form-group(label="Other")
-    b-form-checkbox(
-      v-model="showLabels",
-      switch
-      id="showLabelsSwitch"
-    ) Show Labels in map
+    b-form-checkbox#showLabelsSwitch(v-model="showLabels", switch) Show Labels in map
 </template>
 <script setup lang="ts">
 import { useMainStore } from "../store/main";

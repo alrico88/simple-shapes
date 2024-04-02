@@ -26,9 +26,9 @@
     b-button.text-truncate.w-100(
       size="sm",
       variant="danger",
-      @click="deleteHandler"
+      @click="deleteHandler",
       :disabled="polygons.length === 0"
-    ) {{ deleteConfirmation ? 'Sure?' : 'Remove all' }}
+    ) {{ deleteConfirmation ? "Sure?" : "Remove all" }}
 </template>
 
 <script setup lang="ts">

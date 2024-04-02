@@ -1,15 +1,13 @@
 <template lang="pug">
-form.form.mt-3(@submit.prevent='createWktFromText')
-  .form-group
+b-form.mt-3(@submit.prevent="createWktFromText")
+  b-form-group(
+    valid-feedback="Valid WKT",
+    :invalid-feedback="error",
+    :state="isValid",
+    description="Enter the Well-Known-Text representation of a geometry here or drag and drop a file to the input"
+  )
     text-input(v-model:text="enteredText")
-    .form-text Enter the Well-Known-Text representation of a geometry here
-      |  or drag and drop a file to the input
-    .valid-feedback.d-block(v-if="isValid === true") Valid WKT
-    .invalid-feedback.d-block(v-if="isValid === false") {{ error }}
-  button.btn.btn-success.w-100(
-    type='submit',
-    :disabled="btnDisabled"
-  ) #[icon(name="bi:plus")] Add WKT
+  b-button.w-100(variant="success", type="submit", :disabled="btnDisabled") #[icon(name="bi:plus")] Add WKT
 </template>
 
 <script setup lang="ts">

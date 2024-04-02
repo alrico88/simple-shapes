@@ -6,7 +6,7 @@ export function useDownload(extension: Ref<string> | string) {
   function downloadFile(content: string, fileName: string) {
     saveAs(
       new Blob([content], { type: "text/plain;charset=utf-8" }),
-      `${fileName}.${fileExtension.value}`,
+      `${fileName}.${fileExtension.value}`
     );
   }
 

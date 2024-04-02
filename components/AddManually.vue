@@ -1,7 +1,7 @@
 <template lang="pug">
 b-tabs(v-model="tab", pills, lazy)
   b-tab(v-for="mode of modes", :key="mode.value", :title="mode.text")
-    component(:is="mode.component", @done='sendDone')
+    component(:is="mode.component", @done="sendDone")
 </template>
 
 <script setup lang="ts">
