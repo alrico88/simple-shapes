@@ -8,7 +8,7 @@ b-card.mb-2(no-body)
           .fw-bold.cursor-pointer.text-break(@click="centerOnFeature") {{ polygon.name }}
           .small {{ shapeDetails }}
       .hstack.gap-2
-        form-check(v-model="polygon.visible", label="Visible")
+        b-form-checkbox(v-model="polygon.visible") Visible
         b-button.text-nowrap(
           variant="outline-primary",
           size="sm",
@@ -16,16 +16,13 @@ b-card.mb-2(no-body)
         ) #[icon(name="bi:pencil-square")] Edit name
     justify-between(:gap="2", v-if="isEditing")
       .hstack.gap-2
-        input.form-control.form-control-color(
-          type="color",
-          v-model="polygon.color"
-        )
-        input.form-control(
+        b-form-input(type="color", v-model="polygon.color")
+        b-form-input(
           type="text",
           v-model="polygon.name",
           @keydown.enter="toggleEdit"
         )
-      button.btn.btn-primary.btn-sm(@click="toggleEdit") Close
+      b-button(variant="primary", size="sm", @click="toggleEdit") Close
   b-card-body.p-0
     codemirror(
       v-model="text",
@@ -37,7 +34,7 @@ b-card.mb-2(no-body)
     justify-between(:gap="2")
       .hstack.gap-2
         clipboard-button(text="Copy", :value="text", size="sm")
-        b-button(
+        b-button.text-truncate(
           variant="primary",
           size="sm",
           @click="() => { downloadFile(text, polygon.name); }"
@@ -48,7 +45,11 @@ b-card.mb-2(no-body)
           size="sm",
           :name="polygon.name"
         )
-      b-button(variant="danger", size="sm", @click="deleteHandler") #[icon(name="bi:trash")] {{ deleteConfirmation ? "Sure?" : "Remove" }}
+      b-button.text-truncate(
+        variant="danger",
+        size="sm",
+        @click="deleteHandler"
+      ) #[icon(name="bi:trash")] {{ deleteConfirmation ? "Sure?" : "Remove" }}
 </template>
 
 <script setup lang="ts">
@@ -139,10 +140,5 @@ const shapeDetails = computed(() => {
 .form-control[readonly] {
   background: white;
   font-size: 0.9rem;
-}
-
-.max-editor-height {
-  max-height: 200px;
-  overflow-y: auto;
 }
 </style>

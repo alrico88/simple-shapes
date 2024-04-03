@@ -1,13 +1,13 @@
 <template lang="pug">
-.card.rounded(v-show="show")
-  .card-body.text-center #[icon(name="bi:brush")] Draw or add some shapes first
+b-alert.text-center(:model-value="show", variant="light")
+  .vstack.gap-2
+    div
+      icon(name="gis:extent-alt", size="40")
+    div Draw or add some shapes first
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  show: {
-    type: Boolean,
-    required: true,
-  },
-});
+const props = defineProps<{
+  show: boolean;
+}>();
 </script>

@@ -1,19 +1,20 @@
 <template lang="pug">
 .vstack.gap-2
-  .form-group.mb-0
-    input.form-control(
+  b-form-group.mb-0
+    b-form-input(
       v-model="searchTerm",
       type="text",
       placeholder="Enter a search term"
     )
-  .list-group(v-if="showList")
+  b-list-group(v-if="showList")
     template(v-if="loading")
-      .list-group-item.text-center
-        .spinner.spinner-border
+      b-list-group-item.text-center
+        b-spinner
     template(v-else)
-      button.list-group-item.list-group-item-action(
+      b-list-group-item(
         v-for="place of suggestions",
         :key="place.properties.osm_id",
+        button,
         @click="() => searchStore.selectSearch(place)"
       )
         .hstack.gap-2.justify-content-between
@@ -21,11 +22,11 @@
             .fw-bold {{ place.properties.name }}
             div {{ place.properties.country }}
           .text-muted {{ place.properties.osm_value }}
-  .card(v-if="selectedSearch")
-    .card-header.fw-bold.text-uppercase Search result
-    .card-body.p-0
+  b-card(v-if="selectedSearch", no-body)
+    b-card-header.fw-bold.text-uppercase Search result
+    b-card-body.p-0
       search-details(:place="selectedSearch.properties")
-    .card-footer
+    b-card-footer
       .vstack.gap-2
         .hstack.gap-2
           b-button.w-100(

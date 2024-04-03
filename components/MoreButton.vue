@@ -1,5 +1,5 @@
 <template lang="pug">
-b-dropdown(:variant="color", :size="size")
+b-dropdown.text-nowrap(:variant="color", :size="size")
   template(#button-content) #[icon(name="bi:three-dots")] More
   b-dropdown-item(@click="copyBBox", href="#", :size="size") Copy BBox
   b-dropdown-item(@click="createBBox", href="#", :size="size") Add BBox as new shape

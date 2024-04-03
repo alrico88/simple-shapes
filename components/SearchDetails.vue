@@ -1,17 +1,21 @@
 <template lang="pug">
-table.table.table-sm.bg-white.table-bordered.mb-0
-  thead.thead-light
-    tr
-      th Property
-      th Value
-  tbody
-    tr(v-for="(value, name) in place", :key="name")
-      td {{ name }}
-      td {{ value }}
+b-table-simple.mb-0.bg-white(bordered, small)
+  b-thead(variant="light")
+    b-tr
+      b-th Property
+      b-th Value
+  b-tbody
+    b-tr(v-for="(value, name) in place", :key="name")
+      b-td {{ name }}
+      b-td {{ value }}
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
   place: Record<string, unknown>;
 }>();
+
+watchEffect(() => {
+  console.log(props.place);
+});
 </script>

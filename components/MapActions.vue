@@ -1,15 +1,14 @@
 <template lang="pug">
 .row
   .col
-    label Actions
+    label.mb-1 Actions
 .row.g-2.row-cols-md-4.row-cols-2
   .col
-    b-dropdown.w-100(variant="secondary", size="sm")
-      template(#button-content) Visibility
-      b-dropdown-item(href="#", @click.prevent="toggleVisibility") Toggle visibility
+    b-dropdown.w-100(variant="secondary", size="sm", text="Visibility")
+      b-dropdown-item-button(@click="toggleVisibility") Toggle visibility
       b-dropdown-divider
-      b-dropdown-item(href="#", @click.prevent="store.turnVisibility(true)") Show all
-      b-dropdown-item(href="#", @click.prevent="store.turnVisibility(false)") Hide all
+      b-dropdown-item-button(@click="store.turnVisibility(true)") Show all
+      b-dropdown-item-button(@click="store.turnVisibility(false)") Hide all
   .col
     b-button.text-truncate.w-100(
       size="sm",

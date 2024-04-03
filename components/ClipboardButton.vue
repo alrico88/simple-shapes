@@ -1,6 +1,7 @@
 <template lang="pug">
-button.btn(
-  :class="{ [btnVariant]: true, [`btn-${size}`]: true }",
+b-button.text-truncate(
+  :variant="btnVariant",
+  :size="size",
   @click="() => copy()"
 )
   icon(name="bi:clipboard-plus", v-show="!copied")
@@ -13,7 +14,7 @@ button.btn(
 const props = defineProps<{
   value: any;
   text?: string;
-  size?: string;
+  size?: any;
 }>();
 
 const textToCopy = computed(() => {
@@ -35,6 +36,6 @@ const { copy, copied } = useClipboard({
 });
 
 const btnVariant = computed(() =>
-  copied.value ? "btn-success" : "btn-outline-primary"
+  copied.value ? "success" : "outline-primary"
 );
 </script>

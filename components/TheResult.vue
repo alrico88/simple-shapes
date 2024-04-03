@@ -5,10 +5,14 @@
       .row
         .col.py-3
           .hstack.gap-2.align-items-center.justify-content-between
-            h4.mb-0.fw-bolder Simple Shapes
+            div
+              h4.mb-0.fw-bolder Simple Shapes
             .hstack.gap-2
-              b-button(variant="secondary", @click="openSearchInterface") #[icon(name="bi:search")] Search
-              b-button(variant="primary", @click="openAddModal") #[icon(name="bi:plus")] Add shape manually
+              b-button.text-truncate(
+                variant="secondary",
+                @click="openSearchInterface"
+              ) #[icon(name="bi:search")] Search
+              b-button.text-truncate(variant="primary", @click="openAddModal") #[icon(name="bi:plus")] Add shape manually
   .container-fluid
     .row
       .col
