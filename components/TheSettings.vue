@@ -30,10 +30,10 @@ const store = useMainStore();
 const modalsStore = useModalsStore();
 
 const { format } = storeToRefs(store);
-const { mapSettings } = storeToRefs(modalsStore);
+const { mapSettingsModal } = storeToRefs(modalsStore);
 
 function openMapSettings() {
-  mapSettings.value = true;
+  mapSettingsModal.value = true;
 }
 
 enum Format {

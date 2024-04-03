@@ -157,11 +157,11 @@ onMounted(() => {
         new LatLng(bbox[3], bbox[2])
       );
 
-      map.flyToBounds(leafletBounds);
+      map.fitBounds(leafletBounds);
     });
 
     mapEmitter.on("focusOn" as any, (coords: [number, number]): void => {
-      map.flyTo(new LatLng(coords[1], coords[0]), 14);
+      map.panTo(new LatLng(coords[1], coords[0]), 14);
     });
 
     mapEmitter.on("download", async () => {

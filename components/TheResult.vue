@@ -50,7 +50,7 @@ const store = useMainStore();
 const modalsStore = useModalsStore();
 
 const { polygons } = storeToRefs(store);
-const { addModal, searchInterface } = storeToRefs(modalsStore);
+const { addModal, searchInterfaceModal } = storeToRefs(modalsStore);
 
 const showMultipleActions = computed(() => {
   const len = polygons.value.length;
@@ -66,7 +66,7 @@ function openAddModal() {
 }
 
 function openSearchInterface() {
-  searchInterface.value = true;
+  searchInterfaceModal.value = true;
 }
 
 const { currentPage, currentPageItems, totalRows, perPage, showPagination } =

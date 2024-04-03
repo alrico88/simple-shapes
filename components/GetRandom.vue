@@ -13,13 +13,25 @@
                 b-form-input(type="number", v-model.number="valuesDomain[0]")
               b-input-group(prepend="Max")
                 b-form-input(type="number", v-model.number="valuesDomain[1]")
-          b-button.w-100(type="submit", variant="primary") #[icon(name="tabler:dice")] Generate random points
+          b-button.w-100(
+            type="submit",
+            variant="primary",
+            :disabled="points.length > 0"
+          ) #[icon(name="tabler:dice")] Generate random points
       hr.my-4
-      b-button.w-100(
-        :disabled="points.length === 0",
-        @click="downloadRandom",
-        variant="success"
-      ) #[icon(name="mi:save")] Download as CSV
+      .hstack.gap-2
+        b-button.w-100(
+          :disabled="points.length === 0",
+          @click="downloadRandom",
+          variant="success"
+        ) #[icon(name="mi:save")] Download as CSV
+        b-button.w-100(
+          :disabled="points.length === 0",
+          @click="addToMap",
+          variant="light",
+          v-b-tooltip.hover,
+          title="Be careful when adding a lot of points"
+        ) #[icon(name="gis:map-add")] Add to map
 </template>
 
 <script setup lang="ts">
@@ -29,10 +41,15 @@ import booleanContains from "@turf/boolean-contains";
 import { getWKTBBox } from "bbox-helper-functions";
 import { getRandom } from "number-helper-functions";
 import { parseFromWK } from "wkt-parser-helper";
+import { useMainStore } from "~/store/main";
 
 const props = defineProps<{
   shape: string;
   name: string;
+}>();
+
+const emit = defineEmits<{
+  (e: "close"): void;
 }>();
 
 const amount = ref(100);
@@ -76,5 +93,17 @@ function downloadRandom() {
   });
 
   downloadFile(text, `${props.name} ${points.value.length} points`);
+
+  emit("close");
+}
+
+const mainStore = useMainStore();
+
+function addToMap() {
+  points.value.forEach((d) => {
+    mainStore.addPolygon(point(d.coords));
+  });
+
+  emit("close");
 }
 </script>

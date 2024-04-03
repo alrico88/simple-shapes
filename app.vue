@@ -15,8 +15,7 @@
   )
     add-manually(@done="() => { addModal = false; }")
   b-modal(
-    v-model="mapSettings",
-    @close="() => { mapSettings = false; }",
+    v-model="mapSettingsModal",
     title="Map Options",
     title-class="modal-title",
     hide-footer,
@@ -24,20 +23,34 @@
   )
     map-options
   b-modal(
-    v-model="randomPoints",
-    @close="randomPointsWkt = null",
+    v-model="randomPointsModal.modal",
+    @close="randomPointsModal.wkt = null",
     title="Generate random points",
     title-class="modal-title",
     lazy,
     hide-footer
   )
     get-random(
-      v-if="randomPointsWkt",
-      :shape="randomPointsWkt.wkt",
-      :name="randomPointsWkt.name"
+      v-if="randomPointsModal.wkt",
+      :shape="randomPointsModal.wkt.wkt",
+      :name="randomPointsModal.wkt.name",
+      @close="randomPointsModal.modal = false"
+    )
+  b-modal(
+    v-model="applyBufferModal.modal",
+    @close="applyBufferModal.modal = false",
+    title="Apply buffer to shape",
+    title-class="modal-title",
+    lazy,
+    hide-footer
+  )
+    apply-buffer(
+      :id="applyBufferModal.id",
+      :shape="applyBufferModal.wkt",
+      @close="applyBufferModal.modal = false"
     )
   b-offcanvas(
-    v-model="searchInterface",
+    v-model="searchInterfaceModal",
     placement="end",
     @hide="hideSearchInterface",
     title="Search"
@@ -52,13 +65,13 @@ import { useModalsStore } from "./store/modals";
 const store = useModalsStore();
 const {
   addModal,
-  mapSettings,
-  searchInterface,
-  randomPoints,
-  randomPointsWkt,
+  mapSettingsModal,
+  searchInterfaceModal,
+  randomPointsModal,
+  applyBufferModal,
 } = storeToRefs(store);
 
 function hideSearchInterface() {
-  searchInterface.value = false;
+  searchInterfaceModal.value = false;
 }
 </script>

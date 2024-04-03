@@ -5,10 +5,21 @@ b-card.mb-2(no-body)
       .hstack.gap-2.align-items-center
         color-preview(:color="polygon.color")
         .vstack.gap-0
-          .fw-bold.cursor-pointer.text-break(@click="centerOnFeature") {{ polygon.name }}
+          .fw-bold.cursor-pointer.text-break(
+            @click="centerOnFeature",
+            v-b-tooltip.hover,
+            title="Zoom to feature"
+          ) {{ polygon.name }}
           .small {{ shapeDetails }}
-      .hstack.gap-2
-        b-form-checkbox(v-model="polygon.visible") Visible
+      .hstack.gap-1
+        b-button(
+          variant="outline-primary",
+          size="sm",
+          @click="polygon.visible = !polygon.visible",
+          v-b-tooltip.hover,
+          title="Toggle visibility"
+        )
+          icon(:name="iconName")
         b-button.text-nowrap(
           variant="outline-primary",
           size="sm",
@@ -39,12 +50,7 @@ b-card.mb-2(no-body)
           size="sm",
           @click="() => { downloadFile(text, polygon.name); }"
         ) #[icon(name="bi:download")] Download
-        more-button(
-          color="secondary",
-          :wkt="polygon.wkt",
-          size="sm",
-          :name="polygon.name"
-        )
+        more-button(color="secondary", size="sm", :polygon="polygon")
       b-button.text-truncate(
         variant="danger",
         size="sm",
@@ -63,6 +69,7 @@ import { useMainStore } from "../store/main";
 import { StorePolygon } from "../models/StorePolygon";
 import mapEmitter from "../emitters/mapEmitter";
 import { Codemirror } from "vue-codemirror";
+import { vBTooltip } from "bootstrap-vue-next";
 
 const props = defineProps<{
   polygon: StorePolygon;
@@ -134,6 +141,10 @@ const shapeDetails = computed(() => {
     return `Area: ${toReturn} km2`;
   }
 });
+
+const iconName = computed(() =>
+  props.polygon.visible ? "tabler:eye" : "tabler:eye-closed"
+);
 </script>
 
 <style scoped>
