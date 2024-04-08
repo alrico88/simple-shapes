@@ -37,6 +37,20 @@
       @close="randomPointsModal.modal = false"
     )
   b-modal(
+    v-model="geohashesModal.modal",
+    @close="geohashesModal.modal = false",
+    title="Find geohashes inside",
+    title-class="modal-title",
+    lazy,
+    hide-footer
+  )
+    get-geohashes(
+      v-if="geohashesModal.wkt",
+      :shape="geohashesModal.wkt",
+      :name="geohashesModal.name",
+      @close="geohashesModal.modal = false"
+    )
+  b-modal(
     v-model="applyBufferModal.modal",
     @close="applyBufferModal.modal = false",
     title="Apply buffer to shape",
@@ -69,6 +83,7 @@ const {
   searchInterfaceModal,
   randomPointsModal,
   applyBufferModal,
+  geohashesModal,
 } = storeToRefs(store);
 
 function hideSearchInterface() {

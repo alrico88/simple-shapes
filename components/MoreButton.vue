@@ -6,6 +6,7 @@ b-dropdown.text-nowrap(:variant="color", :size="size")
   b-dropdown-item(button, @click="convertToKml") Convert to KML
   b-dropdown-item(button, @click="openApplyBuffer") Apply buffer
   b-dropdown-item(button, @click="getRandom") Get random points inside shape
+  b-dropdown-item(button, @click="findGeohashes") Find geohashes inside shape
 </template>
 
 <script setup lang="ts">
@@ -65,5 +66,11 @@ function openApplyBuffer() {
   modalsStore.applyBufferModal.id = props.polygon.id;
   modalsStore.applyBufferModal.wkt = props.polygon.wkt;
   modalsStore.applyBufferModal.modal = true;
+}
+
+function findGeohashes() {
+  modalsStore.geohashesModal.name = props.polygon.name;
+  modalsStore.geohashesModal.wkt = props.polygon.wkt;
+  modalsStore.geohashesModal.modal = true;
 }
 </script>

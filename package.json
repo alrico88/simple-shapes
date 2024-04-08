@@ -45,6 +45,7 @@
     "number-helper-functions": "^4.1.1",
     "photon-geocoder": "^1.0.1",
     "pinia": "^2.1.6",
+    "shape2geohash": "github:alrico88/shape2geohash",
     "shortid": "^2.2.16",
     "tokml": "^0.4.0",
     "vue-codemirror": "^6.1.1",

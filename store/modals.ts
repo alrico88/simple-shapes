@@ -16,6 +16,11 @@ export const useModalsStore = defineStore("modals", () => {
     id: "",
     wkt: "",
   });
+  const geohashesModal = reactive({
+    modal: false,
+    name: "",
+    wkt: "",
+  });
 
   return {
     addModal,
@@ -23,5 +28,6 @@ export const useModalsStore = defineStore("modals", () => {
     searchInterfaceModal,
     randomPointsModal,
     applyBufferModal,
+    geohashesModal,
   };
 });
