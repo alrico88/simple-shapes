@@ -26,17 +26,21 @@ import { useMainStore } from "../store/main";
 enum CollMode {
   GeometryCollection = "geomColl",
   FeatureCollection = "featColl",
+  Csv = "csv",
 }
 
 const store = useMainStore();
 
-const { format, getAsGeometryCollection, getAsFeatureCollection } =
-  storeToRefs(store);
+const { format } = storeToRefs(store);
 
 const collMode = ref(CollMode.GeometryCollection);
 
 const options = computed(() => {
   const baseOpts = [
+    {
+      text: "CSV",
+      value: CollMode.Csv,
+    },
     {
       text: "GeometryCollection",
       value: CollMode.GeometryCollection,
@@ -54,10 +58,16 @@ const options = computed(() => {
 });
 
 const toCopy = computed(() => {
-  if (collMode.value === CollMode.GeometryCollection) {
-    return getAsGeometryCollection.value;
+  switch (collMode.value) {
+    case CollMode.Csv:
+      return store.getAsCsv;
+    case CollMode.GeometryCollection:
+      return store.getAsGeometryCollection;
+    case CollMode.FeatureCollection:
+      return store.getAsFeatureCollection;
+    default:
+      break;
   }
-  return getAsFeatureCollection.value;
 });
 
 const extension = useGeoFormat(format);

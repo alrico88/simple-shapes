@@ -5,6 +5,7 @@ import { getGeoJSONBBox } from "bbox-helper-functions";
 import { computed } from "vue";
 import { StorePolygon } from "../models/StorePolygon";
 import { getBasicGeometriesToAdd } from "../helpers/validators";
+import { unparse } from "papaparse";
 
 const formatter = new Formatter();
 
@@ -81,6 +82,21 @@ export const useMainStore = defineStore("main", () => {
         ),
       }) as string
   );
+
+  const getAsCsv = computed(() => {
+    const featColl = polygons.value.map((d) => {
+      return {
+        id: d.id,
+        name: d.name,
+        geometry:
+          format.value === "wkt" ? d.wkt : JSON.stringify(parseFromWK(d.wkt)),
+      };
+    });
+
+    return unparse(featColl, {
+      header: true,
+    });
+  });
 
   const tile = computed(() => {
     const fallbackStyle = mapStyles[5];
@@ -167,6 +183,7 @@ export const useMainStore = defineStore("main", () => {
     getPolygonIds,
     getAsGeometryCollection,
     getAsFeatureCollection,
+    getAsCsv,
     tile,
     polygonsBBox,
     addPolygon,

@@ -83,6 +83,9 @@ dependencies:
   number-helper-functions:
     specifier: ^4.1.1
     version: 4.1.1
+  papaparse:
+    specifier: ^5.4.1
+    version: 5.4.1
   photon-geocoder:
     specifier: ^1.0.1
     version: 1.0.1
@@ -142,6 +145,9 @@ devDependencies:
   '@types/mapbox__tilebelt':
     specifier: ^1.0.4
     version: 1.0.4
+  '@types/papaparse':
+    specifier: ^5.3.14
+    version: 5.3.14
   '@types/shortid':
     specifier: ^0.0.32
     version: 0.0.32
@@ -3714,6 +3720,12 @@ packages:
     resolution: {integrity: sha512-zQ0NYO87hyN6Xrclcqp7f8ZbXNbRfoGWNcMvHTPQp9UUrwI0mI7XBz+cu7/W6/VClYo2g63B0cjull/srU7LgQ==}
     dependencies:
       undici-types: 5.26.5
+    dev: true
+
+  /@types/papaparse@5.3.14:
+    resolution: {integrity: sha512-LxJ4iEFcpqc6METwp9f6BV6VVc43m6MfH0VqFosHvrUgfXiFe6ww7R3itkOQ+TCK6Y+Iv/+RnnvtRZnkc5Kc9g==}
+    dependencies:
+      '@types/node': 20.12.2
     dev: true
 
   /@types/resolve@1.17.1:
@@ -8347,6 +8359,10 @@ packages:
     resolution: {integrity: sha512-NUcwaKxUxWrZLpDG+z/xZaCgQITkA/Dv4V/T6bw7VON6l1Xz/VnrBqrYjZQ12TamKHzITTfOEIYUj48y2KXImA==}
     dev: true
 
+  /papaparse@5.4.1:
+    resolution: {integrity: sha512-HipMsgJkZu8br23pW15uvo6sib6wne/4woLZPlFf3rpDyMe9ywEXUsuD7+6K9PRkJlVT51j/sCOYDKGGS3ZJrw==}
+    dev: false
+
   /parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
@@ -11060,6 +11076,7 @@ packages:
 
   /workbox-google-analytics@7.0.0:
     resolution: {integrity: sha512-MEYM1JTn/qiC3DbpvP2BVhyIH+dV/5BjHk756u9VbwuAhu0QHyKscTnisQuz21lfRpOwiS9z4XdqeVAKol0bzg==}
+    deprecated: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
     dependencies:
       workbox-background-sync: 7.0.0
       workbox-core: 7.0.0
@@ -11222,7 +11239,6 @@ packages:
     resolution: {tarball: https://codeload.github.com/alrico88/shape2geohash/tar.gz/4534c0b71033270b4635e9ca990b891fd3da964c}
     name: shape2geohash
     version: 1.2.6
-    prepare: true
     requiresBuild: true
     dependencies:
       '@turf/area': 6.5.0
