@@ -52,22 +52,25 @@ export function validateBBox(bboxStr: string): void {
 export function validateCoordinates(coordinates: string): void {
   coordinates.split("\n").forEach((coord) => {
     const elements = coord.split(",");
+    const len = elements.length;
 
-    if (elements.length !== 2) {
-      throw new Error("only latitude,longitude are supported");
+    if (len < 2 || len > 3) {
+      throw new Error(
+        "only latitude,longitude and optionally radius are supported"
+      );
     }
 
     const [latitude, longitude] = elements.map(Number);
 
     if (latitude < -90 || latitude > 90) {
       throw new Error(
-        `invalid latitude ${latitude}. should be between -90 and 90`,
+        `invalid latitude ${latitude}. should be between -90 and 90`
       );
     }
 
     if (longitude < -180 || longitude > 180) {
       throw new Error(
-        `invalid longitude ${longitude}. should be between -180 and 180`,
+        `invalid longitude ${longitude}. should be between -180 and 180`
       );
     }
   });

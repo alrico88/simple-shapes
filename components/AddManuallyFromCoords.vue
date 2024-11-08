@@ -4,7 +4,7 @@ b-form.mt-3(@submit.prevent="createGeoJSONFromCoordinates")
     valid-feedback="Valid coordinates",
     :invalid-feedback="error",
     :state="isValid",
-    description="Enter the coordinates in latitude,longitude format (in that order) or drag and drop a file to the input. You can add multiple coordinates at once, separated by new lines"
+    description="Enter the coordinates in latitude,longitude,radius format (in that order, radius is optional, expressed in meters) or drag and drop a file to the input. You can add multiple coordinates at once, separated by new lines"
   )
     text-input(v-model:text="enteredText")
   b-button.w-100(variant="success", type="submit", :disabled="btnDisabled") #[icon(name="bi:plus")] Add coordinate(s)
@@ -13,6 +13,9 @@ b-form.mt-3(@submit.prevent="createGeoJSONFromCoordinates")
 <script setup lang="ts">
 import { validateCoordinates } from "../helpers/validators";
 import { useMainStore } from "../store/main";
+import { point } from "@turf/helpers";
+import circle from "@turf/circle";
+import papa from "papaparse";
 
 const store = useMainStore();
 
@@ -47,19 +50,23 @@ const btnDisabled = computed(() => !hasEnteredText.value || !isValid.value);
 const emit = defineEmits(["done"]);
 
 function createGeoJSONFromCoordinates() {
-  enteredText.value.split("\n").forEach((d) => {
-    const [latitude, longitude] = d.split(",").map(Number);
+  const parsed = papa.parse<number[]>(enteredText.value, {
+    header: false,
+    dynamicTyping: true,
+  }).data;
 
-    store.addPolygon(
-      {
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [longitude, latitude],
-        },
-      },
-      d
-    );
+  parsed.forEach((d) => {
+    const [latitude, longitude, radius] = d;
+
+    if (radius != null) {
+      store.addPolygon(
+        circle([longitude, latitude], radius, {
+          units: "meters",
+        })
+      );
+    } else {
+      store.addPolygon(point([longitude, latitude]));
+    }
   });
 
   emit("done");
