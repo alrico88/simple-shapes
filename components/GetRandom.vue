@@ -1,37 +1,43 @@
 <template lang="pug">
-.container-fluid
-  .row
-    .col
-      b-form(@submit.prevent="generateRandom")
-        .vstack.gap-3
-          b-form-group(label="Amount of points to generate")
-            b-form-input(v-model.number="amount", type="number", :min="0")
-          b-form-checkbox(v-model="withValues") With values
-          b-form-group(label="Values between this range", v-show="withValues")
-            .hstack.gap-2
-              b-input-group(prepend="Min")
-                b-form-input(type="number", v-model.number="valuesDomain[0]")
-              b-input-group(prepend="Max")
-                b-form-input(type="number", v-model.number="valuesDomain[1]")
-          b-button.w-100(
-            type="submit",
-            variant="primary",
-            :disabled="points.length > 0"
-          ) #[icon(name="tabler:dice")] Generate random points
-      hr.my-4
-      .hstack.gap-2
-        b-button.w-100(
-          :disabled="points.length === 0",
-          @click="downloadRandom",
-          variant="success"
-        ) #[icon(name="mi:save")] Download as CSV
-        b-button.w-100(
-          :disabled="points.length === 0",
-          @click="addToMap",
-          variant="light",
-          v-b-tooltip.hover,
-          title="Be careful when adding a lot of points"
-        ) #[icon(name="gis:map-add")] Add to map
+div
+  form.flex.flex-col.gap-4(@submit.prevent="generateRandom")
+    u-form-field(label="Amount of points to generate")
+      u-input.w-full(v-model.number="amount", type="number", :min="0")
+    u-checkbox(v-model="withValues", label="With values")
+    u-form-field(v-show="withValues", label="Values between this range")
+      .flex.gap-2
+        u-field-group.w-full
+          u-badge(color="neutral", variant="outline", label="Min")
+          u-input.w-full(v-model.number="valuesDomain[0]", type="number")
+        u-field-group.w-full
+          u-badge(color="neutral", variant="outline", label="Max")
+          u-input.w-full(v-model.number="valuesDomain[1]", type="number")
+    u-button(
+      block,
+      type="submit",
+      icon="tabler:dice",
+      label="Generate random points",
+      :disabled="points.length > 0"
+    )
+  u-separator.my-4
+  .flex.gap-2
+    u-button.justify-center(
+      block,
+      color="success",
+      icon="mi:save",
+      label="Download as CSV",
+      :disabled="points.length === 0",
+      @click="downloadRandom"
+    )
+    u-tooltip.w-full(text="Be careful when adding a lot of points")
+      u-button.justify-center(
+        block,
+        color="neutral",
+        icon="gis:map-add",
+        label="Add to map",
+        :disabled="points.length === 0",
+        @click="addToMap"
+      )
 </template>
 
 <script setup lang="ts">
@@ -40,7 +46,7 @@ import { point } from "@turf/helpers";
 import booleanContains from "@turf/boolean-contains";
 import { getWKTBBox } from "bbox-helper-functions";
 import { getRandom } from "number-helper-functions";
-import { parseFromWK } from "wkt-parser-helper";
+import { wktToGeojson } from "wkt-parser-helper";
 import { useMainStore } from "~/store/main";
 
 const props = defineProps<{
@@ -63,19 +69,19 @@ watch([amount, withValues, valuesDomain], () => {
 
 function generateRandom() {
   const bbox = getWKTBBox(props.shape);
-  const geojsonShape = parseFromWK(props.shape);
+  const geojsonShape = wktToGeojson(props.shape);
   const [min, max] = valuesDomain.value;
   const wantsValue = withValues.value;
 
   const tempPoints: { coords: [number, number]; value?: number }[] = [];
 
   while (tempPoints.length < amount.value) {
-    const rdm = randomPosition(bbox);
+    const rdm = randomPosition(bbox) as [number, number];
 
     if (booleanContains(geojsonShape, point(rdm))) {
       tempPoints.push({
         coords: rdm,
-        value: wantsValue ? getRandom(min, max) : undefined,
+        value: wantsValue ? getRandom(min!, max!) : undefined,
       });
     }
   }

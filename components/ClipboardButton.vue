@@ -1,13 +1,12 @@
 <template lang="pug">
-b-button.text-truncate(
-  :variant="btnVariant",
+u-button.truncate(
+  :color="copied ? 'success' : 'primary'",
+  variant="outline",
   :size="size",
+  :icon="copied ? 'bi:clipboard-check' : 'bi:clipboard-plus'",
+  :label="text",
   @click="() => copy()"
 )
-  icon(name="bi:clipboard-plus", v-show="!copied")
-  icon(name="bi:clipboard-check", v-show="copied")
-  |
-  | {{ text }}
 </template>
 
 <script lang="ts" setup>
@@ -34,8 +33,4 @@ const textToCopy = computed(() => {
 const { copy, copied } = useClipboard({
   source: textToCopy,
 });
-
-const btnVariant = computed(() =>
-  copied.value ? "success" : "outline-primary"
-);
 </script>

@@ -1,53 +1,56 @@
 <template lang="pug">
-.container-fluid
-  .row
-    .col
-      b-form(@submit.prevent="generateGeohashes")
-        .vstack.gap-3
-          b-form-group(
-            label="Precision",
-            description="Please bear in mind that computation will be made on your device and the browser may hang"
-          )
-            b-form-select(v-model="precision")
-              b-form-select-option(v-for="i in 8", :value="i") {{ i }}
-          b-form-group(label="Method")
-            b-form-select(v-model="selectedMethod", :options="methods")
-          b-button.w-100(
-            type="submit",
-            variant="primary",
-            :disabled="inside.length > 0"
-          ) #[icon(name="tabler:play")] Find geohashes inside shape
-      hr.my-4
-      .vstack.gap-2
-        b-alert.mb-0(:model-value="inside.length > 0") Found {{ inside.length }} geohashes
-        b-form-group(label="Output format")
-          b-form-select(v-model="selectedOutput", :options="outputs")
-        div
-          codemirror(
-            :model-value="insideParsed",
-            disabled,
-            :extensions="extensions",
-            :style="style"
-          )
-        .hstack.gap-2
-          b-button.w-100(
-            :disabled="inside.length === 0",
-            @click="downloadList",
-            variant="success"
-          ) #[icon(name="mi:save")] Download as {{ filenameExtension.toUpperCase() }}
-          b-button.w-100(
-            :disabled="inside.length === 0 || copied",
-            variant="secondary",
-            @click="copy(insideParsed)"
-          )
-            icon(:name="copied ? 'tabler:copy-check-filled' : 'tabler:copy'")
-            |
-            | {{ copied ? "Copied" : "Copy to clipboard" }}
+div
+  form.flex.flex-col.gap-4(@submit.prevent="generateGeohashes")
+    u-form-field(
+      label="Precision",
+      description="Please bear in mind that computation will be made on your device and the browser may hang"
+    )
+      u-select.w-full(v-model="precision", :items="precisionOptions")
+    u-form-field(label="Method")
+      u-select.w-full(v-model="selectedMethod", :items="methods")
+    u-button(
+      block,
+      type="submit",
+      icon="tabler:play",
+      label="Find geohashes inside shape",
+      :disabled="inside.length > 0"
+    )
+  u-separator.my-4
+  .flex.flex-col.gap-2
+    u-alert(
+      v-if="inside.length > 0",
+      :title="`Found ${inside.length} geohashes`"
+    )
+    u-form-field(label="Output format")
+      u-select.w-full(v-model="selectedOutput", :items="outputs")
+    codemirror(
+      :model-value="insideParsed",
+      disabled,
+      :extensions="extensions",
+      :style="style"
+    )
+    .flex.gap-2
+      u-button.justify-center(
+        block,
+        color="success",
+        icon="mi:save",
+        :label="`Download as ${filenameExtension.toUpperCase()}`",
+        :disabled="inside.length === 0",
+        @click="downloadList"
+      )
+      u-button.justify-center(
+        block,
+        color="neutral",
+        :icon="copied ? 'tabler:copy-check-filled' : 'tabler:copy'",
+        :label="copied ? 'Copied' : 'Copy to clipboard'",
+        :disabled="inside.length === 0 || copied",
+        @click="copy(insideParsed)"
+      )
 </template>
 
 <script setup lang="ts">
-import { shape2geohash } from "shape2geohash";
-import { parseFromWK } from "wkt-parser-helper";
+import { toGeohashes, type HashMode } from "geohashcover";
+import { wktToGeojson } from "wkt-parser-helper";
 import { Codemirror } from "vue-codemirror";
 
 const props = defineProps<{
@@ -60,6 +63,7 @@ const emit = defineEmits<{
 }>();
 
 const precision = ref(6);
+const precisionOptions = Array.from({ length: 8 }, (_, i) => i + 1);
 
 const methods = ["intersect", "envelope", "insideOnly", "border"];
 const selectedMethod = ref("intersect");
@@ -77,7 +81,7 @@ const filenameExtension = computed(() => {
   }
 });
 
-const inside = shallowRef([]);
+const inside = shallowRef<string[]>([]);
 const insideParsed = computed(() => {
   switch (selectedOutput.value) {
     case "csv":
@@ -95,14 +99,13 @@ watch([selectedMethod, precision], () => {
 
 const loading = ref(false);
 
-async function generateGeohashes() {
+function generateGeohashes() {
   try {
     loading.value = true;
 
-    inside.value = await shape2geohash(parseFromWK(props.shape), {
+    inside.value = toGeohashes(wktToGeojson(props.shape), {
       precision: precision.value,
-      hashMode: selectedMethod.value,
-      allowDuplicates: false,
+      hashMode: selectedMethod.value as HashMode,
     });
   } catch (err) {
     console.error(err);

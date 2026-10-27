@@ -1,13 +1,19 @@
 <template lang="pug">
-b-form.mt-3(@submit.prevent="createPolygonFromText")
-  b-form-group(
-    valid-feedback="Valid GeoJSON",
-    :invalid-feedback="error",
-    :state="isValid",
-    description="Paste a GeoJSON representation of a geometry here or drag and drop a file to the input"
+form.mt-3.flex.flex-col.gap-3(@submit.prevent="createPolygonFromText")
+  u-form-field(
+    :description="'Paste a GeoJSON representation of a geometry here or drag and drop a file to the input'",
+    :error="isValid === false ? error : undefined",
+    :help="isValid ? 'Valid GeoJSON' : undefined"
   )
     text-input(v-model:text="geojson")
-  b-button.w-100(variant="success", type="submit", :disabled="btnDisabled") #[icon(name="bi:plus")] Add GeoJSON
+  u-button(
+    block,
+    color="success",
+    type="submit",
+    icon="bi:plus",
+    label="Add GeoJSON",
+    :disabled="btnDisabled"
+  )
 </template>
 
 <script setup lang="ts">

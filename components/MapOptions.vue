@@ -1,9 +1,9 @@
 <template lang="pug">
-.vstack.gap-2
-  b-form-group(label="Map Style")
-    b-form-select(v-model="selectedMapStyle", :options="mapStyleOptions")
-  b-form-group(label="Other")
-    b-form-checkbox#showLabelsSwitch(v-model="showLabels", switch) Show Labels in map
+.flex.flex-col.gap-4
+  u-form-field(label="Map Style")
+    u-select.w-full(v-model="selectedMapStyle", :items="mapStyleOptions")
+  u-form-field(label="Other")
+    u-switch(v-model="showLabels", label="Show Labels in map")
 </template>
 <script setup lang="ts">
 import { useMainStore } from "../store/main";
@@ -12,7 +12,7 @@ const store = useMainStore();
 const { showLabels, selectedMapStyle } = storeToRefs(store);
 
 const mapStyleOptions = store.mapStyles.map((d) => ({
-  text: d.text,
+  label: d.text,
   value: d.key,
 }));
 </script>

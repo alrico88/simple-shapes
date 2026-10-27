@@ -1,24 +1,27 @@
 <template lang="pug">
-.container-fluid
-  .row
-    .col
-      b-form(@submit.prevent="applyBuffer")
-        .vstack.gap-3
-          b-form-group(
-            label="Radius",
-            description="Distance to draw the buffer (negative values are allowed)"
-          )
-            b-form-input(v-model.number="radius", type="number")
-          b-form-group(label="Units")
-            b-form-select(:options="unitOptions", v-model="units")
-          b-form-group(label="Steps")
-            b-form-input(v-model.number="steps", type="number", :min="0")
-          b-button.w-100(type="submit", variant="success") #[icon(name="gis:buffer")] Apply buffer
+form.flex.flex-col.gap-4(@submit.prevent="applyBuffer")
+  u-form-field(
+    label="Radius",
+    description="Distance to draw the buffer (negative values are allowed)"
+  )
+    u-input.w-full(v-model.number="radius", type="number")
+  u-form-field(label="Units")
+    u-select.w-full(v-model="units", :items="unitOptions")
+  u-form-field(label="Steps")
+    u-input.w-full(v-model.number="steps", type="number", :min="0")
+  u-button(
+    block,
+    color="success",
+    type="submit",
+    icon="gis:buffer",
+    label="Apply buffer"
+  )
 </template>
 
 <script setup lang="ts">
 import buffer from "@turf/buffer";
-import { convertToWK, parseFromWK } from "wkt-parser-helper";
+import type { Units } from "@turf/helpers";
+import { geojsonToWkt, wktToGeojson } from "wkt-parser-helper";
 import { useMainStore } from "~/store/main";
 
 const props = defineProps<{
@@ -33,14 +36,14 @@ const emit = defineEmits<{
 const unitOptions = ["kilometers", "meters", "miles"];
 
 const radius = ref(1);
-const units = ref("kilometers");
+const units = ref<Units>("kilometers");
 const steps = ref(8);
 
 const mainStore = useMainStore();
 const { polygons } = storeToRefs(mainStore);
 
 function applyBuffer(): void {
-  const geojsonShape = parseFromWK(props.shape);
+  const geojsonShape = wktToGeojson(props.shape);
   const buffered = buffer(geojsonShape, radius.value, {
     units: units.value,
     steps: steps.value,
@@ -52,7 +55,11 @@ function applyBuffer(): void {
     return;
   }
 
-  pol.wkt = convertToWK(buffered);
+  if (!buffered) {
+    return;
+  }
+
+  pol.wkt = geojsonToWkt(buffered);
 
   emit("close");
 }

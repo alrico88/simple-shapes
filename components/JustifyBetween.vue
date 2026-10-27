@@ -1,5 +1,5 @@
 <template lang="pug">
-.hstack.align-items-center.justify-content-between(:class="`gap-${gap}`")
+.flex.items-center.justify-between(:style="{ gap: `${gap * 0.25}rem` }")
   slot
 </template>
 

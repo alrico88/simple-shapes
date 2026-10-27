@@ -1,13 +1,13 @@
 <template lang="pug">
-b-table-simple.mb-0.bg-white(bordered, small)
-  b-thead(variant="light")
-    b-tr
-      b-th Property
-      b-th Value
-  b-tbody
-    b-tr(v-for="(value, name) in place", :key="name")
-      b-td {{ name }}
-      b-td {{ value }}
+table.w-full.border-collapse.bg-white.text-sm
+  thead.bg-elevated
+    tr
+      th.border.border-default.px-2.py-1.text-left Property
+      th.border.border-default.px-2.py-1.text-left Value
+  tbody
+    tr(v-for="(value, name) in place", :key="name")
+      td.border.border-default.px-2.py-1 {{ name }}
+      td.border.border-default.px-2.py-1.break-all {{ value }}
 </template>
 
 <script setup lang="ts">
