@@ -40,3 +40,9 @@ Use query parameters to center the map when the app loads:
 Example: `/?lat=40.4168&lon=-3.7038&zoom=11`
 
 The coordinates are also filled in the "Go to coordinates" fields of the search panel. No shape is added to the map.
+
+## Custom tile layers
+
+In the map options you can add your own slippy map tiles URL. The URL must start with `http://` or `https://` and include `{x}`, `{y}` and `{z}`. `{s}` and `{r}` are also supported. Custom layers are stored in the browser.
+
+Example: `https://tile.openstreetmap.org/{z}/{x}/{y}.png`

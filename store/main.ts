@@ -4,8 +4,14 @@ import { Formatter } from "fracturedjsonjs";
 import { getGeoJSONBBox } from "bbox-helper-functions";
 import { computed } from "vue";
 import { StorePolygon } from "../models/StorePolygon";
-import { getBasicGeometriesToAdd } from "../helpers/validators";
+import {
+  getBasicGeometriesToAdd,
+  validateTileUrl,
+} from "../helpers/validators";
 import { unparse } from "papaparse";
+import shortid from "shortid";
+
+type CustomMapStyle = { key: string; text: string; url: string };
 
 const formatter = new Formatter();
 
@@ -14,7 +20,7 @@ export const useMainStore = defineStore("main", () => {
   const format = usePersistedRef<"wkt" | "geojson">("format", "wkt");
   const showLabels = usePersistedRef("showLabels", true);
 
-  const mapStyles = [
+  const builtInMapStyles = [
     {
       key: "osm",
       text: "OpenStreetMap",
@@ -35,7 +41,42 @@ export const useMainStore = defineStore("main", () => {
     },
   ];
 
+  const customMapStyles = useLocalStorage<CustomMapStyle[]>(
+    "customMapStyles",
+    []
+  );
+
+  const mapStyles = computed(() => [
+    ...builtInMapStyles,
+    ...customMapStyles.value.map((d) => ({
+      key: d.key,
+      text: d.text,
+      url: d.url,
+      attr: "",
+      custom: true,
+    })),
+  ]);
+
   const selectedMapStyle = useLocalStorage("mapStyle", "esri");
+
+  function addCustomMapStyle(text: string, url: string): void {
+    const cleanUrl = url.trim();
+
+    validateTileUrl(cleanUrl);
+
+    const key = `custom-${shortid()}`;
+
+    customMapStyles.value.push({ key, text: text.trim(), url: cleanUrl });
+    selectedMapStyle.value = key;
+  }
+
+  function removeCustomMapStyle(key: string): void {
+    customMapStyles.value = customMapStyles.value.filter((d) => d.key !== key);
+
+    if (selectedMapStyle.value === key) {
+      selectedMapStyle.value = "esri";
+    }
+  }
 
   const getPolygonIds = useArrayMap(polygons, (d) => d.id);
 
@@ -81,9 +122,9 @@ export const useMainStore = defineStore("main", () => {
   });
 
   const tile = computed(() => {
-    const fallbackStyle = mapStyles.find((d) => d.key === "esri")!;
+    const fallbackStyle = builtInMapStyles.find((d) => d.key === "esri")!;
 
-    const info = mapStyles.find((d) => d.key === selectedMapStyle.value);
+    const info = mapStyles.value.find((d) => d.key === selectedMapStyle.value);
 
     if (!info) {
       return {
@@ -162,6 +203,9 @@ export const useMainStore = defineStore("main", () => {
     showLabels,
     selectedMapStyle,
     mapStyles,
+    customMapStyles,
+    addCustomMapStyle,
+    removeCustomMapStyle,
     getPolygonIds,
     getAsGeometryCollection,
     getAsFeatureCollection,

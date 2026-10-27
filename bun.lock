@@ -35,6 +35,7 @@
         "photon-geocoder": "^1.0.1",
         "pinia": "^4.1.0",
         "shortid": "^2.2.17",
+        "string-object-formatter": "^4.0.1",
         "tailwindcss": "^4.3.3",
         "tokml": "^0.4.0",
         "vue-codemirror": "^6.1.1",
