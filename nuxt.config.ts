@@ -26,9 +26,6 @@ export default defineNuxtConfig({
           content: "nc0pKffQdhm679g_eXEQhjK-NzBM8ZbyFQLR9ZMeJtc",
         },
       ],
-      htmlAttrs: {
-        "data-bs-theme": "light",
-      },
       link: [
         {
           rel: "stylesheet",
@@ -48,9 +45,13 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: ["@/assets/main.scss"],
+  css: ["~/assets/main.css"],
+  colorMode: {
+    preference: "light",
+    fallback: "light",
+  },
   modules: [
-    "nuxt-icon",
+    "@nuxt/eslint",
     "@vueuse/nuxt",
     [
       "@pinia/nuxt",
@@ -59,8 +60,7 @@ export default defineNuxtConfig({
       },
     ],
     "@vite-pwa/nuxt",
-    "@nuxt/fonts",
-    "@bootstrap-vue-next/nuxt",
+    "@nuxt/ui",
   ],
   pwa: {
     registerType: "prompt",
