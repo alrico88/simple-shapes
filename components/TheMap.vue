@@ -12,6 +12,7 @@ import { saveAs } from "file-saver";
 import { useMainStore } from "../store/main";
 import { useSearchStore } from "../store/search";
 import mapEmitter from "../emitters/mapEmitter";
+import { parseCoordinatePair } from "../helpers/validators";
 
 (window as any).type = true;
 
@@ -34,7 +35,7 @@ const parsedPolygons = computed(() =>
 
 const route = useRoute();
 
-function applyQueryCoordinates(): void {
+function applyQueryCoordinates(map: L.Map): void {
   const { lat, lon, zoom } = route.query;
 
   if (typeof lat !== "string" || typeof lon !== "string") {
@@ -49,6 +50,12 @@ function applyQueryCoordinates(): void {
   searchStore.goToCoordinates(
     Number.isFinite(parsedZoom) ? parsedZoom : undefined
   );
+
+  if (searchStore.coordsError === "") {
+    const { latitude, longitude } = parseCoordinatePair(lat, lon);
+
+    new L.Marker([latitude, longitude]).addTo(map);
+  }
 }
 
 onMounted(() => {
@@ -190,7 +197,7 @@ onMounted(() => {
       }
     );
 
-    applyQueryCoordinates();
+    applyQueryCoordinates(map);
 
     mapEmitter.on("download", async () => {
       const blob = (await toBlob(
