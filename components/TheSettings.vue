@@ -10,7 +10,7 @@
       :ui="{ root: 'w-full', list: 'w-full' }"
     )
   u-form-field(label="Map options")
-    u-popover(:ui="{ content: 'w-72 p-4' }")
+    u-popover(:ui="{ content: 'w-80 p-4' }")
       u-button(
         block,
         color="neutral",

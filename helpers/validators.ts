@@ -1,4 +1,7 @@
+import Formatter from "string-object-formatter";
 import { wktToGeojson } from "wkt-parser-helper";
+
+const tileFormatter = new Formatter();
 
 export function validateWKT(string: string): void {
   const parsed = wktToGeojson(string);
@@ -101,4 +104,25 @@ export function parseCoordinatePair(
   }
 
   return { latitude: lat, longitude: lon };
+}
+
+export function validateTileUrl(url: string): void {
+  if (!/^https?:\/\//i.test(url)) {
+    throw new Error("The URL must start with http:// or https://");
+  }
+
+  const missing = ["{x}", "{y}", "{z}"].filter((d) => !url.includes(d));
+
+  if (missing.length > 0) {
+    throw new Error(`The URL is missing ${missing.join(", ")}`);
+  }
+
+  const [unknown] =
+    tileFormatter
+      .format(url, { x: "0", y: "0", z: "0", s: "a", r: "" })
+      .match(/\{[^}]*\}/g) ?? [];
+
+  if (unknown) {
+    throw new Error(`Unknown placeholder ${unknown}`);
+  }
 }
