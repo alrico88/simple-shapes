@@ -1,13 +1,19 @@
 <template lang="pug">
-b-form.mt-3(@submit.prevent="createGeoJSONFromCoordinates")
-  b-form-group(
-    valid-feedback="Valid coordinates",
-    :invalid-feedback="error",
-    :state="isValid",
-    description="Enter the coordinates in latitude,longitude,radius format (in that order, radius is optional, expressed in meters) or drag and drop a file to the input. You can add multiple coordinates at once, separated by new lines"
+form.mt-3.flex.flex-col.gap-3(@submit.prevent="createGeoJSONFromCoordinates")
+  u-form-field(
+    :description="'Enter the coordinates in latitude,longitude,radius format (in that order, radius is optional, expressed in meters) or drag and drop a file to the input. You can add multiple coordinates at once, separated by new lines'",
+    :error="isValid === false ? error : undefined",
+    :help="isValid ? 'Valid coordinates' : undefined"
   )
     text-input(v-model:text="enteredText")
-  b-button.w-100(variant="success", type="submit", :disabled="btnDisabled") #[icon(name="bi:plus")] Add coordinate(s)
+  u-button(
+    block,
+    color="success",
+    type="submit",
+    icon="bi:plus",
+    label="Add coordinate(s)",
+    :disabled="btnDisabled"
+  )
 </template>
 
 <script setup lang="ts">
@@ -56,7 +62,7 @@ function createGeoJSONFromCoordinates() {
   }).data;
 
   parsed.forEach((d) => {
-    const [latitude, longitude, radius] = d;
+    const [latitude, longitude, radius] = d as [number, number, number?];
 
     if (radius != null) {
       store.addPolygon(

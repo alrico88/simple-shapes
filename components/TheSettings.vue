@@ -1,54 +1,36 @@
 <template lang="pug">
-.row.mb-2
-  .col
-    b-form(@submit.prevent)
-      .row.row-cols-1.row-cols-md-2.gx-2
-        .col
-          b-form-group.mb-0(label="Shape format")
-            b-button-group.d-flex(size="sm", role="group")
-              b-button.w-100(
-                v-for="item of formats",
-                :key="item.value",
-                @click="() => (format = item.value)",
-                variant="secondary",
-                :class="{ active: format === item.value }"
-              ) {{ item.text }}
-        .col
-          b-form-group.mb-0(label="Map options")
-            b-button.w-100(
-              variant="secondary",
-              size="sm",
-              @click="openMapSettings"
-            ) Show options
+.mb-3.grid.grid-cols-1.gap-3(class="md:grid-cols-2")
+  u-form-field(label="Shape format")
+    u-tabs(
+      v-model="format",
+      :items="formats",
+      :content="false",
+      variant="pill",
+      color="primary",
+      :ui="{ root: 'w-full', list: 'w-full' }"
+    )
+  u-form-field(label="Map options")
+    u-popover(:ui="{ content: 'w-72 p-4' }")
+      u-button(
+        block,
+        color="neutral",
+        variant="subtle",
+        icon="i-lucide-sliders-horizontal",
+        label="Show options"
+      )
+      template(#content)
+        map-options
 </template>
 
 <script setup lang="ts">
 import { useMainStore } from "../store/main";
-import { useModalsStore } from "../store/modals";
 
 const store = useMainStore();
-const modalsStore = useModalsStore();
 
 const { format } = storeToRefs(store);
-const { mapSettingsModal } = storeToRefs(modalsStore);
-
-function openMapSettings() {
-  mapSettingsModal.value = true;
-}
-
-enum Format {
-  wkt = "wkt",
-  geojson = "geojson",
-}
 
 const formats = [
-  {
-    text: "WKT",
-    value: Format.wkt,
-  },
-  {
-    text: "GeoJSON",
-    value: Format.geojson,
-  },
+  { label: "WKT", value: "wkt" },
+  { label: "GeoJSON", value: "geojson" },
 ];
 </script>

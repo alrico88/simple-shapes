@@ -1,7 +1,7 @@
 <template lang="pug">
-b-tabs(v-model="tab", pills, lazy)
-  b-tab(v-for="mode of modes", :key="mode.value", :title="mode.text")
-    component(:is="mode.component", @done="sendDone")
+u-tabs(v-model="tab", :items="modes", variant="pill", :ui="{ list: 'overflow-x-auto' }")
+  template(#content="{ item }")
+    component(:is="item.component", @done="sendDone")
 </template>
 
 <script setup lang="ts">
@@ -15,32 +15,32 @@ import {
 
 const emit = defineEmits(["done"]);
 
-const tab = ref(0);
+const tab = ref("wkt");
 
 const modes = [
   {
-    text: "From WKT",
+    label: "From WKT",
     value: "wkt",
     component: AddManuallyFromWkt,
   },
   {
-    text: "From GeoJSON",
-    value: "gejson",
+    label: "From GeoJSON",
+    value: "geojson",
     component: AddManuallyFromGeojson,
   },
   {
-    text: "From Tilename",
+    label: "From Tilename",
     value: "tilenames",
     component: AddManuallyFromTile,
   },
   {
-    text: "From BBox",
+    label: "From BBox",
     value: "bbox",
     component: AddManuallyFromBbox,
   },
   {
-    text: "From coordinates",
-    value: "boords",
+    label: "From coordinates",
+    value: "coords",
     component: AddManuallyFromCoords,
   },
 ];

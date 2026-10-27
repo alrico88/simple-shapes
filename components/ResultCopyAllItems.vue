@@ -1,23 +1,16 @@
 <template lang="pug">
-.row
-  .col
-    b-alert.border-primary.mb-2.auto-mb(:model-value="true", variant="primary")
-      .row.mb-2
-        .col
-          justify-between(:gap="2")
-            div Get all features as
-            .flex-grow-1
-              b-form-select.w-100(:options="options", v-model="collMode")
-      .row
-        .col
-          .hstack.gap-2
-            clipboard-button.w-100(size="sm", text="Copy", :value="toCopy")
-            b-button.w-100.text-truncate(
-              block,
-              variant="primary",
-              size="sm",
-              @click="downloadAll"
-            ) #[icon(name="bi:download")] Download
+.mb-2.flex.flex-col.gap-2.rounded-md.border.bg-brand-100.p-3(class="border-brand-300")
+  .flex.items-center.justify-between.gap-2
+    div Get all features as
+    .flex-1
+      u-select.w-full(v-model="collMode", :items="options")
+  .flex.gap-2
+    clipboard-button.w-full.justify-center(text="Copy", :value="toCopy")
+    u-button.w-full.justify-center.truncate(
+      icon="bi:download",
+      label="Download",
+      @click="downloadAll"
+    )
 </template>
 
 <script setup lang="ts">
@@ -38,18 +31,18 @@ const collMode = ref(CollMode.GeometryCollection);
 const options = computed(() => {
   const baseOpts = [
     {
-      text: "CSV",
+      label: "CSV",
       value: CollMode.Csv,
     },
     {
-      text: "GeometryCollection",
+      label: "GeometryCollection",
       value: CollMode.GeometryCollection,
     },
   ];
 
   if (format.value === "geojson") {
     baseOpts.push({
-      text: "FeatureCollection",
+      label: "FeatureCollection",
       value: CollMode.FeatureCollection,
     });
   }
@@ -66,7 +59,7 @@ const toCopy = computed(() => {
     case CollMode.FeatureCollection:
       return store.getAsFeatureCollection;
     default:
-      break;
+      return "";
   }
 });
 

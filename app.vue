@@ -1,75 +1,46 @@
 <template lang="pug">
-.row.mx-0.g-0
-  .col-lg-8.col-md-7.col-6.vh-100
-    the-map
-  .col-lg-4.col-md-5.col-6.border-left.vh-100
-    the-result
-  b-modal(
-    v-model="addModal",
-    size="lg",
-    @close="() => { addModal = false; }",
+u-app
+  .flex.h-screen
+    .h-screen.min-w-0.flex-1
+      the-map
+    div(class="h-screen w-1/2 border-l border-default md:w-5/12 lg:w-1/3")
+      the-result
+  u-modal(
+    v-model:open="addModal",
     title="Add manually",
-    title-class="modal-title",
-    hide-footer,
-    lazy
+    :ui="{ content: 'max-w-3xl' }"
   )
-    add-manually(@done="() => { addModal = false; }")
-  b-modal(
-    v-model="mapSettingsModal",
-    title="Map Options",
-    title-class="modal-title",
-    hide-footer,
-    lazy
-  )
-    map-options
-  b-modal(
-    v-model="randomPointsModal.modal",
-    @close="randomPointsModal.wkt = null",
+    template(#body)
+      add-manually(@done="addModal = false")
+  u-modal(
+    v-model:open="randomPointsModal.modal",
     title="Generate random points",
-    title-class="modal-title",
-    lazy,
-    hide-footer
+    @after:leave="randomPointsModal.wkt = null"
   )
-    get-random(
-      v-if="randomPointsModal.wkt",
-      :shape="randomPointsModal.wkt.wkt",
-      :name="randomPointsModal.wkt.name",
-      @close="randomPointsModal.modal = false"
-    )
-  b-modal(
-    v-model="geohashesModal.modal",
-    @close="geohashesModal.modal = false",
-    title="Find geohashes inside",
-    title-class="modal-title",
-    lazy,
-    hide-footer
-  )
-    get-geohashes(
-      v-if="geohashesModal.wkt",
-      :shape="geohashesModal.wkt",
-      :name="geohashesModal.name",
-      @close="geohashesModal.modal = false"
-    )
-  b-modal(
-    v-model="applyBufferModal.modal",
-    @close="applyBufferModal.modal = false",
-    title="Apply buffer to shape",
-    title-class="modal-title",
-    lazy,
-    hide-footer
-  )
-    apply-buffer(
-      :id="applyBufferModal.id",
-      :shape="applyBufferModal.wkt",
-      @close="applyBufferModal.modal = false"
-    )
-  b-offcanvas(
-    v-model="searchInterfaceModal",
-    placement="end",
-    @hide="hideSearchInterface",
-    title="Search"
-  )
-    .p-2.bg-white
+    template(#body)
+      get-random(
+        v-if="randomPointsModal.wkt",
+        :shape="randomPointsModal.wkt.wkt",
+        :name="randomPointsModal.wkt.name",
+        @close="randomPointsModal.modal = false"
+      )
+  u-modal(v-model:open="geohashesModal.modal", title="Find geohashes inside")
+    template(#body)
+      get-geohashes(
+        v-if="geohashesModal.wkt",
+        :shape="geohashesModal.wkt",
+        :name="geohashesModal.name",
+        @close="geohashesModal.modal = false"
+      )
+  u-modal(v-model:open="applyBufferModal.modal", title="Apply buffer to shape")
+    template(#body)
+      apply-buffer(
+        :id="applyBufferModal.id",
+        :shape="applyBufferModal.wkt",
+        @close="applyBufferModal.modal = false"
+      )
+  u-slideover(v-model:open="searchInterfaceModal", side="right", title="Search")
+    template(#body)
       the-search
 </template>
 
@@ -79,14 +50,9 @@ import { useModalsStore } from "./store/modals";
 const store = useModalsStore();
 const {
   addModal,
-  mapSettingsModal,
   searchInterfaceModal,
   randomPointsModal,
   applyBufferModal,
   geohashesModal,
 } = storeToRefs(store);
-
-function hideSearchInterface() {
-  searchInterfaceModal.value = false;
-}
 </script>

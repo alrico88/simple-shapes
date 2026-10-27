@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 
 export const useModalsStore = defineStore("modals", () => {
   const addModal = ref(false);
-  const mapSettingsModal = ref(false);
   const searchInterfaceModal = ref(false);
   const randomPointsModal = reactive<{
     modal: boolean;
@@ -24,7 +23,6 @@ export const useModalsStore = defineStore("modals", () => {
 
   return {
     addModal,
-    mapSettingsModal,
     searchInterfaceModal,
     randomPointsModal,
     applyBufferModal,

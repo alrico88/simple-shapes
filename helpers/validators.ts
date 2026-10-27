@@ -1,7 +1,7 @@
-import { parseFromWK } from "wkt-parser-helper";
+import { wktToGeojson } from "wkt-parser-helper";
 
 export function validateWKT(string: string): void {
-  const parsed = parseFromWK(string);
+  const parsed = wktToGeojson(string);
 
   if (!parsed) {
     throw new Error("invalid WKT");
@@ -60,7 +60,7 @@ export function validateCoordinates(coordinates: string): void {
       );
     }
 
-    const [latitude, longitude] = elements.map(Number);
+    const [latitude, longitude] = elements.map(Number) as [number, number];
 
     if (latitude < -90 || latitude > 90) {
       throw new Error(
@@ -74,4 +74,31 @@ export function validateCoordinates(coordinates: string): void {
       );
     }
   });
+}
+
+export function parseCoordinatePair(
+  latitude: string | number,
+  longitude: string | number
+): { latitude: number; longitude: number } {
+  const lat = Number(String(latitude).trim());
+  const lon = Number(String(longitude).trim());
+
+  if (
+    String(latitude).trim() === "" ||
+    String(longitude).trim() === "" ||
+    Number.isNaN(lat) ||
+    Number.isNaN(lon)
+  ) {
+    throw new Error("Latitude and longitude must be numbers");
+  }
+
+  if (lat < -90 || lat > 90) {
+    throw new Error("Latitude must be between -90 and 90");
+  }
+
+  if (lon < -180 || lon > 180) {
+    throw new Error("Longitude must be between -180 and 180");
+  }
+
+  return { latitude: lat, longitude: lon };
 }

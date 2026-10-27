@@ -1,11 +1,11 @@
 <template lang="pug">
-.h-100.w-100(:id="mapDiv")
+.h-full.w-full(:id="mapDiv")
 </template>
 
 <script lang="ts" setup>
 import L, { LatLng, LatLngBounds } from "leaflet";
 import "leaflet-draw";
-import { parseFromWK } from "wkt-parser-helper";
+import { wktToGeojson } from "wkt-parser-helper";
 import circle from "@turf/circle";
 import { toBlob } from "html-to-image";
 import { saveAs } from "file-saver";
@@ -27,10 +27,29 @@ const parsedPolygons = computed(() =>
     id,
     name,
     color,
-    shape: parseFromWK(wkt),
+    shape: wktToGeojson(wkt),
     visible,
   }))
 );
+
+const route = useRoute();
+
+function applyQueryCoordinates(): void {
+  const { lat, lon, zoom } = route.query;
+
+  if (typeof lat !== "string" || typeof lon !== "string") {
+    return;
+  }
+
+  searchStore.coords.latitude = lat;
+  searchStore.coords.longitude = lon;
+
+  const parsedZoom = typeof zoom === "string" ? Number(zoom) : NaN;
+
+  searchStore.goToCoordinates(
+    Number.isFinite(parsedZoom) ? parsedZoom : undefined
+  );
+}
 
 onMounted(() => {
   nextTick(() => {
@@ -66,7 +85,7 @@ onMounted(() => {
       const { layer, layerType } = e;
       let asJSON;
       if (layerType === "circle") {
-        // eslint-disable-next-line no-underscore-dangle
+         
         const { lat, lng } = layer._latlng;
         asJSON = circle([lng, lat], layer.getRadius(), {
           steps: 100,
@@ -153,16 +172,25 @@ onMounted(() => {
 
     mapEmitter.on("goTo" as any, (bbox: number[]): void => {
       const leafletBounds = new LatLngBounds(
-        new LatLng(bbox[1], bbox[0]),
-        new LatLng(bbox[3], bbox[2])
+        new LatLng(bbox[1]!, bbox[0]!),
+        new LatLng(bbox[3]!, bbox[2]!)
       );
 
       map.fitBounds(leafletBounds);
     });
 
     mapEmitter.on("focusOn" as any, (coords: [number, number]): void => {
-      map.panTo(new LatLng(coords[1], coords[0]), 14);
+      map.setView(new LatLng(coords[1], coords[0]), 14);
     });
+
+    mapEmitter.on(
+      "goToCoords",
+      ({ coords, zoom }: { coords: [number, number]; zoom?: number }): void => {
+        map.setView(new LatLng(coords[1], coords[0]), zoom ?? 14);
+      }
+    );
+
+    applyQueryCoordinates();
 
     mapEmitter.on("download", async () => {
       const blob = (await toBlob(

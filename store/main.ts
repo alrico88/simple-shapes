@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { convertToWK, parseFromWK } from "wkt-parser-helper";
+import { geojsonToWkt, wktToGeojson } from "wkt-parser-helper";
 import { Formatter } from "fracturedjsonjs";
 import { getGeoJSONBBox } from "bbox-helper-functions";
 import { computed } from "vue";
@@ -20,24 +20,6 @@ export const useMainStore = defineStore("main", () => {
       text: "OpenStreetMap",
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    },
-    {
-      key: "cartoLight",
-      text: "CartoDB Positron",
-      url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-      attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    },
-    {
-      key: "cartoDark",
-      text: "CartoDB Dark Matter",
-      url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-      attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    },
-    {
-      key: "cartoVoyager",
-      text: "CartoDB Voyager",
-      url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-      attr: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     },
     {
       key: "esriSat",
@@ -65,7 +47,7 @@ export const useMainStore = defineStore("main", () => {
     }
     return formatter.Serialize({
       type: "GeometryCollection",
-      geometries: polygons.value.map(({ wkt }) => parseFromWK(wkt)),
+      geometries: polygons.value.map(({ wkt }) => wktToGeojson(wkt)),
     }) as string;
   });
 
@@ -74,7 +56,7 @@ export const useMainStore = defineStore("main", () => {
       formatter.Serialize({
         type: "FeatureCollection",
         features: polygons.value.map((d) =>
-          parseFromWK(d.wkt, true, {
+          wktToGeojson(d.wkt, true, {
             id: d.id,
             name: d.name,
             color: d.color,
@@ -89,7 +71,7 @@ export const useMainStore = defineStore("main", () => {
         id: d.id,
         name: d.name,
         geometry:
-          format.value === "wkt" ? d.wkt : JSON.stringify(parseFromWK(d.wkt)),
+          format.value === "wkt" ? d.wkt : JSON.stringify(wktToGeojson(d.wkt)),
       };
     });
 
@@ -99,7 +81,7 @@ export const useMainStore = defineStore("main", () => {
   });
 
   const tile = computed(() => {
-    const fallbackStyle = mapStyles[5];
+    const fallbackStyle = mapStyles.find((d) => d.key === "esri")!;
 
     const info = mapStyles.find((d) => d.key === selectedMapStyle.value);
 
@@ -123,7 +105,7 @@ export const useMainStore = defineStore("main", () => {
   });
 
   function addPolygon(geojson: any, name?: string): void {
-    const wkt = convertToWK(geojson);
+    const wkt = geojsonToWkt(geojson);
     const newPolygon = new StorePolygon(wkt);
 
     if (name) {
@@ -150,7 +132,7 @@ export const useMainStore = defineStore("main", () => {
   function addShapes(parsed: any): void {
     const geomsToAdd = getBasicGeometriesToAdd(parsed);
     const newPolygons = geomsToAdd.map(
-      (geom) => new StorePolygon(convertToWK(geom))
+      (geom) => new StorePolygon(geojsonToWkt(geom))
     );
 
     polygons.value = [...polygons.value, ...newPolygons];
@@ -162,14 +144,14 @@ export const useMainStore = defineStore("main", () => {
 
   function toggleVisibility() {
     polygons.value.forEach((poly) => {
-      // eslint-disable-next-line no-param-reassign
+       
       poly.visible = !poly.visible;
     });
   }
 
   function turnVisibility(status: boolean) {
     polygons.value.forEach((poly) => {
-      // eslint-disable-next-line no-param-reassign
+       
       poly.visible = status;
     });
   }

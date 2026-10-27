@@ -1,45 +1,41 @@
 <template lang="pug">
-.d-flex.flex-column.h-100
-  .bg-blue.mb-3
-    .container-fluid
-      .row
-        .col.py-3
-          .hstack.gap-2.align-items-center.justify-content-between
-            div
-              h4.mb-0.fw-bolder Simple Shapes
-            .hstack.gap-2
-              b-button.text-truncate(
-                variant="secondary",
-                @click="openSearchInterface"
-              ) #[icon(name="bi:search")] Search
-              b-button.text-truncate(variant="primary", @click="openAddModal") #[icon(name="bi:plus")] Add shape manually
-  .container-fluid
-    .row
-      .col
-        the-settings
-        map-actions
-        divider-line(:title="`Shapes (${polygons.length})`")
-  .container-fluid.h-100.overflow-y-auto.flex-grow-1
-    .row.g-2
-      .col
-        result-item(
-          v-for="polygon of currentPageItems",
-          :key="polygon.id",
-          :polygon="polygon"
+.flex.h-full.flex-col
+  .mb-3.bg-brand-100.px-3.py-3
+    .flex.items-center.justify-between.gap-2
+      h4.text-lg.font-extrabold Simple Shapes
+      .flex.gap-2
+        u-button(
+          color="neutral",
+          variant="outline",
+          icon="i-lucide-search",
+          label="Search",
+          @click="openSearchInterface"
         )
-        empty-state.mb-2.auto-mb(:show="polygons.length === 0")
-        b-pagination(
-          v-if="showPagination",
-          v-model="currentPage",
-          :total-rows="totalRows",
-          :per-page="perPage"
+        u-button(
+          icon="i-lucide-plus",
+          label="Add shape",
+          @click="openAddModal"
         )
-  .py-3.border-top.border-2.bg-white
-    .container-fluid
-      .row
-        .col
-          result-copy-all-items.mb-2.auto-mb(v-if="showMultipleActions.copy")
-          the-credits
+  .px-3
+    the-settings
+    map-actions
+    divider-line(:title="`Shapes (${polygons.length})`")
+  .min-h-0.flex-1.overflow-y-auto.px-3.py-1
+    result-item(
+      v-for="polygon of currentPageItems",
+      :key="polygon.id",
+      :polygon="polygon"
+    )
+    empty-state.mb-2.auto-mb(:show="polygons.length === 0")
+    u-pagination(
+      v-if="showPagination",
+      v-model:page="currentPage",
+      :total="totalRows",
+      :items-per-page="perPage"
+    )
+  .border-t-2.border-default.bg-white.px-3.py-3
+    result-copy-all-items.mb-2.auto-mb(v-if="showMultipleActions.copy")
+    the-credits
 </template>
 
 <script setup lang="ts">
@@ -75,10 +71,3 @@ const { currentPage, currentPageItems, totalRows, perPage, showPagination } =
     resetOnChange: true,
   });
 </script>
-
-<style lang="scss" scoped>
-.maxHeight {
-  max-height: 100vh;
-  overflow-y: auto;
-}
-</style>

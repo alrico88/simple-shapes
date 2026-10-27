@@ -1,13 +1,19 @@
 <template lang="pug">
-b-form.mt-3(@submit.prevent="createGeoJSONFromBBox")
-  b-form-group(
-    valid-feedback="Valid BBox(es)",
-    :invalid-feedback="error",
-    :state="isValid",
-    description="Enter the BBox in the [minLon, minLat, maxLon, maxLat] format or drag and drop a file to the input. You can add multiple BBoxes at once, separated by new lines"
+form.mt-3.flex.flex-col.gap-3(@submit.prevent="createGeoJSONFromBBox")
+  u-form-field(
+    :description="'Enter the BBox in the [minLon, minLat, maxLon, maxLat] format or drag and drop a file to the input. You can add multiple BBoxes at once, separated by new lines'",
+    :error="isValid === false ? error : undefined",
+    :help="isValid ? 'Valid BBox(es)' : undefined"
   )
     text-input(v-model:text="enteredText")
-  b-button.w-100(variant="success", type="submit", :disabled="btnDisabled") #[icon(name="bi:plus")] Add BBox(es)
+  u-button(
+    block,
+    color="success",
+    type="submit",
+    icon="bi:plus",
+    label="Add BBox(es)",
+    :disabled="btnDisabled"
+  )
 </template>
 
 <script setup lang="ts">

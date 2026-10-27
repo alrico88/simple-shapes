@@ -1,33 +1,41 @@
 <template lang="pug">
-.row
-  .col
-    label.mb-1 Actions
-.row.g-2.row-cols-md-4.row-cols-2
-  .col
-    b-dropdown.w-100(variant="secondary", size="sm", text="Visibility")
-      b-dropdown-item-button(@click="toggleVisibility") Toggle visibility
-      b-dropdown-divider
-      b-dropdown-item-button(@click="store.turnVisibility(true)") Show all
-      b-dropdown-item-button(@click="store.turnVisibility(false)") Hide all
-  .col
-    b-button.text-truncate.w-100(
-      size="sm",
-      variant="secondary",
+div
+  label.mb-1.block.text-sm.font-medium Actions
+  .grid.grid-cols-2.gap-2(class="xl:grid-cols-4")
+    u-dropdown-menu(:items="visibilityItems")
+      u-button(
+        block,
+        color="neutral",
+        variant="subtle",
+        icon="i-lucide-eye",
+        label="Visibility",
+        trailing-icon="i-lucide-chevron-down"
+      )
+    u-button(
+      block,
+      color="neutral",
+      variant="subtle",
+      icon="i-lucide-maximize",
+      label="Fit all",
       @click="fitAllShapes"
-    ) Fit all shapes
-  .col
-    b-button.text-truncate.w-100(
-      size="sm",
-      variant="secondary",
+    )
+    u-button(
+      block,
+      color="neutral",
+      variant="subtle",
+      icon="i-lucide-image-down",
+      label="Export",
       @click="downloadMap"
-    ) Export map
-  .col
-    b-button.text-truncate.w-100(
-      size="sm",
-      variant="danger",
-      @click="deleteHandler",
-      :disabled="polygons.length === 0"
-    ) {{ deleteConfirmation ? "Sure?" : "Remove all" }}
+    )
+    u-button(
+      block,
+      color="error",
+      variant="soft",
+      icon="i-lucide-trash-2",
+      :label="deleteConfirmation ? 'Sure?' : 'Remove all'",
+      :disabled="polygons.length === 0",
+      @click="deleteHandler"
+    )
 </template>
 
 <script setup lang="ts">
@@ -37,6 +45,14 @@ import { useMainStore } from "../store/main";
 
 const store = useMainStore();
 const { polygons, polygonsBBox } = storeToRefs(store);
+
+const visibilityItems = [
+  [{ label: "Toggle visibility", onSelect: toggleVisibility }],
+  [
+    { label: "Show all", onSelect: () => store.turnVisibility(true) },
+    { label: "Hide all", onSelect: () => store.turnVisibility(false) },
+  ],
+];
 
 function toggleVisibility() {
   store.toggleVisibility();

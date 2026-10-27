@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
-import { ref, shallowRef } from "vue";
+import { reactive, ref, shallowRef } from "vue";
 import type { Feature, Point } from "photon-geocoder/dist/helpers/geojson";
 import mapEmitter from "../emitters/mapEmitter";
+import { parseCoordinatePair } from "../helpers/validators";
 
 export const useSearchStore = defineStore("search", () => {
   const suggestions = shallowRef<Feature<Point>[]>([]);
@@ -21,6 +22,23 @@ export const useSearchStore = defineStore("search", () => {
     mapEmitter.emit("focusOn", feature.geometry.coordinates);
   }
 
+  const coords = reactive({ latitude: "", longitude: "" });
+  const coordsError = ref("");
+
+  function goToCoordinates(zoom?: number): void {
+    try {
+      const { latitude, longitude } = parseCoordinatePair(
+        coords.latitude,
+        coords.longitude
+      );
+
+      coordsError.value = "";
+      mapEmitter.emit("goToCoords", { coords: [longitude, latitude], zoom });
+    } catch (err) {
+      coordsError.value = (err as Error).message;
+    }
+  }
+
   function removeSearchSelection() {
     selectedSearch.value = null;
   }
@@ -32,5 +50,8 @@ export const useSearchStore = defineStore("search", () => {
     selectSearch,
     selectedSearch,
     removeSearchSelection,
+    coords,
+    coordsError,
+    goToCoordinates,
   };
 });

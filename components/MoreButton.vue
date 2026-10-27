@@ -1,27 +1,26 @@
 <template lang="pug">
-b-dropdown.text-nowrap(:variant="color", :size="size")
-  template(#button-content) #[icon(name="bi:three-dots")] More
-  b-dropdown-item(button, @click="copyBBox") Copy BBox
-  b-dropdown-item(button, @click="createBBox") Add BBox as new shape
-  b-dropdown-item(button, @click="convertToKml") Convert to KML
-  b-dropdown-item(button, @click="openApplyBuffer") Apply buffer
-  b-dropdown-item(button, @click="getRandom") Get random points inside shape
-  b-dropdown-item(button, @click="findGeohashes") Find geohashes inside shape
+u-dropdown-menu(:items="items")
+  u-button.whitespace-nowrap(
+    :color="color",
+    :size="size",
+    variant="subtle",
+    icon="i-lucide-ellipsis",
+    label="More"
+  )
 </template>
 
 <script setup lang="ts">
 import { BBoxToGeoJSONFeature, getWKTBBox } from "bbox-helper-functions";
 import tokml from "tokml";
-import { parseFromWK } from "wkt-parser-helper";
-import type { ColorVariant, Size } from "bootstrap-vue-next";
+import { wktToGeojson } from "wkt-parser-helper";
 import { useMainStore } from "~/store/main";
 import { useModalsStore } from "~/store/modals";
 import type { StorePolygon } from "~/models/StorePolygon";
 
 const props = withDefaults(
   defineProps<{
-    color?: ColorVariant;
-    size?: Size;
+    color?: "primary" | "neutral";
+    size?: "xs" | "sm" | "md";
     polygon: StorePolygon;
   }>(),
   {
@@ -47,7 +46,7 @@ function createBBox() {
 }
 
 function convertToKml() {
-  const asGeoJSON = parseFromWK(props.polygon.wkt);
+  const asGeoJSON = wktToGeojson(props.polygon.wkt);
 
   downloadFile(tokml(asGeoJSON), props.polygon.name);
 }
@@ -73,4 +72,13 @@ function findGeohashes() {
   modalsStore.geohashesModal.wkt = props.polygon.wkt;
   modalsStore.geohashesModal.modal = true;
 }
+
+const items = [
+  { label: "Copy BBox", onSelect: copyBBox },
+  { label: "Add BBox as new shape", onSelect: createBBox },
+  { label: "Convert to KML", onSelect: convertToKml },
+  { label: "Apply buffer", onSelect: openApplyBuffer },
+  { label: "Get random points inside shape", onSelect: getRandom },
+  { label: "Find geohashes inside shape", onSelect: findGeohashes },
+];
 </script>

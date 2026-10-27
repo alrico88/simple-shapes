@@ -1,18 +1,24 @@
 <template lang="pug">
-b-form.mt-3(@submit.prevent="createWktFromText")
-  b-form-group(
-    valid-feedback="Valid WKT",
-    :invalid-feedback="error",
-    :state="isValid",
-    description="Enter the Well-Known-Text representation of a geometry here or drag and drop a file to the input"
+form.mt-3.flex.flex-col.gap-3(@submit.prevent="createWktFromText")
+  u-form-field(
+    :description="'Enter the Well-Known-Text representation of a geometry here or drag and drop a file to the input'",
+    :error="isValid === false ? error : undefined",
+    :help="isValid ? 'Valid WKT' : undefined"
   )
     text-input(v-model:text="enteredText")
-  b-button.w-100(variant="success", type="submit", :disabled="btnDisabled") #[icon(name="bi:plus")] Add WKT
+  u-button(
+    block,
+    color="success",
+    type="submit",
+    icon="bi:plus",
+    label="Add WKT",
+    :disabled="btnDisabled"
+  )
 </template>
 
 <script setup lang="ts">
 import { replace } from "lodash-es";
-import { parseFromWK } from "wkt-parser-helper";
+import { wktToGeojson } from "wkt-parser-helper";
 import { validateWKT } from "../helpers/validators";
 import { useMainStore } from "../store/main";
 
@@ -50,7 +56,7 @@ const btnDisabled = computed(() => !hasEnteredText.value || !isValid.value);
 const emit = defineEmits(["done"]);
 
 function createWktFromText() {
-  const parsed = parseFromWK(wkt.value);
+  const parsed = wktToGeojson(wkt.value);
 
   store.addShapes(parsed);
   emit("done");
